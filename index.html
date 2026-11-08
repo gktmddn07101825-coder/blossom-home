@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 블로썸 길드 버프 타이머</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1a1528;
+      color: #ffffff;
+      font-family: 'Segoe UI', Malgun Gothic, sans-serif;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background-image: radial-gradient(#ffb7c5 0.5px, transparent 0.5px), radial-gradient(#ffb7c5 0.5px, #1a1528 0.5px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 580px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: #2b1f3d;
+      padding: 15px;
+      border-radius: 12px;
+      border: 3px solid #ff758c;
+      box-shadow: 0 4px 0 #b33951;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      color: #ff9a9e;
+      margin-bottom: 4px;
+      text-shadow: 1px 1px 0px #000;
+    }
+    header p {
+      font-size: 0.8rem;
+      color: #d1c4e9;
+    }
+
+    .controls-panel {
+      background: #2b1f3d;
+      padding: 12px 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border: 2px solid #ff758c;
+      box-shadow: 0 3px 0 #b33951;
+    }
+    button, input, select {
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 2px solid #333;
+      outline: none;
+    }
+    select {
+      background: #1a1528;
+      color: #fff;
+      border-color: #554270;
+      cursor: pointer;
+    }
+    .btn {
+      background: #ff758c;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #b33951;
+      transition: 0.1s;
+    }
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .btn-reset-all {
+      background: #a18cd1;
+      border-color: #7b52ae;
+      box-shadow: 0 2px 0 #5c3d8a;
+    }
+
+    .timer-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .timer-card {
+      background: #2b1f3d;
+      border-radius: 10px;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 3px solid #ff758c;
+      box-shadow: 0 4px 0 #b33951;
+    }
+    .timer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .buff-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: #1a1528;
+      border: 2px solid #ff9a9e;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .timer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .timer-name {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .timer-sub {
+      font-size: 0.75rem;
+      color: #d1c4e9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timer-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .timer-display {
+      font-size: 1.3rem;
+      font-weight: bold;
+      font-family: monospace;
+      color: #00ffcc;
+      min-width: 70px;
+      text-align: right;
+      text-shadow: 0 0 5px rgba(0,255,204,0.4);
+    }
+    .timer-display.ended {
+      color: #ff5252;
+      animation: blink 0.8s infinite;
+      text-shadow: 0 0 5px rgba(255,82,82,0.6);
+    }
+    @keyframes blink {
+      50% { opacity: 0.3; }
+    }
+    .btn-reset {
+      background: #ff9a9e;
+      color: #1a1528;
+      border: 2px solid #d1435b;
+      font-weight: bold;
+      padding: 6px 10px;
+      box-shadow: 0 2px 0 #b33951;
+      cursor: pointer;
+    }
+    .btn-reset:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .btn-del {
+      background: transparent;
+      color: #ff758c;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-del:hover {
+      color: #ff5252;
+    }
+
+    .edit-panel {
+      background: #2b1f3d;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #ff758c;
+      box-shadow: 0 3px 0 #b33951;
+    }
+    .edit-panel h3 {
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: #ff9a9e;
+    }
+    .form-group {
+      display: flex;
+      gap: 6px;
+    }
+    .form-group input, .form-group select {
+      background: #1a1528;
+      color: #fff;
+      flex: 1;
+      border-color: #554270;
+    }
+    .btn-add {
+      background: #a18cd1;
+      border-color: #7b52ae;
+      color: white;
+      box-shadow: 0 2px 0 #5c3d8a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🌸 블로썸 길드 버프 타이머</h1>
+      <p>원하는 알람음을 골라서 설정할 수 있습니다!</p>
+    </header>
+
+    <div class="controls-panel">
+      <button class="btn btn-reset-all" onclick="resetToGuildDefault()">🔄 길드 기본값 복원</button>
+      <button class="btn" onclick="alert('브라우저에 개개인 설정이 안전하게 자동 저장됩니다!')">💾 설정 저장됨</button>
+    </div>
+
+    <div class="timer-list" id="timerContainer"></div>
+
+    <div class="edit-panel">
+      <h3>➕ 나만의 버프 추가하기</h3>
+      <div class="form-group">
+        <input type="text" id="newName" placeholder="버프 이름">
+        <input type="number" id="newSec" placeholder="시간(초)" style="max-width: 80px;">
+        <select id="newSound">
+          <option value="alert.mp3">기본 알람 (alert.mp3)</option>
+          <option value="digivice.wav">디지바이스 1 (digivice.wav)</option>
+          <option value="digivice2.mp3">디지바이스 2 (digivice2.mp3)</option>
+        </select>
+        <button class="btn btn-add" onclick="addCustomBuff()">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🌟 길드 기본 디폴트 세팅 (알람음 sound 속성 포함)
+    const ADMIN_PRESETS = [
+      { id: 101, name: "도전의 가호", duration: 1800, icon: "Blessing.PNG", sound: "digivice.wav" },
+      { id: 102, name: "슈퍼 증폭 부스터", duration: 180, icon: "Booster.PNG", sound: "digivice2.mp3" },
+      { id: 103, name: "통합 버프", duration: 300, icon: "Integration.PNG", sound: "alert.mp3" }
+    ];
+
+    let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v2')) || ADMIN_PRESETS;
+    let timerStates = {};
+
+    function init() {
+      renderTimers();
+      setInterval(updateClocks, 100);
+    }
+
+    function saveSettings() {
+      localStorage.setItem('blossom_buff_settings_v2', JSON.stringify(userTimers));
+    }
+
+    function renderTimers() {
+      const container = document.getElementById('timerContainer');
+      container.innerHTML = '';
+
+      userTimers.forEach(t => {
+        if (!timerStates[t.id]) {
+          timerStates[t.id] = { endTime: null, isRunning: false, soundPlayed: false };
+        }
+
+        const card = document.createElement('div');
+        card.className = 'timer-card';
+        
+        card.innerHTML = `
+          <div class="timer-left">
+            <img class="buff-icon" src="${t.icon || ''}" alt="icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="buff-icon" style="display:none;">🌸</div>
+            <div class="timer-info">
+              <div class="timer-name" contenteditable="true" onblur="updateBuffName(${t.id}, this)">${t.name}</div>
+              <div class="timer-sub">
+                시간: <span contenteditable="true" onblur="updateBuffDuration(${t.id}, this)">${t.duration}</span>초 | 
+                알람: 
+                <select onchange="updateBuffSound(${t.id}, this)">
+                  <option value="alert.mp3" ${t.sound === 'alert.mp3' ? 'selected' : ''}>기본 알람</option>
+                  <option value="digivice.wav" ${t.sound === 'digivice.wav' ? 'selected' : ''}>디지바이스 1</option>
+                  <option value="digivice2.mp3" ${t.sound === 'digivice2.mp3' ? 'selected' : ''}>디지바이스 2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="timer-right">
+            <div class="timer-display" id="display-${t.id}">READY</div>
+            <button class="btn btn-reset" onclick="triggerTimer(${t.id})">리셋</button>
+            <button class="btn-del" onclick="deleteBuff(${t.id})" title="삭제">✕</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateBuffName(id, el) {
+      const buff = userTimers.find(t => t.id === id);
+      if (buff) {
+        buff.name = el.textContent.trim();
+        saveSettings();
+      }
+    }
+
+    function updateBuffDuration(id, el) {
+      const buff = userTimers.find(t => t.id === id);
+      if (buff) {
+        const newSec = parseInt(el.textContent.trim());
+        if (!isNaN(newSec) && newSec > 0) {
+          buff.duration = newSec;
+          saveSettings();
+        } else {
+          el.textContent = buff.duration;
+        }
+      }
+    }
+
+    function updateBuffSound(id, selectEl) {
+      const buff = userTimers.find(t => t.id === id);
+      if (buff) {
+        buff.sound = selectEl.value;
+        saveSettings();
+        // 소리를 바꿨을 때 테스트로 미리 재생
+        playAudio(buff.sound);
+      }
+    }
+
+    function triggerTimer(id) {
+      const buff = userTimers.find(t => t.id === id);
+      if (!buff) return;
+
+      timerStates[id] = {
+        endTime: Date.now() + buff.duration * 1000,
+        isRunning: true,
+        soundPlayed: false
+      };
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    // 선택된 사운드 파일 재생 함수
+    function playAudio(filename) {
+      const audio = new Audio(filename);
+      audio.volume = 0.9;
+      audio.play().catch(e => {
+        console.log("브라우저 자동 재생 정책 제한", e);
+      });
+    }
+
+    function updateClocks() {
+      const now = Date.now();
+      userTimers.forEach(t => {
+        const state = timerStates[t.id];
+        const displayEl = document.getElementById(`display-${t.id}`);
+        if (!displayEl) return;
+
+        if (!state || !state.isRunning) {
+          displayEl.textContent = "READY";
+          displayEl.classList.remove('ended');
+          return;
+        }
+
+        const remainMs = state.endTime - now;
+        if (remainMs <= 0) {
+          displayEl.textContent = "END!";
+          displayEl.classList.add('ended');
+          
+          if (!state.soundPlayed) {
+            playAudio(t.sound || 'alert.mp3');
+            state.soundPlayed = true;
+          }
+        } else {
+          const remainSec = Math.ceil(remainMs / 1000);
+          displayEl.textContent = formatTime(remainSec);
+          displayEl.classList.remove('ended');
+        }
+      });
+    }
+
+    function resetToGuildDefault() {
+      if (confirm("길드 기본 디폴트 설정으로 초기화하시겠습니까?")) {
+        userTimers = JSON.parse(JSON.stringify(ADMIN_PRESETS));
+        timerStates = {};
+        saveSettings();
+        renderTimers();
+      }
+    }
+
+    function addCustomBuff() {
+      const name = document.getElementById('newName').value.trim();
+      const duration = parseInt(document.getElementById('newSec').value);
+      const sound = document.getElementById('newSound').value;
+
+      if (!name || isNaN(duration) || duration <= 0) {
+        alert("올바른 버프 이름과 시간(초)을 입력해주세요.");
+        return;
+      }
+
+      const newBuff = {
+        id: Date.now(),
+        name: name,
+        duration: duration,
+        icon: '',
+        sound: sound
+      };
+
+      userTimers.push(newBuff);
+      saveSettings();
+      renderTimers();
+
+      document.getElementById('newName').value = '';
+      document.getElementById('newSec').value = '';
+    }
+
+    function deleteBuff(id) {
+      userTimers = userTimers.filter(t => t.id !== id);
+      delete timerStates[id];
+      saveSettings();
+      renderTimers();
+    }
+
+    init();
+  </script>
+</body>
+</html>
