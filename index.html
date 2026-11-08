@@ -139,6 +139,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
     .timer-right {
       display: flex;
@@ -202,11 +203,11 @@
     .form-group {
       display: flex;
       gap: 6px;
+      flex-wrap: wrap;
     }
     .form-group input, .form-group select {
       background: #1a1528;
       color: #fff;
-      flex: 1;
       border-color: #554270;
     }
     .btn-add {
@@ -222,7 +223,7 @@
   <div class="container">
     <header>
       <h1>🌸 블로썸 길드 버프 타이머</h1>
-      <p>원하는 알람음을 골라서 설정할 수 있습니다!</p>
+      <p>원하는 알람음과 볼륨을 골라서 설정할 수 있습니다!</p>
     </header>
 
     <div class="controls-panel">
@@ -235,27 +236,32 @@
     <div class="edit-panel">
       <h3>➕ 나만의 버프 추가하기</h3>
       <div class="form-group">
-        <input type="text" id="newName" placeholder="버프 이름">
-        <input type="number" id="newSec" placeholder="시간(초)" style="max-width: 80px;">
-        <select id="newSound">
-          <option value="alert.mp3">기본 알람 (alert.mp3)</option>
-          <option value="digivice.wav">디지바이스 1 (digivice.wav)</option>
-          <option value="digivice2.mp3">디지바이스 2 (digivice2.mp3)</option>
+        <input type="text" id="newName" placeholder="버프 이름" style="flex: 2;">
+        <input type="number" id="newSec" placeholder="시간(초)" style="width: 75px;">
+        <select id="newSound" style="flex: 1.5;">
+          <option value="alert.mp3">기본 알람</option>
+          <option value="digivice.wav">디지바이스 1</option>
+          <option value="digivice2.mp3">디지바이스 2</option>
         </select>
-        <button class="btn btn-add" onclick="addCustomBuff()">추가</button>
+        <select id="newVolume" style="width: 75px;">
+          <option value="0.3">30%</option>
+          <option value="0.6">60%</option>
+          <option value="0.9" selected>90%</option>
+        </select>
+        <button class="btn btn-add" onclick="addCustomBuff()" style="flex: 1;">추가</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 🌟 길드 기본 디폴트 세팅 (알람음 sound 속성 포함)
+    // 🌟 길드 기본 디폴트 세팅 (sound와 volume 속성 포함)
     const ADMIN_PRESETS = [
-      { id: 101, name: "도전의 가호", duration: 7200, icon: "Blessing.PNG", sound: "digivice.wav" },
-      { id: 102, name: "슈퍼 증폭 부스터", duration: 3600, icon: "Booster.PNG", sound: "digivice2.mp3" },
-      { id: 103, name: "통합 버프", duration: 3600, icon: "Integration.PNG", sound: "alert.mp3" }
+      { id: 101, name: "도전의 가호", duration: 7200, icon: "Blessing.PNG", sound: "digivice.wav", volume: 0.9 },
+      { id: 102, name: "슈퍼 증폭 부스터", duration: 3600, icon: "Booster.PNG", sound: "digivice2.mp3", volume: 0.9 },
+      { id: 103, name: "통합 버프", duration: 3600, icon: "Integration.PNG", sound: "alert.mp3", volume: 0.9 }
     ];
 
-    let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v2')) || ADMIN_PRESETS;
+    let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v3')) || ADMIN_PRESETS;
     let timerStates = {};
 
     function init() {
@@ -264,7 +270,7 @@
     }
 
     function saveSettings() {
-      localStorage.setItem('blossom_buff_settings_v2', JSON.stringify(userTimers));
+      localStorage.setItem('blossom_buff_settings_v3', JSON.stringify(userTimers));
     }
 
     function renderTimers() {
@@ -275,6 +281,8 @@
         if (!timerStates[t.id]) {
           timerStates[t.id] = { endTime: null, isRunning: false, soundPlayed: false };
         }
+
+        const currentVol = t.volume !== undefined ? t.volume : 0.9;
 
         const card = document.createElement('div');
         card.className = 'timer-card';
@@ -292,6 +300,12 @@
                   <option value="alert.mp3" ${t.sound === 'alert.mp3' ? 'selected' : ''}>기본 알람</option>
                   <option value="digivice.wav" ${t.sound === 'digivice.wav' ? 'selected' : ''}>디지바이스 1</option>
                   <option value="digivice2.mp3" ${t.sound === 'digivice2.mp3' ? 'selected' : ''}>디지바이스 2</option>
+                </select>
+                볼륨:
+                <select onchange="updateBuffVolume(${t.id}, this)">
+                  <option value="0.3" ${currentVol == 0.3 ? 'selected' : ''}>30%</option>
+                  <option value="0.6" ${currentVol == 0.6 ? 'selected' : ''}>60%</option>
+                  <option value="0.9" ${currentVol == 0.9 ? 'selected' : ''}>90%</option>
                 </select>
               </div>
             </div>
@@ -332,8 +346,16 @@
       if (buff) {
         buff.sound = selectEl.value;
         saveSettings();
-        // 소리를 바꿨을 때 테스트로 미리 재생
-        playAudio(buff.sound);
+        playAudio(buff.sound, buff.volume !== undefined ? buff.volume : 0.9);
+      }
+    }
+
+    function updateBuffVolume(id, selectEl) {
+      const buff = userTimers.find(t => t.id === id);
+      if (buff) {
+        buff.volume = parseFloat(selectEl.value);
+        saveSettings();
+        playAudio(buff.sound, buff.volume);
       }
     }
 
@@ -354,10 +376,10 @@
       return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
-    // 선택된 사운드 파일 재생 함수
-    function playAudio(filename) {
+    // 설정된 볼륨을 반영하여 사운드 재생
+    function playAudio(filename, volume) {
       const audio = new Audio(filename);
-      audio.volume = 0.9;
+      audio.volume = volume !== undefined ? volume : 0.9;
       audio.play().catch(e => {
         console.log("브라우저 자동 재생 정책 제한", e);
       });
@@ -382,7 +404,7 @@
           displayEl.classList.add('ended');
           
           if (!state.soundPlayed) {
-            playAudio(t.sound || 'alert.mp3');
+            playAudio(t.sound || 'alert.mp3', t.volume !== undefined ? t.volume : 0.9);
             state.soundPlayed = true;
           }
         } else {
@@ -406,6 +428,7 @@
       const name = document.getElementById('newName').value.trim();
       const duration = parseInt(document.getElementById('newSec').value);
       const sound = document.getElementById('newSound').value;
+      const volume = parseFloat(document.getElementById('newVolume').value);
 
       if (!name || isNaN(duration) || duration <= 0) {
         alert("올바른 버프 이름과 시간(초)을 입력해주세요.");
@@ -417,7 +440,8 @@
         name: name,
         duration: duration,
         icon: '',
-        sound: sound
+        sound: sound,
+        volume: volume
       };
 
       userTimers.push(newBuff);
