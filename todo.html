@@ -88,6 +88,12 @@
       border-color: #d48b00;
       box-shadow: 0 3px 0 #b57600;
     }
+    .btn-user-add {
+      background: #00ffcc;
+      color: #111;
+      border-color: #00aa88;
+      box-shadow: 0 3px 0 #008866;
+    }
     .btn-restore {
       background: #a18cd1;
       border-color: #7b52ae;
@@ -156,6 +162,12 @@
       box-shadow: 0 3px 0 #b33951;
       transition: 0.2s;
     }
+    /* 유저가 직접 추가한 개인 숙제 스타일 구분 (초록빛 테두리) */
+    .todo-item.custom {
+      border-color: #00ffcc;
+      box-shadow: 0 3px 0 #00aa88;
+      background: #203335;
+    }
     .todo-item.done {
       opacity: 0.45;
       background: #1c1427;
@@ -183,8 +195,16 @@
       font-weight: bold;
       color: #fff;
     }
+    .custom-badge {
+      font-size: 0.65rem;
+      background: #00ffcc;
+      color: #000;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-right: 4px;
+    }
 
-    /* 🔢 횟수 선택/입력 셀렉트 박스 스타일 */
     .count-select {
       background: #1a1528;
       color: #00ffcc;
@@ -215,21 +235,28 @@
       color: #ff5252;
     }
 
-    .admin-panel {
+    /* 패널 공통 스타일 */
+    .panel-box {
       display: none;
       background: #3d2b27;
       padding: 15px;
       border-radius: 12px;
-      border: 3px solid #ffb703;
-      box-shadow: 0 4px 0 #b57600;
       margin-bottom: 20px;
     }
-    .admin-panel.active {
+    .panel-box.active {
       display: block;
     }
-    .admin-panel h3 {
+    .admin-panel {
+      border: 3px solid #ffb703;
+      box-shadow: 0 4px 0 #b57600;
+    }
+    .user-panel {
+      border: 3px solid #00ffcc;
+      background: #1e3335;
+      box-shadow: 0 4px 0 #008866;
+    }
+    .panel-box h3 {
       font-size: 1rem;
-      color: #ffb703;
       margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
@@ -245,12 +272,6 @@
       flex: 1;
       border-color: #554270;
     }
-    .btn-add {
-      background: #ffb703;
-      color: #000;
-      border-color: #d48b00;
-      box-shadow: 0 2px 0 #b57600;
-    }
   </style>
 </head>
 <body>
@@ -258,34 +279,51 @@
   <div class="container">
     <header>
       <h1>🌸 블로썸 디마 숙제 체크리스트</h1>
-      <p>던전별 맞춤 횟수 설정 & 자동 리셋 시스템</p>
+      <p>공용 기본 숙제 + 나만의 개인 숙제 추가 시스템</p>
     </header>
 
     <div class="controls-panel">
-      <div>
+      <div style="display: flex; gap: 8px;">
         <button class="btn btn-restore" onclick="restoreDefault()">🔄 내 체크/횟수 초기화</button>
+        <button class="btn btn-user-add" onclick="toggleUserPanel()">➕ 내 개인 숙제 추가</button>
       </div>
-      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 인증 (목록 수정)</button>
+      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 (공용 목록 수정)</button>
     </div>
 
-    <!-- 제작자(관리자) 전용 편집 창 -->
-    <div class="admin-panel" id="adminPanel">
-      <h3>
-        <span>🛠️ 공용 던전/숙제 목록 관리 모드 활성화됨</span>
-        <button class="btn" style="font-size: 0.75rem; padding: 3px 8px; background:#ff5252;" onclick="logoutAdmin()">관리자 잠금</button>
+    <!-- 🛠️ 제작자(관리자) 전용 공용 목록 추가 패널 -->
+    <div class="panel-box admin-panel" id="adminPanel">
+      <h3 style="color: #ffb703;">
+        <span>🛠️ [관리자 모드] 공용 숙제 추가/삭제</span>
+        <button class="btn" style="font-size: 0.75rem; padding: 3px 8px; background:#ff5252;" onclick="logoutAdmin()">닫기</button>
       </h3>
       <div class="form-group">
-        <select id="newType" style="max-width: 110px;">
+        <select id="adminNewType" style="max-width: 110px;">
           <option value="daily">☀️ 일일</option>
           <option value="weekly">📅 주간</option>
         </select>
-        <input type="text" id="newTitle" placeholder="추가할 던전/숙제 이름">
-        <button class="btn btn-add" onclick="addMasterTodo()">목록에 추가</button>
+        <input type="text" id="adminNewTitle" placeholder="모든 길드원에게 보일 공용 숙제 이름">
+        <button class="btn" style="background:#ffb703; color:#000; font-weight:bold;" onclick="addMasterTodo()">공용 추가</button>
+      </div>
+    </div>
+
+    <!-- 👤 유저 개인 숙제 추가 패널 (비밀번호 없음, 내 화면에만 추가됨) -->
+    <div class="panel-box user-panel" id="userPanel">
+      <h3 style="color: #00ffcc;">
+        <span>👤 [개인 숙제 추가] 내 화면에만 나만의 숙제 만들기</span>
+        <button class="btn" style="font-size: 0.75rem; padding: 3px 8px; background:#ff5252;" onclick="toggleUserPanel()">닫기</button>
+      </h3>
+      <div class="form-group">
+        <select id="userNewType" style="max-width: 110px;">
+          <option value="daily">☀️ 일일</option>
+          <option value="weekly">📅 주간</option>
+        </select>
+        <input type="text" id="userNewTitle" placeholder="내가 따로 돌고 싶은 개인 숙제/던전 이름">
+        <button class="btn" style="background:#00ffcc; color:#000; font-weight:bold;" onclick="addUserCustomTodo()">내 숙제 추가</button>
       </div>
     </div>
 
     <div class="reset-info">
-      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 💡 **횟수 설정**: 각자 스펙에 맞게 판수를 선택하면 창을 꺼도 유지됩니다!
+      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 💡 공용 숙제는 제작자가 관리하고, 개인 숙제는 [내 개인 숙제 추가]로 자유롭게 늘릴 수 있습니다!
     </div>
 
     <div class="homework-grid">
@@ -308,8 +346,8 @@
   </div>
 
   <script>
-    // 🌟 기본 공용 던전 목록
-    let MASTER_TODOS = JSON.parse(localStorage.getItem('blossom_master_todos_v3')) || [
+    // 🌟 제작자가 세팅하는 기본 공용 던전 목록
+    let MASTER_TODOS = JSON.parse(localStorage.getItem('blossom_master_todos_v4')) || [
       { id: 1, type: "daily", title: "☀️ 일일 퀘스트 & 출석체크" },
       { id: 2, type: "daily", title: "⚔️ 콜로세움 도전" },
       { id: 3, type: "daily", title: "🐉 일일 던전 (현카 / 사방 등)" },
@@ -317,12 +355,15 @@
       { id: 5, type: "weekly", title: "📦 주간 던전 티켓 소진" }
     ];
 
-    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v6')) || {};
-    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v1')) || {}; // 횟수 저장소
-    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v6')) || { lastDaily: 0, lastWeekly: 0 };
+    // 유저 개개인이 직접 추가한 개인 숙제 목록 (내 브라우저에만 저장됨)
+    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v1')) || [];
+
+    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v7')) || {};
+    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v2')) || {};
+    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v7')) || { lastDaily: 0, lastWeekly: 0 };
     
     let isAdmin = sessionStorage.getItem('blossom_is_admin') === 'true';
-    const ADMIN_PASSWORD = "gktmddn0710";
+    const ADMIN_PASSWORD = "gktmddn0710"; // 설정하신 관리자 비밀번호
 
     function getLastDailyResetTime() {
       const d = new Date();
@@ -347,15 +388,16 @@
       const targetWeeklyReset = getLastWeeklyResetTime();
       let isChanged = false;
 
-      // 자동 리셋 시에는 '체크 상태'만 초기화되고, 유저가 설정한 '횟수(userCounts)'는 절대 지워지지 않습니다!
       if (resetTimes.lastDaily < targetDailyReset) {
         MASTER_TODOS.filter(t => t.type === 'daily').forEach(t => { userStates[t.id] = false; });
+        USER_CUSTOM_TODOS.filter(t => t.type === 'daily').forEach(t => { userStates[t.id] = false; });
         resetTimes.lastDaily = now;
         isChanged = true;
       }
 
       if (resetTimes.lastWeekly < targetWeeklyReset) {
         MASTER_TODOS.filter(t => t.type === 'weekly').forEach(t => { userStates[t.id] = false; });
+        USER_CUSTOM_TODOS.filter(t => t.type === 'weekly').forEach(t => { userStates[t.id] = false; });
         resetTimes.lastWeekly = now;
         isChanged = true;
       }
@@ -364,10 +406,11 @@
     }
 
     function save() {
-      localStorage.setItem('blossom_master_todos_v3', JSON.stringify(MASTER_TODOS));
-      localStorage.setItem('blossom_user_states_v6', JSON.stringify(userStates));
-      localStorage.setItem('blossom_user_counts_v1', JSON.stringify(userCounts)); // 횟수 별도 저장
-      localStorage.setItem('blossom_reset_times_v6', JSON.stringify(resetTimes));
+      localStorage.setItem('blossom_master_todos_v4', JSON.stringify(MASTER_TODOS));
+      localStorage.setItem('blossom_user_custom_todos_v1', JSON.stringify(USER_CUSTOM_TODOS));
+      localStorage.setItem('blossom_user_states_v7', JSON.stringify(userStates));
+      localStorage.setItem('blossom_user_counts_v2', JSON.stringify(userCounts));
+      localStorage.setItem('blossom_reset_times_v7', JSON.stringify(resetTimes));
     }
 
     function render() {
@@ -389,23 +432,31 @@
         adminToggleBtn.style.display = 'block';
       }
 
-      MASTER_TODOS.forEach(item => {
+      // 1. 공용 기본 숙제 렌더링
+      renderTodoList(MASTER_TODOS, dailyContainer, weeklyContainer, false);
+      // 2. 유저 개인이 추가한 숙제 렌더링
+      renderTodoList(USER_CUSTOM_TODOS, dailyContainer, weeklyContainer, true);
+    }
+
+    function renderTodoList(list, dailyContainer, weeklyContainer, isCustom) {
+      list.forEach(item => {
         const isDone = !!userStates[item.id];
-        // 유저가 설정한 횟수가 없으면 기본값 "1" 또는 "기본"으로 세팅
-        const currentCount = userCounts[item.id] || "1";
+        const currentCount = userCounts[item.id] || "1판";
 
         const div = document.createElement('div');
-        div.className = `todo-item ${isDone ? 'done' : ''}`;
+        div.className = `todo-item ${isDone ? 'done' : ''} ${isCustom ? 'custom' : ''}`;
         
         div.innerHTML = `
           <div class="todo-left">
             <input type="checkbox" class="todo-checkbox" ${isDone ? 'checked' : ''} onchange="toggleTodo(${item.id})">
-            <span class="todo-text">${item.title}</span>
+            <span class="todo-text">
+              ${isCustom ? '<span class="custom-badge">내숙제</span>' : ''}
+              ${item.title}
+            </span>
           </div>
           <div class="todo-right">
-            <!-- 🔢 뉴비와 고스펙 모두 대응 가능한 횟수 선택 셀렉트 박스 -->
             <select class="count-select" onchange="updateCount(${item.id}, this)">
-              <option value="1각" ${currentCount === '1각' ? 'selected' : ''}>1판</option>
+              <option value="1판" ${currentCount === '1판' ? 'selected' : ''}>1판</option>
               <option value="2판" ${currentCount === '2판' ? 'selected' : ''}>2판</option>
               <option value="3판" ${currentCount === '3판' ? 'selected' : ''}>3판</option>
               <option value="4판" ${currentCount === '4판' ? 'selected' : ''}>4판</option>
@@ -413,7 +464,9 @@
               <option value="10판" ${currentCount === '10판' ? 'selected' : ''}>10판</option>
               <option value="자유" ${currentCount === '자유' ? 'selected' : ''}>자유</option>
             </select>
-            ${isAdmin ? `<button class="btn-del" onclick="deleteMasterTodo(${item.id})" title="삭제">✕</button>` : ''}
+            <!-- 공용 숙제는 관리자만 삭제 가능, 개인 숙제는 누구나 본인 화면에서 삭제 가능 -->
+            ${isAdmin && !isCustom ? `<button class="btn-del" onclick="deleteMasterTodo(${item.id})" title="공용 삭제">✕</button>` : ''}
+            ${isCustom ? `<button class="btn-del" onclick="deleteUserCustomTodo(${item.id})" title="내 숙제 삭제">✕</button>` : ''}
           </div>
         `;
 
@@ -431,14 +484,13 @@
       render();
     }
 
-    // 횟수 바꿀 때 실행되는 함수 (창을 꺼도 유지됨!)
     function updateCount(id, selectEl) {
       userCounts[id] = selectEl.value;
       save();
     }
 
     function tryAdminLogin() {
-      const inputPw = prompt("제작자(관리자) 비밀번호를 입력하세요:");
+      const inputPw = prompt("관리자 비밀번호를 입력하세요:");
       if (inputPw === ADMIN_PASSWORD) {
         isAdmin = true;
         sessionStorage.setItem('blossom_is_admin', 'true');
@@ -455,28 +507,68 @@
       render();
     }
 
+    // 유저 개인 숙제 추가 패널 토글
+    function toggleUserPanel() {
+      const panel = document.getElementById('userPanel');
+      panel.classList.toggle('active');
+    }
+
+    // 관리자 공용 숙제 추가
     function addMasterTodo() {
-      const type = document.getElementById('newType').value;
-      const title = document.getElementById('newTitle').value.trim();
+      const type = document.getElementById('adminNewType').value;
+      const title = document.getElementById('adminNewTitle').value.trim();
 
       if (!title) {
-        alert("던전/숙제 이름을 입력해주세요!");
+        alert("공용 숙제 이름을 입력해주세요!");
         return;
       }
 
       const newId = Date.now();
       MASTER_TODOS.push({ id: newId, type: type, title: title });
       userStates[newId] = false;
-      userCounts[newId] = "1판"; // 기본 판수
+      userCounts[newId] = "1판";
 
       save();
       render();
-      document.getElementById('newTitle').value = '';
+      document.getElementById('adminNewTitle').value = '';
     }
 
+    // 유저 개인 숙제 추가
+    function addUserCustomTodo() {
+      const type = document.getElementById('userNewType').value;
+      const title = document.getElementById('userNewTitle').value.trim();
+
+      if (!title) {
+        alert("추가할 개인 숙제 이름을 입력해주세요!");
+        return;
+      }
+
+      const newId = Date.now() + Math.random(); // 고유 ID 생성
+      USER_CUSTOM_TODOS.push({ id: newId, type: type, title: title });
+      userStates[newId] = false;
+      userCounts[newId] = "1판";
+
+      save();
+      render();
+      document.getElementById('userNewTitle').value = '';
+      document.getElementById('userPanel').classList.remove('active');
+    }
+
+    // 공용 숙제 삭제 (관리자만)
     function deleteMasterTodo(id) {
-      if (confirm("이 던전/숙제를 공용 목록에서 완전히 삭제하시겠습니까?")) {
+      if (confirm("이 공용 숙제를 모든 유저 목록에서 삭제하시겠습니까?")) {
         MASTER_TODOS = MASTER_TODOS.filter(t => t.id !== id);
+        delete userStates[id];
+        delete userCounts[id];
+        save();
+        render();
+      }
+    }
+
+    // 개인 숙제 삭제 (본인 화면에서만)
+    function deleteUserCustomTodo(id) {
+      if (confirm("이 개인 숙제를 목록에서 삭제하시겠습니까?")) {
+        USER_CUSTOM_TODOS = USER_CUSTOM_TODOS.filter(t => t.id !== id);
         delete userStates[id];
         delete userCounts[id];
         save();
@@ -487,16 +579,15 @@
     function resetCheck(type) {
       const typeName = type === 'daily' ? '일일' : '주간';
       if (confirm(`${typeName} 숙제 체크를 모두 해제하시겠습니까? (설정하신 판수는 유지됩니다!)`)) {
-        MASTER_TODOS.filter(t => t.type === type).forEach(t => {
-          userStates[t.id] = false;
-        });
+        MASTER_TODOS.filter(t => t.type === type).forEach(t => { userStates[t.id] = false; });
+        USER_CUSTOM_TODOS.filter(t => t.type === type).forEach(t => { userStates[t.id] = false; });
         save();
         render();
       }
     }
 
     function restoreDefault() {
-      if (confirm("내 체크 상태와 횟수 설정을 모두 초기화하시겠습니까?")) {
+      if (confirm("내 체크 상태와 판수 설정을 초기화하시겠습니까? (직접 추가한 개인 숙제는 유지됩니다)")) {
         userStates = {};
         userCounts = {};
         save();
