@@ -345,7 +345,7 @@
   </div>
 
   <script>
-    // 🌟 요청하신 5개 항목을 제거한 순수 퀘스트 기본 목록 (일일 4개 / 주간 9개)
+    // 🌟 기본 공용 퀘스트 목록 (주간 숙제 2개 추가 완료)
     const DEFAULT_MASTER_TODOS = [
       // 일일 숙제 (4개)
       { id: 101, type: "daily", title: "17주년 퀘스트", defaultCount: "1회" },
@@ -353,25 +353,26 @@
       { id: 103, type: "daily", title: "홀리엔젤몬 퀘스트", defaultCount: "1회" },
       { id: 104, type: "daily", title: "에테몬 퀘스트", defaultCount: "1회" },
 
-      // 주간 숙제 (9개)
+      // 주간 숙제 (11개: 키노, 네버랜드 추가 완료)
       { id: 201, type: "weekly", title: "사성수 던전 퀘스트", defaultCount: "2회" },
       { id: 202, type: "weekly", title: "다크웹", defaultCount: "1회" },
       { id: 203, type: "weekly", title: "스사노오몬 던전", defaultCount: "1회" },
       { id: 204, type: "weekly", title: "카이저의 기지 Easy (키이)", defaultCount: "1회" },
-      { id: 205, type: "weekly", title: "로얄 베이스 어려움 (로어)", defaultCount: "1회" },
-      { id: 206, type: "weekly", title: "카이저의 영역 레이드 (카영레)", defaultCount: "12회" },
-      { id: 207, type: "weekly", title: "그림자 미궁 퀘스트", defaultCount: "2회" },
-      { id: 208, type: "weekly", title: "디지몬 카이저 노말 (메청던)", defaultCount: "1회" },
-      { id: 209, type: "weekly", title: "상점가 이지,노말 하드 / 악목던전 (입장횟수 공유)", defaultCount: "3회" }
+      { id: 205, type: "weekly", title: "카이저의 기지 노말 ( 키노 ) 160제한", defaultCount: "1회" },
+      { id: 206, type: "weekly", title: "네버랜드", defaultCount: "1회" },
+      { id: 207, type: "weekly", title: "로얄 베이스 어려움 (로어)", defaultCount: "1회" },
+      { id: 208, type: "weekly", title: "카이저의 영역 레이드 (카영레)", defaultCount: "12회" },
+      { id: 209, type: "weekly", title: "그림자 미궁 퀘스트", defaultCount: "2회" },
+      { id: 210, type: "weekly", title: "디지몬 카이저 노말 (메청던)", defaultCount: "1회" },
+      { id: 211, type: "weekly", title: "상점가 이지,노말 하드 / 악목던전 (입장횟수 공유)", defaultCount: "3회" }
     ];
 
-    // 기존 버전 데이터와 새 디폴트 목록 동기화
     let MASTER_TODOS = DEFAULT_MASTER_TODOS;
 
-    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v7')) || [];
-    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v10')) || {};
-    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v5')) || {};
-    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v10')) || { lastDaily: 0, lastWeekly: 0 };
+    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v8')) || [];
+    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v11')) || {};
+    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v6')) || {};
+    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v11')) || { lastDaily: 0, lastWeekly: 0 };
     
     let isAdmin = sessionStorage.getItem('blossom_is_admin') === 'true';
     const ADMIN_PASSWORD = "gktmddn0710";
@@ -424,11 +425,11 @@
     }
 
     function save() {
-      localStorage.setItem('blossom_master_todos_v7', JSON.stringify(MASTER_TODOS));
-      localStorage.setItem('blossom_user_custom_todos_v7', JSON.stringify(USER_CUSTOM_TODOS));
-      localStorage.setItem('blossom_user_states_v10', JSON.stringify(userStates));
-      localStorage.setItem('blossom_user_counts_v5', JSON.stringify(userCounts));
-      localStorage.setItem('blossom_reset_times_v10', JSON.stringify(resetTimes));
+      localStorage.setItem('blossom_master_todos_v8', JSON.stringify(MASTER_TODOS));
+      localStorage.setItem('blossom_user_custom_todos_v8', JSON.stringify(USER_CUSTOM_TODOS));
+      localStorage.setItem('blossom_user_states_v11', JSON.stringify(userStates));
+      localStorage.setItem('blossom_user_counts_v6', JSON.stringify(userCounts));
+      localStorage.setItem('blossom_reset_times_v11', JSON.stringify(resetTimes));
     }
 
     function render() {
