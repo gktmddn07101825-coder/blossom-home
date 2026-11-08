@@ -250,9 +250,9 @@
   <script>
     // 🌟 길드 기본 디폴트 세팅 (알람음 sound 속성 포함)
     const ADMIN_PRESETS = [
-      { id: 101, name: "도전의 가호", duration: 1800, icon: "Blessing.PNG", sound: "digivice.wav" },
-      { id: 102, name: "슈퍼 증폭 부스터", duration: 180, icon: "Booster.PNG", sound: "digivice2.mp3" },
-      { id: 103, name: "통합 버프", duration: 300, icon: "Integration.PNG", sound: "alert.mp3" }
+      { id: 101, name: "도전의 가호", duration: 7200, icon: "Blessing.PNG", sound: "digivice.wav" },
+      { id: 102, name: "슈퍼 증폭 부스터", duration: 3600, icon: "Booster.PNG", sound: "digivice2.mp3" },
+      { id: 103, name: "통합 버프", duration: 3600, icon: "Integration.PNG", sound: "alert.mp3" }
     ];
 
     let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v2')) || ADMIN_PRESETS;
