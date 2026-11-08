@@ -321,7 +321,8 @@
     </div>
 
     <div class="reset-info">
-      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 💡 업데이트를 해도 내가 설정한 회수(최대 20회)와 개인 숙제는 그대로 보존됩니다!
+      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 📅 **주간 숙제**: 매주 화요일 08시 자동 리셋<br>
+      💡 사이트가 업데이트되어도 내가 세팅한 횟수(최대 20회)와 [내 숙제]는 유지됩니다!
     </div>
 
     <div class="homework-grid">
@@ -344,49 +345,58 @@
   </div>
 
   <script>
+    // 🌟 요청하신 5개 항목을 제거한 순수 퀘스트 기본 목록 (일일 4개 / 주간 9개)
     const DEFAULT_MASTER_TODOS = [
-      { id: 1, type: "daily", title: "☀️ 일일 퀘스트 & 출석체크" },
-      { id: 2, type: "daily", title: "⚔️ 콜로세움 도전" },
-      { id: 3, type: "daily", title: "🐉 일일 던전 (현카 / 사방 등)" },
-      { id: 4, type: "weekly", title: "🏆 주간 레이드 보스 클리어" },
-      { id: 5, type: "weekly", title: "📦 주간 던전 티켓 소진" }
+      // 일일 숙제 (4개)
+      { id: 101, type: "daily", title: "17주년 퀘스트", defaultCount: "1회" },
+      { id: 102, type: "daily", title: "간쿠몬 퀘스트", defaultCount: "1회" },
+      { id: 103, type: "daily", title: "홀리엔젤몬 퀘스트", defaultCount: "1회" },
+      { id: 104, type: "daily", title: "에테몬 퀘스트", defaultCount: "1회" },
+
+      // 주간 숙제 (9개)
+      { id: 201, type: "weekly", title: "사성수 던전 퀘스트", defaultCount: "2회" },
+      { id: 202, type: "weekly", title: "다크웹", defaultCount: "1회" },
+      { id: 203, type: "weekly", title: "스사노오몬 던전", defaultCount: "1회" },
+      { id: 204, type: "weekly", title: "카이저의 기지 Easy (키이)", defaultCount: "1회" },
+      { id: 205, type: "weekly", title: "로얄 베이스 어려움 (로어)", defaultCount: "1회" },
+      { id: 206, type: "weekly", title: "카이저의 영역 레이드 (카영레)", defaultCount: "12회" },
+      { id: 207, type: "weekly", title: "그림자 미궁 퀘스트", defaultCount: "2회" },
+      { id: 208, type: "weekly", title: "디지몬 카이저 노말 (메청던)", defaultCount: "1회" },
+      { id: 209, type: "weekly", title: "상점가 이지,노말 하드 / 악목던전 (입장횟수 공유)", defaultCount: "3회" }
     ];
 
-    let savedMasterTodos = JSON.parse(localStorage.getItem('blossom_master_todos_v5'));
-    let MASTER_TODOS = savedMasterTodos ? mergeMasterTodos(DEFAULT_MASTER_TODOS, savedMasterTodos) : DEFAULT_MASTER_TODOS;
+    // 기존 버전 데이터와 새 디폴트 목록 동기화
+    let MASTER_TODOS = DEFAULT_MASTER_TODOS;
 
-    function mergeMasterTodos(defaults, saved) {
-      let merged = [...saved];
-      defaults.forEach(def => {
-        if (!merged.some(m => m.id === def.id)) {
-          merged.push(def);
-        }
-      });
-      return merged;
-    }
-
-    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v2')) || [];
-    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v8')) || {};
-    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v3')) || {};
-    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v8')) || { lastDaily: 0, lastWeekly: 0 };
+    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v7')) || [];
+    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v10')) || {};
+    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v5')) || {};
+    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v10')) || { lastDaily: 0, lastWeekly: 0 };
     
     let isAdmin = sessionStorage.getItem('blossom_is_admin') === 'true';
     const ADMIN_PASSWORD = "gktmddn0710";
 
+    // 1. 일일 리셋 시간 (매일 자정 00:00)
     function getLastDailyResetTime() {
       const d = new Date();
       d.setHours(0, 0, 0, 0);
       return d.getTime();
     }
 
+    // 2. 주간 리셋 시간 (매주 화요일 오전 08:00)
     function getLastWeeklyResetTime() {
       const d = new Date();
       const day = d.getDay();
       let diff = day - 2;
-      if (diff === 0 && d.getHours() < 20) diff = 7;
-      else if (diff < 0) diff += 7;
+      
+      if (diff === 0 && d.getHours() < 8) {
+        diff = 7;
+      } else if (diff < 0) {
+        diff += 7;
+      }
+      
       d.setDate(d.getDate() - diff);
-      d.setHours(20, 0, 0, 0);
+      d.setHours(8, 0, 0, 0);
       return d.getTime();
     }
 
@@ -414,11 +424,11 @@
     }
 
     function save() {
-      localStorage.setItem('blossom_master_todos_v5', JSON.stringify(MASTER_TODOS));
-      localStorage.setItem('blossom_user_custom_todos_v2', JSON.stringify(USER_CUSTOM_TODOS));
-      localStorage.setItem('blossom_user_states_v8', JSON.stringify(userStates));
-      localStorage.setItem('blossom_user_counts_v3', JSON.stringify(userCounts));
-      localStorage.setItem('blossom_reset_times_v8', JSON.stringify(resetTimes));
+      localStorage.setItem('blossom_master_todos_v7', JSON.stringify(MASTER_TODOS));
+      localStorage.setItem('blossom_user_custom_todos_v7', JSON.stringify(USER_CUSTOM_TODOS));
+      localStorage.setItem('blossom_user_states_v10', JSON.stringify(userStates));
+      localStorage.setItem('blossom_user_counts_v5', JSON.stringify(userCounts));
+      localStorage.setItem('blossom_reset_times_v10', JSON.stringify(resetTimes));
     }
 
     function render() {
@@ -447,7 +457,7 @@
     function renderTodoList(list, dailyContainer, weeklyContainer, isCustom) {
       list.forEach(item => {
         const isDone = !!userStates[item.id];
-        const currentCount = userCounts[item.id] || "1회";
+        const currentCount = userCounts[item.id] || item.defaultCount || "1회";
 
         const div = document.createElement('div');
         div.className = `todo-item ${isDone ? 'done' : ''} ${isCustom ? 'custom' : ''}`;
@@ -528,7 +538,7 @@
       }
 
       const newId = Date.now();
-      MASTER_TODOS.push({ id: newId, type: type, title: title });
+      MASTER_TODOS.push({ id: newId, type: type, title: title, defaultCount: "1회" });
       userStates[newId] = false;
       userCounts[newId] = "1회";
 
@@ -547,7 +557,7 @@
       }
 
       const newId = Date.now() + Math.random();
-      USER_CUSTOM_TODOS.push({ id: newId, type: type, title: title });
+      USER_CUSTOM_TODOS.push({ id: newId, type: type, title: title, defaultCount: "1회" });
       userStates[newId] = false;
       userCounts[newId] = "1회";
 
