@@ -3,573 +3,388 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌸 블로썸 길드 이벤트 캘린더</title>
+  <title>🌸 블로썸 길드 이벤트 & 공지 센터</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #121118;
+      background-color: #1a1528;
       color: #ffffff;
       font-family: 'Segoe UI', Malgun Gothic, sans-serif;
-      min-height: 100vh;
+      padding: 20px 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-bottom: 50px;
+      min-height: 100vh;
+      background-image: radial-gradient(#ff9a9e 0.6px, transparent 0.6px), radial-gradient(#ff9a9e 0.6px, #1a1528 0.6px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
     }
-
-    /* 🎮 상단 네비게이션 */
-    nav.navbar {
-      width: 100%;
-      background: #1e122b;
-      border-bottom: 3px solid #ff758c;
-      display: flex;
-      justify-content: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    .container { width: 100%; max-width: 950px; }
+    
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: #2b1f3d;
+      padding: 18px;
+      border-radius: 16px;
+      border: 4px solid #ff758c;
+      box-shadow: 0 6px 0 #b33951, 0 10px 20px rgba(0,0,0,0.4);
     }
-    .nav-container {
-      width: 100%;
-      max-width: 1200px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      height: 60px;
-    }
-    .brand-logo {
-      font-size: 1.3rem;
-      font-weight: 900;
+    header h1 {
+      font-size: 1.8rem;
       color: #ff9a9e;
-      text-decoration: none;
-      text-shadow: 0 0 10px #ff758c;
+      margin-bottom: 4px;
+      text-shadow: 2px 2px 0px #000;
     }
+    header p { font-size: 0.85rem; color: #d1c4e9; font-weight: 500; }
 
-    .main-container {
-      width: 100%;
-      max-width: 1200px;
-      padding: 20px;
-    }
-
-    /* 상단 헤더 & 관리자 조작 버튼 */
-    .header-bar {
+    .controls-panel {
+      background: #2b1f3d;
+      padding: 12px 15px;
+      border-radius: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      background: #1e1929;
-      padding: 15px 20px;
-      border-radius: 12px;
-      border: 2px solid #ff758c;
+      border: 3px solid #ff758c;
+      box-shadow: 0 4px 0 #b33951;
     }
-    .header-bar h1 {
-      font-size: 1.5rem;
-      color: #ff9a9e;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    button {
-      font-family: inherit;
-      font-size: 0.85rem;
+    .btn {
+      background: #ff758c;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
       padding: 8px 14px;
       border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
+      border: 2px solid #222;
+      box-shadow: 0 3px 0 #b33951;
+      font-size: 0.85rem;
     }
-    .btn-admin {
-      background: #ffb703;
-      color: #111;
-      box-shadow: 0 3px 0 #b57600;
-    }
-    .btn-admin:active {
-      transform: translateY(2px);
-      box-shadow: none;
-    }
+    .btn:active { transform: translateY(2px); box-shadow: none; }
+    .btn-admin { background: #ffb703; color: #111; border-color: #d48b00; box-shadow: 0 3px 0 #b57600; }
 
-    /* 🛠️ 관리자 전용 작성 패널 */
-    .admin-panel {
-      display: none;
-      background: #251c2e;
-      border: 2px solid #ffb703;
-      border-radius: 12px;
+    .calendar-card {
+      background: #2b1f3d;
+      border-radius: 16px;
       padding: 20px;
+      border: 4px solid #ff758c;
+      box-shadow: 0 6px 0 #b33951;
       margin-bottom: 25px;
     }
-    .admin-panel.active {
-      display: block;
-    }
-    .admin-panel h3 {
-      color: #ffb703;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .form-grid input, .form-grid select {
-      background: #121118;
-      color: #fff;
-      border: 1px solid #554270;
-      padding: 8px 10px;
-      border-radius: 6px;
-      outline: none;
-    }
-    .btn-add {
-      background: #ff758c;
-      color: white;
-      box-shadow: 0 3px 0 #b33951;
-      width: 100%;
-      padding: 10px;
-      font-size: 0.95rem;
-    }
-
-    /* 📅 게임 타임라인 달력 보드 */
-    .timeline-wrapper {
-      background: #171522;
-      border-radius: 14px;
-      border: 2px solid #382950;
-      overflow-x: auto;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .timeline-container {
-      min-width: 1000px;
-      position: relative;
-    }
-
-    /* 날짜 헤더 (월/일 표시) */
-    .timeline-header {
+    .calendar-header {
       display: flex;
-      background: #0f0e17;
-      border-bottom: 2px solid #2b1f3d;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-header h2 { font-size: 1.4rem; color: #ff9a9e; text-shadow: 1px 1px 0 #000; }
+    .month-nav { display: flex; gap: 8px; align-items: center; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .day-header {
+      text-align: center;
+      font-weight: bold;
+      padding: 8px 0;
+      color: #ffb7c5;
+      font-size: 0.9rem;
     }
     .day-cell {
-      flex: 1;
-      text-align: center;
-      padding: 10px 0;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.8rem;
-      color: #8a7b9d;
-    }
-    .day-cell.today {
-      background: rgba(255, 117, 140, 0.15);
-      color: #ff758c;
-      font-weight: bold;
-    }
-    .day-number {
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: #fff;
-      margin-top: 2px;
-    }
-    .day-cell.today .day-number {
-      color: #ff9a9e;
-    }
-
-    /* 현재 시간 표시 세로선 (붉은 레이저 라인) */
-    .current-time-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: #ff3366;
-      box-shadow: 0 0 8px #ff3366;
-      z-index: 5;
-      pointer-events: none;
-    }
-    .current-time-badge {
-      position: absolute;
-      top: 4px;
-      transform: translateX(-50%);
-      background: #ff3366;
-      color: white;
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    /* 이벤트 바 트랙 레인 */
-    .timeline-body {
-      padding: 15px 0;
+      background: #382950;
+      border-radius: 8px;
+      min-height: 90px;
+      padding: 6px;
+      border: 1px solid #4a3866;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 4px;
       position: relative;
-      min-height: 300px;
-      /* 날짜별 격자 배경선 */
-      background-size: calc(100% / 15) 100%;
-      background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px);
     }
+    .day-cell.other-month { opacity: 0.3; }
+    .day-cell.today { border: 2px solid #00ffcc; background: #2a3848; }
+    .day-number { font-size: 0.85rem; font-weight: bold; color: #fff; margin-bottom: 4px; }
 
-    /* 🏷️ 이벤트 바 스타일 */
-    .event-bar-track {
-      position: relative;
-      height: 44px;
-      width: 100%;
-    }
     .event-bar {
-      position: absolute;
-      height: 100%;
-      border-radius: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 15px;
-      color: white;
+      font-size: 0.72rem;
       font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      background-size: cover;
-      background-position: center;
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: transform 0.15s;
-      overflow: hidden;
-    }
-    .event-bar::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.35); /* 글씨 가독성을 위한 어두운 오버레이 */
-      z-index: 1;
-    }
-    .event-bar:hover {
-      transform: scale(1.01);
-      z-index: 8;
-    }
-    .event-title {
-      position: relative;
-      z-index: 2;
-      text-shadow: 1px 1px 3px #000;
+      padding: 3px 6px;
+      border-radius: 4px;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-right: 10px;
-    }
-    .event-dday {
-      position: relative;
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      border: 1px solid rgba(255,255,255,0.3);
-      white-space: nowrap;
-    }
-    .btn-del-event {
-      position: relative;
-      z-index: 3;
-      background: #ff5252;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 0.7rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       cursor: pointer;
-      margin-left: 6px;
+    }
+
+    .admin-panel {
+      display: none;
+      background: #3d2b27;
+      padding: 18px;
+      border-radius: 14px;
+      border: 3px solid #ffb703;
+      box-shadow: 0 4px 0 #b57600;
+      margin-bottom: 20px;
+    }
+    .admin-panel.active { display: block; }
+    .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .form-row input, .form-row select {
+      padding: 8px; border-radius: 6px; border: 1px solid #554270; background: #1a1528; color: #fff; flex: 1; min-width: 130px;
+    }
+
+    .event-manage-list { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+    .manage-item {
+      background: #2b1f3d; padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ffb703; font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="brand-logo">🌸 BLOSSOM GUILD</a>
-      <a href="index.html" style="color:#d1c4e9; text-decoration:none; font-size:0.9rem; font-weight:bold;">🏠 메인 홈으로</a>
-    </div>
-  </nav>
+  <div class="container">
+    <header>
+      <h1>🌸 블로썸 길드 이벤트 & 공지 센터</h1>
+      <p>실시간 공유 이벤트 달력 · 주요 주간 일정</p>
+    </header>
 
-  <div class="main-container">
-    <div class="header-bar">
-      <h1>🗓️ 길드 이벤트 캘린더</h1>
-      <button class="btn-admin" id="adminBtn" onclick="tryAdminLogin()">🔒 이벤트 관리 (관리자)</button>
+    <div class="controls-panel">
+      <div style="font-size: 0.85rem; color: #00ffcc; font-weight: bold;" id="syncStatus">
+        🔄 데이터 동기화 완료
+      </div>
+      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 모드 (이벤트 수정)</button>
     </div>
 
-    <!-- 관리자 작성 폼 -->
+    <!-- 관리자 이벤트를 실시간 등록하는 패널 -->
     <div class="admin-panel" id="adminPanel">
-      <h3>➕ 새 이벤트 등록</h3>
-      <div class="form-grid">
-        <input type="text" id="evTitle" placeholder="이벤트 제목 (예: 핫타임 사냥 BOOST UP!)">
-        <input type="date" id="evStart">
-        <input type="date" id="evEnd">
-        <input type="text" id="evBg" placeholder="배경 이미지 URL (선택 사항)">
-        <select id="evColor">
-          <option value="#ff758c">🌸 핑크 테마</option>
-          <option value="#2196f3">🔷 블루 테마</option>
-          <option value="#4caf50">🟢 그린 테마</option>
-          <option value="#ff9800">🟠 오렌지 테마</option>
-          <option value="#9c27b0">🟣 퍼플 테마</option>
+      <h3 style="color: #ffb703; display: flex; justify-content: space-between; align-items: center;">
+        <span>🛠️ [관리자 모드] 길드 공유 이벤트 등록/삭제</span>
+        <button class="btn" style="font-size: 0.75rem; background:#ff5252; padding: 3px 8px;" onclick="logoutAdmin()">닫기</button>
+      </h3>
+      
+      <div class="form-row">
+        <input type="text" id="evtTitle" placeholder="이벤트 / 공지 제목">
+        <input type="date" id="evtStart">
+        <input type="date" id="evtEnd">
+        <select id="evtColor">
+          <option value="#ff758c">🌸 핑크</option>
+          <option value="#00ffcc">✨ 민트</option>
+          <option value="#ffb703">⭐ 골드</option>
+          <option value="#7289da">🎧 블루</option>
+          <option value="#ff5252">🔥 레드</option>
         </select>
+        <button class="btn" style="background:#ffb703; color:#000;" onclick="addNewEvent()">전 유저 공지 등록</button>
       </div>
-      <button class="btn-add" onclick="addEvent()">이벤트 달력에 등록</button>
+
+      <div class="event-manage-list" id="adminEventList"></div>
     </div>
 
-    <!-- 타임라인 달력판 -->
-    <div class="timeline-wrapper">
-      <div class="timeline-container" id="timelineContainer">
-        <!-- 상단 날짜 헤더 -->
-        <div class="timeline-header" id="timelineHeader"></div>
-
-        <!-- 실시간 세로 기준선 -->
-        <div class="current-time-line" id="timeLine">
-          <div class="current-time-badge" id="timeBadge">NOW</div>
+    <div class="calendar-card">
+      <div class="calendar-header">
+        <h2 id="calendarTitle">2026년 11월</h2>
+        <div class="month-nav">
+          <button class="btn" onclick="moveMonth(-1)">◀ 이전달</button>
+          <button class="btn" onclick="moveMonth(1)">다음달 ▶</button>
         </div>
-
-        <!-- 이벤트 바 레인 -->
-        <div class="timeline-body" id="timelineBody"></div>
       </div>
+
+      <div class="calendar-grid" id="calendarGrid"></div>
     </div>
   </div>
 
   <script>
-    // 🌟 15일간의 범위 타임라인 구성 (오늘 기준 -3일 ~ +11일)
-    const DAYS_TOTAL = 15;
-    const START_OFFSET = -3; 
-    
-    // 샘플 디폴트 이벤트 데이터
-    let EVENTS = JSON.parse(localStorage.getItem('blossom_events_v1')) || [
-      {
-        id: 1,
-        title: "[핫타임] 경험치 & 사냥 BOOST UP!",
-        start: getOffsetDate(-2),
-        end: getOffsetDate(3),
-        bg: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500",
-        color: "#ff758c"
-      },
-      {
-        id: 2,
-        title: "🏆 주간 길드 콜로세움 도전 주간",
-        start: getOffsetDate(0),
-        end: getOffsetDate(6),
-        bg: "",
-        color: "#2196f3"
-      }
-    ];
-
-    let isAdmin = sessionStorage.getItem('blossom_event_admin') === 'true';
+    // 🌟 연동된 온라인 DB 설정
+    const BIN_ID = "6af0f5d6ac6210605a783891";
+    const API_KEY = "$2a$10$QCeURoTGN.wcSMcioL8CB.Cu7fE2kpyPt1GIMf3cuaUgR2sDlyyMC";
     const ADMIN_PASSWORD = "gktmddn0710";
 
-    function getOffsetDate(offsetDays) {
-      const d = new Date();
-      d.setDate(d.getDate() + offsetDays);
-      return d.toISOString().split('T')[0];
-    }
+    let currentDate = new Date();
+    let eventsList = [];
+    let isAdmin = sessionStorage.getItem('blossom_event_admin') === 'true';
 
-    function initTimeline() {
-      renderHeader();
-      renderEvents();
-      updateTimeLinePosition();
-    }
-
-    // 날짜 헤더 생성 (월/일 표시 및 오늘 표시)
-    function renderHeader() {
-      const headerEl = document.getElementById('timelineHeader');
-      headerEl.innerHTML = '';
-
-      const todayStr = new Date().toISOString().split('T')[0];
-
-      for (let i = 0; i < DAYS_TOTAL; i++) {
-        const d = new Date();
-        d.setDate(d.getDate() + START_OFFSET + i);
-
-        const dateStr = d.toISOString().split('T')[0];
-        const month = d.getMonth() + 1;
-        const dateNum = d.getDate();
-        const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayName = dayNames[d.getDay()];
-
-        const cell = document.createElement('div');
-        cell.className = `day-cell ${dateStr === todayStr ? 'today' : ''}`;
-        cell.innerHTML = `
-          <div>${month}월 (${dayName})</div>
-          <div class="day-number">${dateNum}</div>
-        `;
-        headerEl.appendChild(cell);
-      }
-    }
-
-    // 이벤트 바 위치 및 길이 계산하여 화면에 배치
-    function renderEvents() {
-      const bodyEl = document.getElementById('timelineBody');
-      const adminPanel = document.getElementById('adminPanel');
-      const adminBtn = document.getElementById('adminBtn');
-
-      bodyEl.innerHTML = '';
-
-      if (isAdmin) {
-        adminPanel.classList.add('active');
-        adminBtn.textContent = '🔓 작성 모드 중';
-      } else {
-        adminPanel.classList.remove('active');
-        adminBtn.textContent = '🔒 이벤트 관리 (관리자)';
-      }
-
-      const startDateWindow = new Date();
-      startDateWindow.setDate(startDateWindow.getDate() + START_OFFSET);
-      startDateWindow.setHours(0, 0, 0, 0);
-
-      EVENTS.forEach(ev => {
-        const evStart = new Date(ev.start + 'T00:00:00');
-        const evEnd = new Date(ev.end + 'T23:59:59');
-
-        // 타임라인 내 시작 % 및 너비 % 계산
-        const startDiffDays = (evStart - startDateWindow) / (1000 * 60 * 60 * 24);
-        const durationDays = (evEnd - evStart) / (1000 * 60 * 60 * 24);
-
-        let leftPercent = (startDiffDays / DAYS_TOTAL) * 100;
-        let widthPercent = (durationDays / DAYS_TOTAL) * 100;
-
-        // 화면 밖으로 벗어나는 경우 보정
-        if (leftPercent < 0) {
-          widthPercent += leftPercent;
-          leftPercent = 0;
-        }
-
-        const track = document.createElement('div');
-        track.className = 'event-bar-track';
-
-        const bar = document.createElement('div');
-        bar.className = 'event-bar';
-        bar.style.left = `${leftPercent}%`;
-        bar.style.width = `${widthPercent}%`;
-        bar.style.backgroundColor = ev.color || '#ff758c';
-
-        if (ev.bg) {
-          bar.style.backgroundImage = `url('${ev.bg}')`;
-        }
-
-        // 남은 D-day 계산
-        const now = new Date();
-        const remainMs = evEnd - now;
-        let ddayText = "";
-        if (remainMs > 0) {
-          const daysLeft = Math.floor(remainMs / (1000 * 60 * 60 * 24));
-          ddayText = daysLeft === 0 ? "오늘 종료" : `${daysLeft}일 남음`;
+    // 1. 온라인 DB에서 이벤트 데이터 불러오기 (전체 유저 공통)
+    async function fetchEventsFromCloud() {
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "🔄 최신 데이터 불러오는 중...";
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { "X-Master-Key": API_KEY }
+        });
+        const data = await res.json();
+        if (data.record && data.record.events) {
+          eventsList = data.record.events;
         } else {
-          ddayText = "종료됨";
+          eventsList = [];
         }
-
-        bar.innerHTML = `
-          <span class="event-title">${ev.title}</span>
-          <div style="display:flex; align-items:center;">
-            <span class="event-dday">${ddayText}</span>
-            ${isAdmin ? `<button class="btn-del-event" onclick="deleteEvent(${ev.id})">✕</button>` : ''}
-          </div>
-        `;
-
-        track.appendChild(bar);
-        bodyEl.appendChild(track);
-      });
-    }
-
-    // 현재 시각 붉은 세로선 위치 업데이트
-    function updateTimeLinePosition() {
-      const now = new Date();
-      const startDateWindow = new Date();
-      startDateWindow.setDate(startDateWindow.getDate() + START_OFFSET);
-      startDateWindow.setHours(0, 0, 0, 0);
-
-      const diffMs = now - startDateWindow;
-      const totalMs = DAYS_TOTAL * 24 * 60 * 60 * 1000;
-      const percent = (diffMs / totalMs) * 100;
-
-      const lineEl = document.getElementById('timeLine');
-      const badgeEl = document.getElementById('timeBadge');
-
-      if (percent >= 0 && percent <= 100) {
-        lineEl.style.left = `${percent}%`;
-        lineEl.style.display = 'block';
-        badgeEl.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-      } else {
-        lineEl.style.display = 'none';
+        statusEl.innerText = "✅ 실시간 동기화 완료";
+        render();
+      } catch (err) {
+        console.error("데이터 로드 실패:", err);
+        statusEl.innerText = "⚠️ 동기화 실패 (기본 화면 표시)";
+        render();
       }
     }
 
-    function saveEvents() {
-      localStorage.setItem('blossom_events_v1', JSON.stringify(EVENTS));
+    // 2. 온라인 DB로 저장하기 (관리자용)
+    async function saveEventsToCloud() {
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "⏳ 서버에 저장 중...";
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": API_KEY
+          },
+          body: JSON.stringify({ events: eventsList })
+        });
+        statusEl.innerText = "✅ 모든 유저 화면 반영 완료!";
+      } catch (err) {
+        console.error("저장 실패:", err);
+        alert("서버 저장 실패! 네트워크 상태를 확인하세요.");
+      }
+    }
+
+    function render() {
+      renderCalendar();
+      renderAdminPanel();
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      const title = document.getElementById('calendarTitle');
+      grid.innerHTML = '';
+
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      title.innerText = `${year}년 ${month + 1}월`;
+
+      const daysHeader = ['일', '월', '화', '수', '목', '금', '토'];
+      daysHeader.forEach(d => {
+        const div = document.createElement('div');
+        div.className = 'day-header';
+        div.innerText = d;
+        grid.appendChild(div);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+      const prevLastDate = new Date(year, month, 0).getDate();
+
+      // 이전 달 날짜 채우기
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const div = document.createElement('div');
+        div.className = 'day-cell other-month';
+        div.innerHTML = `<span class="day-number">${prevLastDate - i}</span>`;
+        grid.appendChild(div);
+      }
+
+      // 현재 달 날짜 채우기
+      const today = new Date();
+      for (let d = 1; d <= lastDate; d++) {
+        const div = document.createElement('div');
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+        div.className = `day-cell ${isToday ? 'today' : ''}`;
+        
+        let cellHtml = `<span class="day-number">${d}</span>`;
+        
+        // 해당 날짜에 걸치는 이벤트 바 바인딩
+        const currentCellTime = new Date(year, month, d).getTime();
+
+        eventsList.forEach(evt => {
+          const startTime = new Date(evt.start + "T00:00:00").getTime();
+          const endTime = new Date(evt.end + "T23:59:59").getTime();
+
+          if (currentCellTime >= startTime && currentCellTime <= endTime) {
+            cellHtml += `<div class="event-bar" style="background:${evt.color}" title="${evt.title}">${evt.title}</div>`;
+          }
+        });
+
+        div.innerHTML = cellHtml;
+        grid.appendChild(div);
+      }
+    }
+
+    function moveMonth(dir) {
+      currentDate.setMonth(currentDate.getMonth() + dir);
+      renderCalendar();
     }
 
     function tryAdminLogin() {
-      if (isAdmin) {
-        if (confirm("작성 모드를 종료하시겠습니까?")) {
-          isAdmin = false;
-          sessionStorage.removeItem('blossom_event_admin');
-          renderEvents();
-        }
-        return;
-      }
-
-      const input = prompt("관리자 비밀번호를 입력해 주세요:");
-      if (input === ADMIN_PASSWORD) {
+      const pw = prompt("관리자 비밀번호를 입력하세요:");
+      if (pw === ADMIN_PASSWORD) {
         isAdmin = true;
         sessionStorage.setItem('blossom_event_admin', 'true');
-        alert("관리자 인증 완료!");
-        renderEvents();
-      } else if (input !== null) {
-        alert("비밀번호가 틀렸습니다!");
+        alert("관리자 모드가 활성화되었습니다!");
+        render();
+      } else if (pw !== null) {
+        alert("비밀번호가 틀렸습니다.");
       }
     }
 
-    function addEvent() {
-      const title = document.getElementById('evTitle').value.trim();
-      const start = document.getElementById('evStart').value;
-      const end = document.getElementById('evEnd').value;
-      const bg = document.getElementById('evBg').value.trim();
-      const color = document.getElementById('evColor').value;
+    function logoutAdmin() {
+      isAdmin = false;
+      sessionStorage.removeItem('blossom_event_admin');
+      render();
+    }
+
+    function renderAdminPanel() {
+      const panel = document.getElementById('adminPanel');
+      const toggleBtn = document.getElementById('adminToggleBtn');
+      const listEl = document.getElementById('adminEventList');
+
+      if (isAdmin) {
+        panel.classList.add('active');
+        toggleBtn.style.display = 'none';
+
+        listEl.innerHTML = '<h4 style="color:#ffb703; margin-top:10px;">📋 등록된 공유 이벤트 목록</h4>';
+        eventsList.forEach((evt, idx) => {
+          const item = document.createElement('div');
+          item.className = 'manage-item';
+          item.innerHTML = `
+            <span><strong style="color:${evt.color}">■</strong> ${evt.title} (${evt.start} ~ ${evt.end})</span>
+            <button class="btn" style="background:#ff5252; padding:2px 6px; font-size:0.75rem;" onclick="deleteEvent(${idx})">삭제</button>
+          `;
+          listEl.appendChild(item);
+        });
+      } else {
+        panel.classList.remove('active');
+        toggleBtn.style.display = 'block';
+      }
+    }
+
+    async function addNewEvent() {
+      const title = document.getElementById('evtTitle').value.trim();
+      const start = document.getElementById('evtStart').value;
+      const end = document.getElementById('evtEnd').value;
+      const color = document.getElementById('evtColor').value;
 
       if (!title || !start || !end) {
-        alert("이벤트 제목과 시작일, 종료일을 모두 설정해 주세요!");
+        alert("이벤트 제목과 시작일, 종료일을 모두 입력하세요!");
         return;
       }
 
-      if (new Date(start) > new Date(end)) {
-        alert("종료일은 시작일보다 이후여야 합니다!");
-        return;
-      }
+      eventsList.push({ id: Date.now(), title, start, end, color });
+      render();
+      await saveEventsToCloud();
 
-      EVENTS.push({
-        id: Date.now(),
-        title: title,
-        start: start,
-        end: end,
-        bg: bg,
-        color: color
-      });
-
-      saveEvents();
-      renderEvents();
-
-      document.getElementById('evTitle').value = '';
-      document.getElementById('evStart').value = '';
-      document.getElementById('evEnd').value = '';
-      document.getElementById('evBg').value = '';
+      document.getElementById('evtTitle').value = '';
+      document.getElementById('evtStart').value = '';
+      document.getElementById('evtEnd').value = '';
     }
 
-    function deleteEvent(id) {
-      if (confirm("이 이벤트를 달력에서 삭제하시겠습니까?")) {
-        EVENTS = EVENTS.filter(e => e.id !== id);
-        saveEvents();
-        renderEvents();
+    async function deleteEvent(idx) {
+      if (confirm("이 이벤트를 모든 유저 화면에서 삭제하시겠습니까?")) {
+        eventsList.splice(idx, 1);
+        render();
+        await saveEventsToCloud();
       }
     }
 
-    initTimeline();
-    setInterval(updateTimeLinePosition, 60000); // 1분마다 위치 갱신
+    // 첫 로딩 시 온라인 DB에서 이벤트 동기화
+    fetchEventsFromCloud();
   </script>
 </body>
 </html>
