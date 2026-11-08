@@ -321,7 +321,7 @@
     </div>
 
     <div class="reset-info">
-      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 💡 업데이트를 해도 내가 설정한 횟수(최대 20회)와 개인 숙제는 그대로 보존됩니다!
+      ⏱️ **일일 숙제**: 매일 00시 자동 리셋 | 💡 업데이트를 해도 내가 설정한 회수(최대 20회)와 개인 숙제는 그대로 보존됩니다!
     </div>
 
     <div class="homework-grid">
@@ -344,7 +344,6 @@
   </div>
 
   <script>
-    // 🌟 제작자가 세팅하는 기본 공용 던전 목록 (업데이트 시 여기에 새 기본 숙제를 추가하셔도 유저들의 세팅은 사라지지 않습니다!)
     const DEFAULT_MASTER_TODOS = [
       { id: 1, type: "daily", title: "☀️ 일일 퀘스트 & 출석체크" },
       { id: 2, type: "daily", title: "⚔️ 콜로세움 도전" },
@@ -353,7 +352,6 @@
       { id: 5, type: "weekly", title: "📦 주간 던전 티켓 소진" }
     ];
 
-    // 기존 유저가 저장해 둔 공용 목록을 불러오되, 새로운 기본 항목이 추가되었다면 스마트하게 합쳐줍니다.
     let savedMasterTodos = JSON.parse(localStorage.getItem('blossom_master_todos_v5'));
     let MASTER_TODOS = savedMasterTodos ? mergeMasterTodos(DEFAULT_MASTER_TODOS, savedMasterTodos) : DEFAULT_MASTER_TODOS;
 
@@ -361,7 +359,7 @@
       let merged = [...saved];
       defaults.forEach(def => {
         if (!merged.some(m => m.id === def.id)) {
-          merged.push(def); // 새로운 기본 숙제가 추가되었다면 기존 유저 데이터에 안전하게 병합
+          merged.push(def);
         }
       });
       return merged;
@@ -454,7 +452,6 @@
         const div = document.createElement('div');
         div.className = `todo-item ${isDone ? 'done' : ''} ${isCustom ? 'custom' : ''}`;
         
-        // 🔢 1회부터 20회까지 동적으로 옵션 생성 (몇 판 -> 몇 회 변경 완료)
         let optionsHtml = '';
         for (let i = 1; i <= 20; i++) {
           const val = i + "회";
