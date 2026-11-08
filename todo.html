@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌸 블로썸 디마 숙제 체크리스트</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: #1a1528;
       color: #ffffff;
@@ -23,10 +19,7 @@
       background-size: 24px 24px;
       background-position: 0 0, 12px 12px;
     }
-    .container {
-      width: 100%;
-      max-width: 850px;
-    }
+    .container { width: 100%; max-width: 850px; }
     
     header {
       text-align: center;
@@ -37,17 +30,8 @@
       border: 4px solid #ff758c;
       box-shadow: 0 6px 0 #b33951, 0 10px 20px rgba(0,0,0,0.4);
     }
-    header h1 {
-      font-size: 1.8rem;
-      color: #ff9a9e;
-      margin-bottom: 4px;
-      text-shadow: 2px 2px 0px #000;
-    }
-    header p {
-      font-size: 0.85rem;
-      color: #d1c4e9;
-      font-weight: 500;
-    }
+    header h1 { font-size: 1.8rem; color: #ff9a9e; margin-bottom: 4px; text-shadow: 2px 2px 0px #000; }
+    header p { font-size: 0.85rem; color: #d1c4e9; font-weight: 500; }
 
     .controls-panel {
       background: #2b1f3d;
@@ -63,213 +47,61 @@
       box-shadow: 0 4px 0 #b33951;
     }
     button, input, select {
-      font-family: inherit;
-      font-size: 0.85rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 2px solid #222;
-      outline: none;
+      font-family: inherit; font-size: 0.85rem; padding: 8px 12px; border-radius: 8px; border: 2px solid #222; outline: none;
     }
     .btn {
-      background: #ff758c;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 3px 0 #b33951;
-      transition: 0.1s;
+      background: #ff758c; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #b33951; transition: 0.1s;
     }
-    .btn:active {
-      transform: translateY(2px);
-      box-shadow: none;
-    }
-    .btn-admin {
-      background: #ffb703;
-      color: #111;
-      border-color: #d48b00;
-      box-shadow: 0 3px 0 #b57600;
-    }
-    .btn-user-add {
-      background: #00ffcc;
-      color: #111;
-      border-color: #00aa88;
-      box-shadow: 0 3px 0 #008866;
-    }
-    .btn-restore {
-      background: #a18cd1;
-      border-color: #7b52ae;
-      box-shadow: 0 3px 0 #5c3d8a;
-    }
+    .btn:active { transform: translateY(2px); box-shadow: none; }
+    .btn-admin { background: #ffb703; color: #111; border-color: #d48b00; box-shadow: 0 3px 0 #b57600; }
+    .btn-user-add { background: #00ffcc; color: #111; border-color: #00aa88; box-shadow: 0 3px 0 #008866; }
+    .btn-restore { background: #a18cd1; border-color: #7b52ae; box-shadow: 0 3px 0 #5c3d8a; }
 
     .reset-info {
-      font-size: 0.8rem;
-      color: #ffb7c5;
-      text-align: center;
-      margin-bottom: 20px;
-      background: rgba(43, 31, 61, 0.8);
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px dashed #ff758c;
+      font-size: 0.8rem; color: #ffb7c5; text-align: center; margin-bottom: 20px;
+      background: rgba(43, 31, 61, 0.8); padding: 8px; border-radius: 8px; border: 1px dashed #ff758c;
     }
 
     .homework-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;
     }
-    @media (max-width: 650px) {
-      .homework-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    @media (max-width: 650px) { .homework-grid { grid-template-columns: 1fr; } }
 
     .homework-column {
-      background: #2b1f3d;
-      border-radius: 14px;
-      padding: 16px;
-      border: 3px solid #ff758c;
-      box-shadow: 0 5px 0 #b33951;
-      display: flex;
-      flex-direction: column;
+      background: #2b1f3d; border-radius: 14px; padding: 16px; border: 3px solid #ff758c; box-shadow: 0 5px 0 #b33951; display: flex; flex-direction: column;
     }
     .column-header {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #ff9a9e;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 2px dashed #ff758c;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-shadow: 1px 1px 0 #000;
+      font-size: 1.2rem; font-weight: bold; color: #ff9a9e; margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 2px dashed #ff758c; display: flex; justify-content: space-between; align-items: center; text-shadow: 1px 1px 0 #000;
     }
 
-    .todo-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
+    .todo-list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
     .todo-item {
-      background: #382950;
-      border-radius: 10px;
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 2px solid #ff758c;
-      box-shadow: 0 3px 0 #b33951;
-      transition: 0.2s;
+      background: #382950; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between;
+      border: 2px solid #ff758c; box-shadow: 0 3px 0 #b33951; transition: 0.2s;
     }
-    .todo-item.custom {
-      border-color: #00ffcc;
-      box-shadow: 0 3px 0 #00aa88;
-      background: #203335;
-    }
-    .todo-item.done {
-      opacity: 0.45;
-      background: #1c1427;
-      border-color: #554270;
-      box-shadow: none;
-    }
-    .todo-item.done .todo-text {
-      text-decoration: line-through;
-      color: #9a8bb0;
-    }
-    .todo-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-    }
-    .todo-checkbox {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      accent-color: #ff758c;
-    }
-    .todo-text {
-      font-size: 0.92rem;
-      font-weight: bold;
-      color: #fff;
-    }
-    .custom-badge {
-      font-size: 0.65rem;
-      background: #00ffcc;
-      color: #000;
-      padding: 1px 4px;
-      border-radius: 4px;
-      font-weight: bold;
-      margin-right: 4px;
-    }
+    .todo-item.custom { border-color: #00ffcc; box-shadow: 0 3px 0 #00aa88; background: #203335; }
+    .todo-item.done { opacity: 0.45; background: #1c1427; border-color: #554270; box-shadow: none; }
+    .todo-item.done .todo-text { text-decoration: line-through; color: #9a8bb0; }
+    .todo-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .todo-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: #ff758c; }
+    .todo-text { font-size: 0.92rem; font-weight: bold; color: #fff; }
+    .custom-badge { font-size: 0.65rem; background: #00ffcc; color: #000; padding: 1px 4px; border-radius: 4px; font-weight: bold; margin-right: 4px; }
 
     .count-select {
-      background: #1a1528;
-      color: #00ffcc;
-      border: 1px solid #554270;
-      font-size: 0.78rem;
-      padding: 3px 6px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-left: 6px;
+      background: #1a1528; color: #00ffcc; border: 1px solid #554270; font-size: 0.78rem; padding: 3px 6px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 6px;
     }
+    .todo-right { display: flex; align-items: center; gap: 6px; }
+    .btn-del { background: transparent; color: #ff758c; font-size: 1rem; border: none; cursor: pointer; font-weight: bold; padding: 0 4px; }
+    .btn-del:hover { color: #ff5252; }
 
-    .todo-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-del {
-      background: transparent;
-      color: #ff758c;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 0 4px;
-    }
-    .btn-del:hover {
-      color: #ff5252;
-    }
-
-    .panel-box {
-      display: none;
-      background: #3d2b27;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    .panel-box.active {
-      display: block;
-    }
-    .admin-panel {
-      border: 3px solid #ffb703;
-      box-shadow: 0 4px 0 #b57600;
-    }
-    .user-panel {
-      border: 3px solid #00ffcc;
-      background: #1e3335;
-      box-shadow: 0 4px 0 #008866;
-    }
-    .panel-box h3 {
-      font-size: 1rem;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .form-group {
-      display: flex;
-      gap: 8px;
-    }
-    .form-group input, .form-group select {
-      background: #1a1528;
-      color: #fff;
-      flex: 1;
-      border-color: #554270;
-    }
+    .panel-box { display: none; background: #3d2b27; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+    .panel-box.active { display: block; }
+    .admin-panel { border: 3px solid #ffb703; box-shadow: 0 4px 0 #b57600; }
+    .user-panel { border: 3px solid #00ffcc; background: #1e3335; box-shadow: 0 4px 0 #008866; }
+    .panel-box h3 { font-size: 1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .form-group { display: flex; gap: 8px; }
+    .form-group input, .form-group select { background: #1a1528; color: #fff; flex: 1; border-color: #554270; }
   </style>
 </head>
 <body>
@@ -277,7 +109,7 @@
   <div class="container">
     <header>
       <h1>🌸 블로썸 디마 숙제 체크리스트</h1>
-      <p>공용 기본 숙제 + 맞춤 횟수(최대 20회) 설정 시스템</p>
+      <p>실시간 공용 숙제 + 맞춤 횟수(최대 20회) 설정 시스템</p>
     </header>
 
     <div class="controls-panel">
@@ -285,13 +117,14 @@
         <button class="btn btn-restore" onclick="restoreDefault()">🔄 내 체크/횟수 초기화</button>
         <button class="btn btn-user-add" onclick="toggleUserPanel()">➕ 내 개인 숙제 추가</button>
       </div>
-      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 (공용 목록 수정)</button>
+      <div style="font-size: 0.8rem; color: #00ffcc; font-weight: bold;" id="syncStatus">🔄 동기화 중...</div>
+      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 (공용 숙제 수정)</button>
     </div>
 
     <!-- 관리자 공용 목록 추가 패널 -->
     <div class="panel-box admin-panel" id="adminPanel">
       <h3 style="color: #ffb703;">
-        <span>🛠️ [관리자 모드] 공용 숙제 추가/삭제</span>
+        <span>🛠️ [관리자 모드] 전 유저 공용 숙제 추가/삭제</span>
         <button class="btn" style="font-size: 0.75rem; padding: 3px 8px; background:#ff5252;" onclick="logoutAdmin()">닫기</button>
       </h3>
       <div class="form-group">
@@ -300,6 +133,12 @@
           <option value="weekly">📅 주간</option>
         </select>
         <input type="text" id="adminNewTitle" placeholder="모든 길드원에게 보일 공용 숙제 이름">
+        <select id="adminNewCount" style="max-width: 90px;">
+          <option value="1회">1회</option>
+          <option value="2회">2회</option>
+          <option value="3회">3회</option>
+          <option value="12회">12회</option>
+        </select>
         <button class="btn" style="background:#ffb703; color:#000; font-weight:bold;" onclick="addMasterTodo()">공용 추가</button>
       </div>
     </div>
@@ -345,57 +184,105 @@
   </div>
 
   <script>
-    // 🌟 기본 공용 퀘스트 목록 (주간 숙제 2개 추가 완료)
+    // 🌟 온라인 DB 세팅
+    const BIN_ID = "6af0f5d6ac6210605a783891";
+    const API_KEY = "$2a$10$QCeURoTGN.wcSMcioL8CB.Cu7fE2kpyPt1GIMf3cuaUgR2sDlyyMC";
+    const ADMIN_PASSWORD = "gktmddn0710";
+
+    // 🌟 요청하신 던전 목록 기본 세팅
     const DEFAULT_MASTER_TODOS = [
-      // 일일 숙제 (4개)
       { id: 101, type: "daily", title: "17주년 퀘스트", defaultCount: "1회" },
       { id: 102, type: "daily", title: "간쿠몬 퀘스트", defaultCount: "1회" },
       { id: 103, type: "daily", title: "홀리엔젤몬 퀘스트", defaultCount: "1회" },
       { id: 104, type: "daily", title: "에테몬 퀘스트", defaultCount: "1회" },
 
-      // 주간 숙제 (11개: 키노, 네버랜드 추가 완료)
       { id: 201, type: "weekly", title: "사성수 던전 퀘스트", defaultCount: "2회" },
       { id: 202, type: "weekly", title: "다크웹", defaultCount: "1회" },
       { id: 203, type: "weekly", title: "스사노오몬 던전", defaultCount: "1회" },
-      { id: 204, type: "weekly", title: "카이저의 기지 이지 (키이)", defaultCount: "1회" },
+      { id: 204, type: "weekly", title: "카이저의 기지 Easy (키이)", defaultCount: "1회" },
       { id: 205, type: "weekly", title: "카이저의 기지 노말 ( 키노 ) 160제한", defaultCount: "1회" },
-      { id: 206, type: "weekly", title: "네버랜드 ( 160레벨 제한 )", defaultCount: "1회" },
+      { id: 206, type: "weekly", title: "네버랜드", defaultCount: "1회" },
       { id: 207, type: "weekly", title: "로얄 베이스 어려움 (로어)", defaultCount: "1회" },
       { id: 208, type: "weekly", title: "카이저의 영역 레이드 (카영레)", defaultCount: "12회" },
       { id: 209, type: "weekly", title: "그림자 미궁 퀘스트", defaultCount: "2회" },
       { id: 210, type: "weekly", title: "디지몬 카이저 노말 (메청던)", defaultCount: "1회" },
-      { id: 211, type: "weekly", title: "상점가 이지,노말 하드 / 악몽던전 (입장횟수 공유)", defaultCount: "3회" }
+      { id: 211, type: "weekly", title: "상점가 이지,노말 하드 / 악목던전 (입장횟수 공유)", defaultCount: "3회" }
     ];
 
     let MASTER_TODOS = DEFAULT_MASTER_TODOS;
 
-    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v8')) || [];
-    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v11')) || {};
-    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v6')) || {};
-    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v11')) || { lastDaily: 0, lastWeekly: 0 };
+    // 유저 개인 브라우저 보존 저장소
+    let USER_CUSTOM_TODOS = JSON.parse(localStorage.getItem('blossom_user_custom_todos_v9')) || [];
+    let userStates = JSON.parse(localStorage.getItem('blossom_user_states_v12')) || {};
+    let userCounts = JSON.parse(localStorage.getItem('blossom_user_counts_v7')) || {};
+    let resetTimes = JSON.parse(localStorage.getItem('blossom_reset_times_v12')) || { lastDaily: 0, lastWeekly: 0 };
     
     let isAdmin = sessionStorage.getItem('blossom_is_admin') === 'true';
-    const ADMIN_PASSWORD = "gktmddn0710";
 
-    // 1. 일일 리셋 시간 (매일 자정 00:00)
-    function getLastDailyResetTime() {
-      const d = new Date();
-      d.setHours(0, 0, 0, 0);
-      return d.getTime();
+    // 온라인 DB 데이터 가져오기
+    async function fetchMasterTodosFromCloud() {
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "🔄 DB 연결 중...";
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { "X-Master-Key": API_KEY }
+        });
+        const data = await res.json();
+        if (data.record && data.record.todos && data.record.todos.length > 0) {
+          MASTER_TODOS = data.record.todos;
+        } else {
+          // DB가 비어있다면 기본 틀 업로드
+          MASTER_TODOS = DEFAULT_MASTER_TODOS;
+        }
+        statusEl.innerText = "✅ 공용 데이터 동기화 완료";
+        render();
+      } catch (err) {
+        console.error(err);
+        statusEl.innerText = "⚠️ 동기화 실패 (기본 틀 표시)";
+        render();
+      }
     }
 
-    // 2. 주간 리셋 시간 (매주 화요일 오전 08:00)
+    // 온라인 DB로 공용 목록 저장하기 (관리자 전용)
+    async function saveMasterTodosToCloud() {
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "⏳ 서버 저장 중...";
+      try {
+        // 기존 Bin의 events 데이터를 보존하기 위해 GET후 PUT
+        const resGet = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { "X-Master-Key": API_KEY }
+        });
+        const currentData = await resGet.json();
+        const currentEvents = (currentData.record && currentData.record.events) ? currentData.record.events : [];
+
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": API_KEY
+          },
+          body: JSON.stringify({
+            events: currentEvents,
+            todos: MASTER_TODOS
+          })
+        });
+        statusEl.innerText = "✅ 전 유저 숙제 목록 반영 완료!";
+      } catch (err) {
+        console.error(err);
+        alert("서버 저장 실패!");
+      }
+    }
+
+    function getLastDailyResetTime() {
+      const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime();
+    }
+
     function getLastWeeklyResetTime() {
       const d = new Date();
       const day = d.getDay();
       let diff = day - 2;
-      
-      if (diff === 0 && d.getHours() < 8) {
-        diff = 7;
-      } else if (diff < 0) {
-        diff += 7;
-      }
-      
+      if (diff === 0 && d.getHours() < 8) diff = 7;
+      else if (diff < 0) diff += 7;
       d.setDate(d.getDate() - diff);
       d.setHours(8, 0, 0, 0);
       return d.getTime();
@@ -421,15 +308,14 @@
         isChanged = true;
       }
 
-      if (isChanged) save();
+      if (isChanged) saveUserLocal();
     }
 
-    function save() {
-      localStorage.setItem('blossom_master_todos_v8', JSON.stringify(MASTER_TODOS));
-      localStorage.setItem('blossom_user_custom_todos_v8', JSON.stringify(USER_CUSTOM_TODOS));
-      localStorage.setItem('blossom_user_states_v11', JSON.stringify(userStates));
-      localStorage.setItem('blossom_user_counts_v6', JSON.stringify(userCounts));
-      localStorage.setItem('blossom_reset_times_v11', JSON.stringify(resetTimes));
+    function saveUserLocal() {
+      localStorage.setItem('blossom_user_custom_todos_v9', JSON.stringify(USER_CUSTOM_TODOS));
+      localStorage.setItem('blossom_user_states_v12', JSON.stringify(userStates));
+      localStorage.setItem('blossom_user_counts_v7', JSON.stringify(userCounts));
+      localStorage.setItem('blossom_reset_times_v12', JSON.stringify(resetTimes));
     }
 
     function render() {
@@ -497,13 +383,13 @@
 
     function toggleTodo(id) {
       userStates[id] = !userStates[id];
-      save();
+      saveUserLocal();
       render();
     }
 
     function updateCount(id, selectEl) {
       userCounts[id] = selectEl.value;
-      save();
+      saveUserLocal();
     }
 
     function tryAdminLogin() {
@@ -525,13 +411,13 @@
     }
 
     function toggleUserPanel() {
-      const panel = document.getElementById('userPanel');
-      panel.classList.toggle('active');
+      document.getElementById('userPanel').classList.toggle('active');
     }
 
-    function addMasterTodo() {
+    async function addMasterTodo() {
       const type = document.getElementById('adminNewType').value;
       const title = document.getElementById('adminNewTitle').value.trim();
+      const defCount = document.getElementById('adminNewCount').value;
 
       if (!title) {
         alert("공용 숙제 이름을 입력해주세요!");
@@ -539,12 +425,11 @@
       }
 
       const newId = Date.now();
-      MASTER_TODOS.push({ id: newId, type: type, title: title, defaultCount: "1회" });
+      MASTER_TODOS.push({ id: newId, type: type, title: title, defaultCount: defCount });
       userStates[newId] = false;
-      userCounts[newId] = "1회";
 
-      save();
       render();
+      await saveMasterTodosToCloud();
       document.getElementById('adminNewTitle').value = '';
     }
 
@@ -560,21 +445,18 @@
       const newId = Date.now() + Math.random();
       USER_CUSTOM_TODOS.push({ id: newId, type: type, title: title, defaultCount: "1회" });
       userStates[newId] = false;
-      userCounts[newId] = "1회";
 
-      save();
+      saveUserLocal();
       render();
       document.getElementById('userNewTitle').value = '';
       document.getElementById('userPanel').classList.remove('active');
     }
 
-    function deleteMasterTodo(id) {
+    async function deleteMasterTodo(id) {
       if (confirm("이 공용 숙제를 모든 유저 목록에서 삭제하시겠습니까?")) {
         MASTER_TODOS = MASTER_TODOS.filter(t => t.id !== id);
-        delete userStates[id];
-        delete userCounts[id];
-        save();
         render();
+        await saveMasterTodosToCloud();
       }
     }
 
@@ -583,7 +465,7 @@
         USER_CUSTOM_TODOS = USER_CUSTOM_TODOS.filter(t => t.id !== id);
         delete userStates[id];
         delete userCounts[id];
-        save();
+        saveUserLocal();
         render();
       }
     }
@@ -593,7 +475,7 @@
       if (confirm(`${typeName} 숙제 체크를 모두 해제하시겠습니까? (설정하신 회수는 유지됩니다!)`)) {
         MASTER_TODOS.filter(t => t.type === type).forEach(t => { userStates[t.id] = false; });
         USER_CUSTOM_TODOS.filter(t => t.type === type).forEach(t => { userStates[t.id] = false; });
-        save();
+        saveUserLocal();
         render();
       }
     }
@@ -602,13 +484,13 @@
       if (confirm("내 체크 상태와 회수 설정을 초기화하시겠습니까? (직접 추가한 개인 숙제는 유지됩니다)")) {
         userStates = {};
         userCounts = {};
-        save();
+        saveUserLocal();
         render();
       }
     }
 
     setInterval(checkAutoReset, 60000);
-    render();
+    fetchMasterTodosFromCloud();
   </script>
 </body>
 </html>
