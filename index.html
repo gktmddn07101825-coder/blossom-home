@@ -3,396 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌸 블로썸 길드 공식 아지트</title>
+  <title>🌸 블로썸 길드 아지트</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #151021;
+      background-color: #120f1d;
       color: #ffffff;
       font-family: 'Segoe UI', Malgun Gothic, sans-serif;
-      min-height: 100vh;
-      /* 디마/벚꽃 테마 감성 배경 패턴 */
-      background-image: 
-        radial-gradient(#ff758c 0.8px, transparent 0.8px), 
-        radial-gradient(#00ffcc 0.6px, #151021 0.6px);
-      background-size: 32px 32px;
-      background-position: 0 0, 16px 16px;
+      padding: 20px 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
+      background-image: radial-gradient(#ff9a9e 0.6px, transparent 0.6px), radial-gradient(#ff9a9e 0.6px, #120f1d 0.6px);
+      background-size: 24px 24px;
     }
+    .container { width: 100%; max-width: 900px; }
 
-    /* 🎮 상단 게임 카테고리 네비게이션 바 (디지바이스 네온 스타일) */
-    nav.navbar {
-      width: 100%;
-      background: linear-gradient(90deg, #1e122b, #2b173d, #1e122b);
-      border-bottom: 4px solid #ff758c;
-      box-shadow: 0 4px 20px rgba(255, 117, 140, 0.4);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: center;
-    }
-    .nav-container {
-      width: 100%;
-      max-width: 950px;
+    /* 치지직 방송 홍보 배너 */
+    .stream-banner {
+      background: linear-gradient(90deg, #1e1b2e 0%, #2b1f3d 100%);
+      border: 2px solid #554270;
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      height: 65px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: 0.3s;
     }
-    .brand-logo {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: #ff9a9e;
-      text-decoration: none;
-      text-shadow: 0 0 10px #ff758c, 2px 2px 0 #000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* LIVE 방송 중일 때 스타일 */
+    .stream-banner.is-live {
+      border-color: #ff5252;
+      box-shadow: 0 0 20px rgba(255, 82, 82, 0.4);
+      background: linear-gradient(90deg, #2e1b25 0%, #3d1f2b 100%);
     }
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 10px;
-    }
-    .nav-link {
-      color: #e2d9f3;
-      text-decoration: none;
+
+    .stream-info { display: flex; align-items: center; gap: 12px; }
+    
+    .stream-badge {
+      background: #4a3b63;
+      color: #d1c4e9;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+    .stream-banner.is-live .stream-badge {
+      background: #ff5252;
+      color: #fff;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .stream-text h4 { font-size: 0.95rem; color: #fff; margin-bottom: 2px; }
+    .stream-text p { font-size: 0.78rem; color: #bfaedc; }
+    
+    .btn-chzzk {
+      background: #00ffa3;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
       padding: 8px 14px;
       border-radius: 8px;
-      border: 2px solid transparent;
+      font-size: 0.82rem;
       transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 117, 140, 0.1);
+      box-shadow: 0 3px 0 #00b372;
     }
-    .nav-link:hover {
-      background: #ff758c;
-      color: #fff;
-      border-color: #fff;
-      box-shadow: 0 0 12px #ff758c;
-      transform: translateY(-2px);
-    }
-    .nav-link.support {
-      background: rgba(114, 137, 218, 0.2);
-      border-color: #7289da;
-      color: #7289da;
-    }
-    .nav-link.support:hover {
-      background: #7289da;
-      color: #fff;
-      box-shadow: 0 0 12px #7289da;
-    }
+    .btn-chzzk:hover { background: #33ffb8; transform: translateY(-1px); }
 
-    .main-container {
-      width: 100%;
-      max-width: 950px;
-      padding: 30px 20px;
-    }
-
-    /* 메인 히어로 헤더 (블로썸 길드 타이틀) */
-    header.hero-header {
+    header {
       text-align: center;
-      margin-bottom: 30px;
-      background: linear-gradient(135deg, #2b1f3d, #3c254e);
-      padding: 30px 20px;
-      border-radius: 20px;
-      border: 4px solid #ff758c;
-      box-shadow: 0 8px 0 #b33951, 0 15px 25px rgba(0,0,0,0.6);
-      position: relative;
-      overflow: hidden;
-    }
-    header.hero-header::before {
-      content: "🌸 DIGITAL MONSTER GUILD 🌸";
-      position: absolute;
-      top: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75rem;
-      color: #00ffcc;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #00ffcc;
-    }
-    header.hero-header h1 {
-      font-size: 2.3rem;
-      color: #ff9a9e;
-      margin: 10px 0 6px 0;
-      text-shadow: 3px 3px 0px #000, 0 0 15px rgba(255,117,140,0.6);
-    }
-    header.hero-header p {
-      font-size: 0.95rem;
-      color: #d1c4e9;
-      font-weight: 600;
-    }
-
-    /* 🚀 게임 유틸리티 퀵 바로가기 카드 (디마 아티팩트 스타일) */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 35px;
-    }
-    @media (max-width: 650px) {
-      .quick-grid {
-        grid-template-columns: 1fr;
-      }
-      .nav-menu {
-        gap: 4px;
-      }
-      .nav-link {
-        font-size: 0.75rem;
-        padding: 6px 8px;
-      }
-    }
-    .quick-card {
-      background: linear-gradient(145deg, #2b1f3d, #231834);
-      border: 3px solid #ff758c;
-      border-radius: 16px;
+      margin-bottom: 25px;
+      background: #2b1f3d;
       padding: 22px;
+      border-radius: 16px;
+      border: 4px solid #ff758c;
+      box-shadow: 0 6px 0 #b33951;
+    }
+    header h1 { font-size: 2rem; color: #ff9a9e; margin-bottom: 6px; text-shadow: 2px 2px 0px #000; }
+    header p { font-size: 0.9rem; color: #d1c4e9; }
+
+    /* 메인 메뉴 카드 그리드 */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .menu-card {
+      background: #2b1f3d;
+      border-radius: 14px;
+      padding: 20px;
+      border: 3px solid #ff758c;
+      box-shadow: 0 5px 0 #b33951;
       text-decoration: none;
       color: #fff;
-      box-shadow: 0 6px 0 #b33951, inset 0 0 15px rgba(255,117,140,0.15);
-      transition: 0.2s;
       display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .quick-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 0 #b33951, 0 0 20px rgba(255,117,140,0.4);
-      border-color: #ff9a9e;
-    }
-    .quick-card:active {
-      transform: translateY(2px);
-      box-shadow: 0 3px 0 #b33951;
-    }
-    .quick-icon {
-      font-size: 3rem;
-      background: #1a1528;
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      border: 2px solid #ff758c;
-      box-shadow: inset 0 0 8px rgba(255,117,140,0.5);
-    }
-    .quick-info h3 {
-      font-size: 1.25rem;
-      color: #ff9a9e;
-      margin-bottom: 5px;
-      text-shadow: 1px 1px 0 #000;
-    }
-    .quick-info p {
-      font-size: 0.82rem;
-      color: #bfaedc;
-      line-height: 1.35;
-    }
-
-    /* 📢 공지사항 & 이벤트 소식 게시판 섹션 (게임 UI 패널) */
-    .board-section {
-      background: #231834;
-      border-radius: 18px;
-      padding: 25px;
-      border: 4px solid #ff758c;
-      box-shadow: 0 8px 0 #b33951;
-    }
-    .board-header {
-      display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px dashed #ff758c;
+      transition: 0.2s;
     }
-    .board-title {
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: #ff9a9e;
-      text-shadow: 2px 2px 0 #000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    button {
-      font-family: inherit;
-      font-size: 0.85rem;
-      padding: 7px 14px;
-      border-radius: 8px;
-      border: 2px solid #222;
-      outline: none;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.15s;
-    }
-    .btn-admin {
-      background: #ffb703;
-      color: #111;
-      border-color: #d48b00;
-      box-shadow: 0 3px 0 #b57600;
-    }
-    .btn-admin:hover {
-      background: #ffd043;
-    }
-    .btn-admin:active {
-      transform: translateY(2px);
-      box-shadow: none;
-    }
-
-    /* 관리자 작성 폼 */
-    .notice-form {
-      display: none;
-      background: #3d2b27;
-      padding: 18px;
-      border-radius: 14px;
-      border: 3px solid #ffb703;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 0 #b57600;
-    }
-    .notice-form.active {
-      display: block;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .form-group input, .form-group textarea {
-      background: #151021;
-      color: #fff;
-      border: 2px solid #554270;
-      padding: 10px;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      outline: none;
-    }
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: #ffb703;
-    }
-    .btn-submit {
-      background: #ffb703;
-      color: #000;
-      border-color: #d48b00;
-      box-shadow: 0 3px 0 #b57600;
-      align-self: flex-end;
-    }
-
-    /* 공지 목록 카드 (디마 공지사항 감성) */
-    .notice-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .notice-card {
-      background: #2b1f3d;
-      border-radius: 12px;
-      padding: 16px 18px;
-      border: 2px solid #ff758c;
-      box-shadow: 0 4px 0 #b33951;
-      position: relative;
-      transition: 0.15s;
-    }
-    .notice-card:hover {
-      border-color: #00ffcc;
-      box-shadow: 0 4px 0 #00aa88;
-    }
-    .notice-badge {
-      display: inline-block;
-      background: #ff758c;
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 3px 8px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      box-shadow: 0 2px 0 #b33951;
-    }
-    .notice-card h4 {
-      font-size: 1.12rem;
-      color: #fff;
-      margin-bottom: 8px;
-      text-shadow: 1px 1px 0 #000;
-    }
-    .notice-card p {
-      font-size: 0.9rem;
-      color: #d1c4e9;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-    .notice-date {
-      font-size: 0.72rem;
-      color: #9a8bb0;
-      margin-top: 10px;
-    }
-    .btn-del-notice {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: transparent;
-      color: #ff758c;
-      border: none;
-      font-size: 1.1rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .btn-del-notice:hover {
-      color: #ff5252;
-    }
+    .menu-card:hover { transform: translateY(-3px); border-color: #00ffcc; box-shadow: 0 8px 0 #00aa88; }
+    .card-title { font-size: 1.25rem; font-weight: bold; color: #ff9a9e; margin-bottom: 8px; }
+    .card-desc { font-size: 0.85rem; color: #d1c4e9; line-height: 1.4; margin-bottom: 15px; }
+    .card-go { font-size: 0.8rem; font-weight: bold; color: #00ffcc; text-align: right; }
   </style>
 </head>
 <body>
 
-  <!-- 🎮 상단 게임 카테고리 네비게이션 바 -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="brand-logo">🌸 BLOSSOM GUILD</a>
-      <ul class="nav-menu">
-        <li><a href="event.html" target="_blank" class="nav-link">📢 이벤트/공지</a></li>
-        <li><a href="timer.html" target="_blank" class="nav-link">⏱️ 버프 타이머</a></li>
-        <li><a href="todo.html" target="_blank" class="nav-link">⚔️ 숙제 체크판</a></li>
-        <li><a href="https://discord.com/users/641524398859354113" target="_blank" class="nav-link support">🎧 고객센터</a></li>
-      </ul>
+  <div class="container">
+    
+    <!-- 🎮 우비테이머 실시간 라이브 연동 배너 -->
+    <div class="stream-banner" id="streamBanner">
+      <div class="stream-info">
+        <span class="stream-badge" id="liveBadge">OFFLINE</span>
+        <div class="stream-text">
+          <h4 id="streamTitle">🎮 우비테이머 방송국</h4>
+          <p id="streamDesc">디지몬 마스터즈 라이브 스트리밍</p>
+        </div>
+      </div>
+      <a href="https://chzzk.naver.com/241f32b55087d010e6a1b2468b45d8b8" id="chzzkLink" target="_blank" class="btn-chzzk">📺 방송 보러가기</a>
     </div>
-  </nav>
 
-  <div class="main-container">
-    <header class="hero-header">
-      <h1>🌸 블로썸 길드 공식 아지트</h1>
-      <p>디지몬 마스터즈 길드원 전용 버프 타이머 · 숙제 체크리스트 · 실시간 소식 센터</p>
+    <header>
+      <h1>🌸 블로썸 길드 통합 아지트</h1>
+      <p>디지몬 마스터즈 블로썸 길드원 전용 숙제 & 일정 관리 센터</p>
     </header>
 
-    <!-- 🚀 유틸리티 퀵 바로가기 (새창 열기) -->
-    <div class="quick-grid">
-      <a href="timer.html" target="_blank" class="quick-card">
-        <div class="quick-icon">⏱️</div>
-        <div class="quick-info">
-          <h3>버프 타이머</h3>
-          <p>지속시간 알람음 & 볼륨 슬라이더 바 세밀 조절 (새창)</p>
+    <div class="menu-grid">
+      <a href="todo.html" class="menu-card">
+        <div>
+          <div class="card-title">✅ 숙제 체크리스트</div>
+          <div class="card-desc">일일/주간 던전 숙제 체크 및 개인 맞춤 횟수 세팅 시스템</div>
         </div>
+        <div class="card-go">바로가기 ▶</div>
       </a>
 
-      <a href="todo.html" target="_blank" class="quick-card">
-        <div class="quick-icon">⚔️</div>
-        <div class="quick-info">
-          <h3>숙제 체크리스트</h3>
-          <p>일일(00시) & 주간(화요일 20시) 자동 리셋 체크판 (새창)</p>
+      <a href="event.html" class="menu-card">
+        <div>
+          <div class="card-title">📅 이벤트 & 일정 타임라인</div>
+          <div class="card-desc">검은사막 스타일 실시간 가로형 일정표 및 길드 행사 캘린더</div>
         </div>
+        <div class="card-go">바로가기 ▶</div>
+      </a>
+
+      <a href="timer.html" class="menu-card">
+        <div>
+          <div class="card-title">⏱️ 버프 타이머</div>
+          <div class="card-desc">경험치 & 물약 버프 시간 카운트다운 알림 소리 기능</div>
+        </div>
+        <div class="card-go">바로가기 ▶</div>
       </a>
     </div>
 
-    <!-- 📢 공지 및 이벤트 게시판 -->
-    <div class="board-section" id="board
+  </div>
+
+  <script>
+    // 🌟 치지직 URL 기반 라이브 상태 감지
+    const chzzkUrl = document.getElementById('chzzkLink').href;
+    
+    // URL에서 채널 고유 ID 추출
+    function extractChannelId(url) {
+      const match = url.match(/chzzk\.naver\.com\/(?:live\/)?([a-zA-Z0-9]+)/);
+      return match ? match[1] : null;
+    }
+
+    async function checkChzzkLiveStatus() {
+      const channelId = extractChannelId(chzzkUrl);
+      if (!channelId) return;
+
+      const banner = document.getElementById('streamBanner');
+      const badge = document.getElementById('liveBadge');
+      const desc = document.getElementById('streamDesc');
+
+      try {
+        // 프록시 API를 사용하여 실시간 방송 상태 데이터 로드
+        const res = await fetch(`https://api.chzzk.naver.com/service/v1/channels/${channelId}/live-detail`);
+        const data = await res.json();
+
+        if (data && data.content && data.content.status === 'OPEN') {
+          // 방송 중 (OPEN)일 때
+          banner.classList.add('is-live');
+          badge.innerText = '🔴 LIVE 방송 중';
+          
+          const liveTitle = data.content.liveTitle || '디지몬 마스터즈 방송 진행 중!';
+          desc.innerText = liveTitle;
+        } else {
+          // 방송이 아닐 때 (CLOSE)
+          banner.classList.remove('is-live');
+          badge.innerText = 'OFFLINE';
+          desc.innerText = '디지몬 마스터즈 라이브 스트리밍';
+        }
+      } catch (err) {
+        // CORS 또는 로딩 오류 시 기본 오프라인 상태 유지
+        console.log("치지직 상태 감지 대기 중");
+      }
+    }
+
+    // 로딩 시 1회 체크 및 1분마다 상태 자동 갱신
+    checkChzzkLiveStatus();
+    setInterval(checkChzzkLiveStatus, 60000);
+  </script>
+</body>
+</html>
