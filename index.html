@@ -126,7 +126,7 @@
     .timer-info {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
     .timer-name {
       font-size: 1rem;
@@ -138,9 +138,34 @@
       color: #d1c4e9;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
+    
+    /* 🎚️ 볼륨 슬라이더 바 스타일 */
+    .volume-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      vertical-align: middle;
+    }
+    .volume-slider {
+      width: 75px;
+      height: 6px;
+      background: #1a1528;
+      border-radius: 3px;
+      outline: none;
+      border: 1px solid #554270;
+      cursor: pointer;
+      accent-color: #ff758c;
+    }
+    .volume-text {
+      font-size: 0.7rem;
+      color: #ff9a9e;
+      min-width: 26px;
+      text-align: right;
+    }
+
     .timer-right {
       display: flex;
       align-items: center;
@@ -223,7 +248,7 @@
   <div class="container">
     <header>
       <h1>🌸 블로썸 길드 버프 타이머</h1>
-      <p>원하는 알람음과 볼륨을 골라서 설정할 수 있습니다!</p>
+      <p>볼륨 슬라이더 바로 세밀하게 음량을 조절하세요!</p>
     </header>
 
     <div class="controls-panel">
@@ -243,25 +268,23 @@
           <option value="digivice.wav">디지바이스 1</option>
           <option value="digivice2.mp3">디지바이스 2</option>
         </select>
-        <select id="newVolume" style="width: 75px;">
-          <option value="0.3">30%</option>
-          <option value="0.6">60%</option>
-          <option value="0.9" selected>90%</option>
-        </select>
+        <div style="display: flex; align-items: center; gap: 4px; background: #1a1528; padding: 2px 8px; border-radius: 6px; border: 2px solid #554270;">
+          <span style="font-size:0.75rem; color:#ff9a9e;">🔊</span>
+          <input type="range" id="newVolume" min="0" max="1" step="0.05" value="0.9" style="width: 60px; accent-color: #ff758c; cursor: pointer;">
+        </div>
         <button class="btn btn-add" onclick="addCustomBuff()" style="flex: 1;">추가</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 🌟 길드 기본 디폴트 세팅 (sound와 volume 속성 포함)
     const ADMIN_PRESETS = [
       { id: 101, name: "도전의 가호", duration: 7200, icon: "Blessing.PNG", sound: "digivice.wav", volume: 0.9 },
-      { id: 102, name: "슈퍼 증폭 부스터", duration: 3900, icon: "Booster.PNG", sound: "digivice2.mp3", volume: 0.9 },
+      { id: 102, name: "슈퍼 증폭 부스터", duration: 3600, icon: "Booster.PNG", sound: "digivice2.mp3", volume: 0.9 },
       { id: 103, name: "통합 버프", duration: 3600, icon: "Integration.PNG", sound: "alert.mp3", volume: 0.9 }
     ];
 
-    let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v3')) || ADMIN_PRESETS;
+    let userTimers = JSON.parse(localStorage.getItem('blossom_buff_settings_v4')) || ADMIN_PRESETS;
     let timerStates = {};
 
     function init() {
@@ -270,7 +293,7 @@
     }
 
     function saveSettings() {
-      localStorage.setItem('blossom_buff_settings_v3', JSON.stringify(userTimers));
+      localStorage.setItem('blossom_buff_settings_v4', JSON.stringify(userTimers));
     }
 
     function renderTimers() {
@@ -283,6 +306,7 @@
         }
 
         const currentVol = t.volume !== undefined ? t.volume : 0.9;
+        const volPercent = Math.round(currentVol * 100);
 
         const card = document.createElement('div');
         card.className = 'timer-card';
@@ -301,12 +325,11 @@
                   <option value="digivice.wav" ${t.sound === 'digivice.wav' ? 'selected' : ''}>디지바이스 1</option>
                   <option value="digivice2.mp3" ${t.sound === 'digivice2.mp3' ? 'selected' : ''}>디지바이스 2</option>
                 </select>
-                볼륨:
-                <select onchange="updateBuffVolume(${t.id}, this)">
-                  <option value="0.3" ${currentVol == 0.3 ? 'selected' : ''}>30%</option>
-                  <option value="0.6" ${currentVol == 0.6 ? 'selected' : ''}>60%</option>
-                  <option value="0.9" ${currentVol == 0.9 ? 'selected' : ''}>90%</option>
-                </select>
+                <div class="volume-container">
+                  <span>🔊</span>
+                  <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="${currentVol}" oninput="updateBuffVolume(${t.id}, this)">
+                  <span class="volume-text" id="vol-text-${t.id}">${volPercent}%</span>
+                </div>
               </div>
             </div>
           </div>
@@ -350,12 +373,12 @@
       }
     }
 
-    function updateBuffVolume(id, selectEl) {
+    function updateBuffVolume(id, rangeEl) {
       const buff = userTimers.find(t => t.id === id);
       if (buff) {
-        buff.volume = parseFloat(selectEl.value);
+        buff.volume = parseFloat(rangeEl.value);
+        document.getElementById(`vol-text-${id}`).textContent = `${Math.round(buff.volume * 100)}%`;
         saveSettings();
-        playAudio(buff.sound, buff.volume);
       }
     }
 
@@ -376,7 +399,6 @@
       return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
-    // 설정된 볼륨을 반영하여 사운드 재생
     function playAudio(filename, volume) {
       const audio = new Audio(filename);
       audio.volume = volume !== undefined ? volume : 0.9;
@@ -400,19 +422,22 @@
 
         const remainMs = state.endTime - now;
         if (remainMs <= 0) {
-          displayEl.textContent = "END!";
-          displayEl.classList.add('ended');
-          
-          if (!state.soundPlayed) {
-            playAudio(t.sound || 'alert.mp3', t.volume !== undefined ? t.volume : 0.9);
-            state.soundPlayed = true;
-          }
+          displayEndState(t, displayEl, state);
         } else {
           const remainSec = Math.ceil(remainMs / 1000);
           displayEl.textContent = formatTime(remainSec);
           displayEl.classList.remove('ended');
         }
       });
+    }
+
+    function displayEndState(t, displayEl, state) {
+      displayEl.textContent = "END!";
+      displayEl.classList.add('ended');
+      if (!state.soundPlayed) {
+        playAudio(t.sound || 'alert.mp3', t.volume !== undefined ? t.volume : 0.9);
+      }
+      state.soundPlayed = true;
     }
 
     function resetToGuildDefault() {
