@@ -7,7 +7,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #1a1528;
+      background-color: #120f1d;
       color: #ffffff;
       font-family: 'Segoe UI', Malgun Gothic, sans-serif;
       padding: 20px 10px;
@@ -15,20 +15,17 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      background-image: radial-gradient(#ff9a9e 0.6px, transparent 0.6px), radial-gradient(#ff9a9e 0.6px, #1a1528 0.6px);
-      background-size: 24px 24px;
-      background-position: 0 0, 12px 12px;
     }
-    .container { width: 100%; max-width: 950px; }
+    .container { width: 100%; max-width: 1100px; }
     
     header {
       text-align: center;
       margin-bottom: 20px;
-      background: #2b1f3d;
+      background: #1e182c;
       padding: 18px;
       border-radius: 16px;
-      border: 4px solid #ff758c;
-      box-shadow: 0 6px 0 #b33951, 0 10px 20px rgba(0,0,0,0.4);
+      border: 3px solid #ff758c;
+      box-shadow: 0 6px 0 #b33951;
     }
     header h1 {
       font-size: 1.8rem;
@@ -39,15 +36,14 @@
     header p { font-size: 0.85rem; color: #d1c4e9; font-weight: 500; }
 
     .controls-panel {
-      background: #2b1f3d;
+      background: #1e182c;
       padding: 12px 15px;
       border-radius: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      border: 3px solid #ff758c;
-      box-shadow: 0 4px 0 #b33951;
+      border: 2px solid #ff758c;
     }
     .btn {
       background: #ff758c;
@@ -63,66 +59,91 @@
     .btn:active { transform: translateY(2px); box-shadow: none; }
     .btn-admin { background: #ffb703; color: #111; border-color: #d48b00; box-shadow: 0 3px 0 #b57600; }
 
-    .calendar-card {
-      background: #2b1f3d;
+    /* 타임라인 박스 스타일 */
+    .timeline-container {
+      background: #181324;
       border-radius: 16px;
-      padding: 20px;
-      border: 4px solid #ff758c;
-      box-shadow: 0 6px 0 #b33951;
+      border: 3px solid #ff758c;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      overflow: hidden;
       margin-bottom: 25px;
     }
-    .calendar-header {
+    .timeline-nav {
+      background: #251d38;
+      padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      border-bottom: 2px solid #382b52;
     }
-    .calendar-header h2 { font-size: 1.4rem; color: #ff9a9e; text-shadow: 1px 1px 0 #000; }
-    .month-nav { display: flex; gap: 8px; align-items: center; }
+    .timeline-nav h2 { font-size: 1.3rem; color: #ff9a9e; }
+    .nav-btns { display: flex; gap: 8px; }
 
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
+    .timeline-scroll-area {
+      overflow-x: auto;
+      position: relative;
+      padding: 20px 0;
+      background: #151021;
     }
-    .day-header {
+    .timeline-header-row {
+      display: flex;
+      border-bottom: 2px solid #2e2246;
+      padding-bottom: 10px;
+      min-width: max-content;
+    }
+    .timeline-day-col {
+      width: 45px;
       text-align: center;
-      font-weight: bold;
-      padding: 8px 0;
-      color: #ffb7c5;
-      font-size: 0.9rem;
-    }
-    .day-cell {
-      background: #382950;
-      border-radius: 8px;
-      min-height: 90px;
-      padding: 6px;
-      border: 1px solid #4a3866;
+      font-size: 0.78rem;
+      color: #bfaedc;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      position: relative;
+      gap: 2px;
+      border-right: 1px solid rgba(255,255,255,0.05);
     }
-    .day-cell.other-month { opacity: 0.3; }
-    .day-cell.today { border: 2px solid #00ffcc; background: #2a3848; }
-    .day-number { font-size: 0.85rem; font-weight: bold; color: #fff; margin-bottom: 4px; }
+    .timeline-day-col.weekend { color: #ff758c; }
+    .timeline-day-col.today-col { background: rgba(0, 255, 204, 0.08); border-top: 3px solid #00ffcc; }
 
-    .event-bar {
-      font-size: 0.72rem;
+    .timeline-body {
+      position: relative;
+      min-width: max-content;
+      padding: 15px 0;
+      min-height: 250px;
+    }
+
+    /* 이벤트 바 스타일 */
+    .event-row-bar {
+      position: absolute;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 0.8rem;
       font-weight: bold;
-      padding: 3px 6px;
-      border-radius: 4px;
       color: #fff;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
       cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: 0.2s;
+    }
+    .event-row-bar:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .event-time-badge {
+      margin-left: auto;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      color: #ffb7c5;
+      font-weight: normal;
     }
 
+    /* 관리자 패널 */
     .admin-panel {
       display: none;
-      background: #3d2b27;
+      background: #2b1f3d;
       padding: 18px;
       border-radius: 14px;
       border: 3px solid #ffb703;
@@ -132,12 +153,11 @@
     .admin-panel.active { display: block; }
     .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .form-row input, .form-row select {
-      padding: 8px; border-radius: 6px; border: 1px solid #554270; background: #1a1528; color: #fff; flex: 1; min-width: 130px;
+      padding: 8px; border-radius: 6px; border: 1px solid #554270; background: #1a1528; color: #fff; flex: 1; min-width: 140px;
     }
-
     .event-manage-list { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
     .manage-item {
-      background: #2b1f3d; padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ffb703; font-size: 0.85rem;
+      background: #1a1528; padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ffb703; font-size: 0.85rem;
     }
   </style>
 </head>
@@ -146,7 +166,7 @@
   <div class="container">
     <header>
       <h1>🌸 블로썸 길드 이벤트 & 공지 센터</h1>
-      <p>실시간 공유 이벤트 달력 · 주요 주간 일정</p>
+      <p>실시간 공유 가로형 타임라인 일정표</p>
     </header>
 
     <div class="controls-panel">
@@ -156,10 +176,10 @@
       <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 모드 (이벤트 수정)</button>
     </div>
 
-    <!-- 관리자 이벤트를 실시간 등록하는 패널 -->
+    <!-- 관리자 등록 패널 -->
     <div class="admin-panel" id="adminPanel">
       <h3 style="color: #ffb703; display: flex; justify-content: space-between; align-items: center;">
-        <span>🛠️ [관리자 모드] 길드 공유 이벤트 등록/삭제</span>
+        <span>🛠️ [관리자 모드] 타임라인 이벤트 등록/삭제</span>
         <button class="btn" style="font-size: 0.75rem; background:#ff5252; padding: 3px 8px;" onclick="logoutAdmin()">닫기</button>
       </h3>
       
@@ -168,42 +188,46 @@
         <input type="date" id="evtStart">
         <input type="date" id="evtEnd">
         <select id="evtColor">
-          <option value="#ff758c">🌸 핑크</option>
-          <option value="#00ffcc">✨ 민트</option>
-          <option value="#ffb703">⭐ 골드</option>
-          <option value="#7289da">🎧 블루</option>
-          <option value="#ff5252">🔥 레드</option>
+          <option value="linear-gradient(90deg, #ff758c, #ff7eb3)">🌸 핑크 그라데이션</option>
+          <option value="linear-gradient(90deg, #00b09b, #96c93d)">✨ 민트 그라데이션</option>
+          <option value="linear-gradient(90deg, #f7b733, #fc4a1a)">⭐ 골드 그라데이션</option>
+          <option value="linear-gradient(90deg, #36d1dc, #5b86e5)">🎧 블루 그라데이션</option>
+          <option value="linear-gradient(90deg, #cb2d3e, #ef473f)">🔥 레드 그라데이션</option>
         </select>
-        <button class="btn" style="background:#ffb703; color:#000;" onclick="addNewEvent()">전 유저 공지 등록</button>
+        <button class="btn" style="background:#ffb703; color:#000;" onclick="addNewEvent()">타임라인에 추가</button>
       </div>
 
       <div class="event-manage-list" id="adminEventList"></div>
     </div>
 
-    <div class="calendar-card">
-      <div class="calendar-header">
-        <h2 id="calendarTitle">2026년 11월</h2>
-        <div class="month-nav">
-          <button class="btn" onclick="moveMonth(-1)">◀ 이전달</button>
-          <button class="btn" onclick="moveMonth(1)">다음달 ▶</button>
+    <!-- 타임라인 뷰어 -->
+    <div class="timeline-container">
+      <div class="timeline-nav">
+        <h2 id="timelineTitle">2026년 11월 일정 타임라인</h2>
+        <div class="nav-btns">
+          <button class="btn" onclick="moveTimelineMonth(-1)">◀ 이전 달</button>
+          <button class="btn" onclick="goToToday()">오늘</button>
+          <button class="btn" onclick="moveTimelineMonth(1)">다음 달 ▶</button>
         </div>
       </div>
 
-      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="timeline-scroll-area" id="timelineScrollArea">
+        <div class="timeline-header-row" id="timelineHeader"></div>
+        <div class="timeline-body" id="timelineBody"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    // 🌟 연동된 온라인 DB 설정
     const BIN_ID = "6af0f5d6ac6210605a783891";
     const API_KEY = "$2a$10$QCeURoTGN.wcSMcioL8CB.Cu7fE2kpyPt1GIMf3cuaUgR2sDlyyMC";
     const ADMIN_PASSWORD = "gktmddn0710";
 
-    let currentDate = new Date();
+    let viewYear = new Date().getFullYear();
+    let viewMonth = new Date().getMonth(); // 0~11
     let eventsList = [];
     let isAdmin = sessionStorage.getItem('blossom_event_admin') === 'true';
 
-    // 1. 온라인 DB에서 이벤트 데이터 불러오기 (전체 유저 공통)
     async function fetchEventsFromCloud() {
       const statusEl = document.getElementById('syncStatus');
       statusEl.innerText = "🔄 최신 데이터 불러오는 중...";
@@ -220,13 +244,12 @@
         statusEl.innerText = "✅ 실시간 동기화 완료";
         render();
       } catch (err) {
-        console.error("데이터 로드 실패:", err);
-        statusEl.innerText = "⚠️ 동기화 실패 (기본 화면 표시)";
+        console.error(err);
+        statusEl.innerText = "⚠️ 동기화 실패";
         render();
       }
     }
 
-    // 2. 온라인 DB로 저장하기 (관리자용)
     async function saveEventsToCloud() {
       const statusEl = document.getElementById('syncStatus');
       statusEl.innerText = "⏳ 서버에 저장 중...";
@@ -241,75 +264,131 @@
         });
         statusEl.innerText = "✅ 모든 유저 화면 반영 완료!";
       } catch (err) {
-        console.error("저장 실패:", err);
-        alert("서버 저장 실패! 네트워크 상태를 확인하세요.");
+        console.error(err);
+        alert("저장 실패!");
       }
     }
 
     function render() {
-      renderCalendar();
+      renderTimeline();
       renderAdminPanel();
     }
 
-    function renderCalendar() {
-      const grid = document.getElementById('calendarGrid');
-      const title = document.getElementById('calendarTitle');
-      grid.innerHTML = '';
+    function renderTimeline() {
+      const headerRow = document.getElementById('timelineHeader');
+      const bodyDiv = document.getElementById('timelineBody');
+      const titleEl = document.getElementById('timelineTitle');
 
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
+      headerRow.innerHTML = '';
+      bodyDiv.innerHTML = '';
 
-      title.innerText = `${year}년 ${month + 1}월`;
+      titleEl.innerText = `${viewYear}년 ${viewMonth + 1}월 일정 타임라인`;
 
-      const daysHeader = ['일', '월', '화', '수', '목', '금', '토'];
-      daysHeader.forEach(d => {
-        const div = document.createElement('div');
-        div.className = 'day-header';
-        div.innerText = d;
-        grid.appendChild(div);
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+
+      let datesArray = [];
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(viewYear, viewMonth, d);
+        datesArray.push(dateObj);
+
+        const dayOfWeek = dateObj.getDay();
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const today = new Date();
+        const isToday = (today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === d);
+
+        const col = document.createElement('div');
+        col.className = `timeline-day-col ${isWeekend ? 'weekend' : ''} ${isToday ? 'today-col' : ''}`;
+        col.innerHTML = `<span>${d}</span><span style="font-size:0.68rem;">${dayNames[dayOfWeek]}</span>`;
+        headerRow.appendChild(col);
+      }
+
+      // 이벤트 바 배치 계산
+      // 월의 시작일과 마지막일 타임스탬프
+      const monthStartTime = new Date(viewYear, viewMonth, 1).setHours(0,0,0,0);
+      const colWidth = 45; // 각 날짜 칸의 너비 (px)
+
+      // 겹치지 않게 행(row) 자동 배정 알고리즘
+      let rowEnds = []; // 각 행의 마지막 이벤트가 끝나는 x좌표 기록
+
+      eventsList.forEach(evt => {
+        const evtStartTime = new Date(evt.start + "T00:00:00").getTime();
+        const evtEndTime = new Date(evt.end + "T23:59:59").getTime();
+
+        const monthEndTime = new Date(viewYear, viewMonth, daysInMonth).setHours(23,59,59,999);
+
+        // 이번 달에 걸치는 이벤트만 표시
+        if (evtEndTime < monthStartTime || evtStartTime > monthEndTime) return;
+
+        // 시작 인덱스 및 종료 인덱스 계산
+        const startDateObj = new Date(Math.max(evtStartTime, monthStartTime));
+        const endDateObj = new Date(Math.min(evtEndTime, monthEndTime));
+
+        const startDayIdx = startDateObj.getDate() - 1;
+        const durationDays = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24)) + 1;
+
+        const leftPos = startDayIdx * colWidth + 4;
+        const barWidth = durationDays * colWidth - 8;
+
+        // 남은 시간 계산
+        const now = Date.now();
+        let timeLeftStr = "";
+        if (evtEndTime > now) {
+          const diffMs = evtEndTime - now;
+          const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          timeLeftStr = `${diffDays}d ${diffHours}h 남음`;
+        } else {
+          timeLeftStr = "종료됨";
+        }
+
+        // 빈 행 찾기 (겹침 방지)
+        let assignedRow = 0;
+        let placed = false;
+        for (let r = 0; r < rowEnds.length; r++) {
+          if (rowEnds[r] <= leftPos) {
+            assignedRow = r;
+            rowEnds[r] = leftPos + barWidth;
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          assignedRow = rowEnds.length;
+          rowEnds.push(leftPos + barWidth);
+        }
+
+        const bar = document.createElement('div');
+        bar.className = 'event-row-bar';
+        bar.style.left = `${leftPos}px` ;
+        bar.style.width = `${barWidth}px`;
+        bar.style.top = `${assignedRow * 38 + 10}px`;
+        bar.style.background = evt.color;
+        bar.innerHTML = `
+          <span style="overflow:hidden; text-overflow:ellipsis;">${evt.title}</span>
+          <span class="event-time-badge">${timeLeftStr}</span>
+        `;
+        bar.title = `${evt.title} (${evt.start} ~ ${evt.end})`;
+        bodyDiv.appendChild(bar);
       });
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const lastDate = new Date(year, month + 1, 0).getDate();
-      const prevLastDate = new Date(year, month, 0).getDate();
-
-      // 이전 달 날짜 채우기
-      for (let i = firstDay - 1; i >= 0; i--) {
-        const div = document.createElement('div');
-        div.className = 'day-cell other-month';
-        div.innerHTML = `<span class="day-number">${prevLastDate - i}</span>`;
-        grid.appendChild(div);
-      }
-
-      // 현재 달 날짜 채우기
-      const today = new Date();
-      for (let d = 1; d <= lastDate; d++) {
-        const div = document.createElement('div');
-        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
-        div.className = `day-cell ${isToday ? 'today' : ''}`;
-        
-        let cellHtml = `<span class="day-number">${d}</span>`;
-        
-        // 해당 날짜에 걸치는 이벤트 바 바인딩
-        const currentCellTime = new Date(year, month, d).getTime();
-
-        eventsList.forEach(evt => {
-          const startTime = new Date(evt.start + "T00:00:00").getTime();
-          const endTime = new Date(evt.end + "T23:59:59").getTime();
-
-          if (currentCellTime >= startTime && currentCellTime <= endTime) {
-            cellHtml += `<div class="event-bar" style="background:${evt.color}" title="${evt.title}">${evt.title}</div>`;
-          }
-        });
-
-        div.innerHTML = cellHtml;
-        grid.appendChild(div);
-      }
+      // 전체 바디 높이 동적 조절
+      const totalRows = Math.max(rowEnds.length, 1);
+      bodyDiv.style.height = `${totalRows * 38 + 20}px`;
     }
 
-    function moveMonth(dir) {
-      currentDate.setMonth(currentDate.getMonth() + dir);
-      renderCalendar();
+    function moveTimelineMonth(dir) {
+      viewMonth += dir;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      else if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      renderTimeline();
+    }
+
+    function goToToday() {
+      const now = new Date();
+      viewYear = now.getFullYear();
+      viewMonth = now.getMonth();
+      renderTimeline();
     }
 
     function tryAdminLogin() {
@@ -339,7 +418,7 @@
         panel.classList.add('active');
         toggleBtn.style.display = 'none';
 
-        listEl.innerHTML = '<h4 style="color:#ffb703; margin-top:10px;">📋 등록된 공유 이벤트 목록</h4>';
+        listEl.innerHTML = '<h4 style="color:#ffb703; margin-top:10px;">📋 등록된 타임라인 이벤트 목록</h4>';
         eventsList.forEach((evt, idx) => {
           const item = document.createElement('div');
           item.className = 'manage-item';
@@ -362,7 +441,7 @@
       const color = document.getElementById('evtColor').value;
 
       if (!title || !start || !end) {
-        alert("이벤트 제목과 시작일, 종료일을 모두 입력하세요!");
+        alert("제목과 시작일, 종료일을 모두 입력해주세요!");
         return;
       }
 
@@ -383,7 +462,6 @@
       }
     }
 
-    // 첫 로딩 시 온라인 DB에서 이벤트 동기화
     fetchEventsFromCloud();
   </script>
 </body>
