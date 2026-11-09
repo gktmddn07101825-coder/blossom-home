@@ -40,3 +40,13 @@
   window.BlossomSkin={apply,refresh};
   if(!document.body?.dataset?.blossomShop)refresh();
 })();
+
+/* BLOSSOM v13: 공통 스크립트에서 접속 현황 기능을 자동 연결 */
+(() => {
+  if (document.querySelector('script[data-blossom-presence]')) return;
+  const loader = document.createElement('script');
+  loader.src = 'presence.js?v=13';
+  loader.defer = true;
+  loader.dataset.blossomPresence = '1';
+  document.head.appendChild(loader);
+})();
