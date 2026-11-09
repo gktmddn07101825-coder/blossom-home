@@ -48,7 +48,7 @@
   const inventory=own(),equipped=wears(),search=strip($('search').value),balance=Number(state.wallet?.balance||0);
   let chosen=(state.products||[]).filter(p=>
    (category==='all'||p.category===category)&&
-   (view==='shop'||inventory.has(p.id))&&
+   (view==='shop'?p.active!==false:inventory.has(p.id))&&
    (!search||strip([p.name,p.description,p.category,p.id].join(' ')).includes(search))
   );
   const sort=$('sortProducts').value;
@@ -103,7 +103,7 @@
   const isOwner=state.can_adjust===true&&state.user?.role==='site_owner';
   $('ownerBox').classList.toggle('hidden',!isOwner);
   $('ownerJump').classList.toggle('hidden',!isOwner);
-  $('totalGoods').textContent=(state.products||[]).length+'종 상품';
+  $('totalGoods').textContent=(state.products||[]).filter(p=>p.active!==false).length+'종 상품';
   updateCategories();
   renderWeek();renderProducts();
   if(window.BlossomSkin)window.BlossomSkin.apply(state.equipped,state.products,state.user?.nickname);
@@ -124,7 +124,7 @@
  function updateCategories(){
   const filters=$('filters');filters.replaceChildren();
   for(const [id,label,emoji] of kinds){
-   const count=(state?.products||[]).filter(p=>(id==='all'||p.category===id)&&(view==='shop'||own().has(p.id))).length;
+   const count=(state?.products||[]).filter(p=>(id==='all'||p.category===id)&&(view==='shop'?p.active!==false:own().has(p.id))).length;
    const b=el('button','category-btn'+(id===category?' active':''));b.type='button';
    b.setAttribute('aria-pressed',String(id===category));
    b.append(el('span','cat-emoji',emoji),el('span','cat-label',label),el('span','cat-count',count+'개'));

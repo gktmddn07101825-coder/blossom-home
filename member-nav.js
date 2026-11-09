@@ -17,7 +17,7 @@
     member: '길드원',
   });
   function clearSession() {
-    try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
+    try { sessionStorage.removeItem(SESSION_KEY);window.BlossomSession?.logout(); } catch (_) {}
   }
   function session() {
     try {

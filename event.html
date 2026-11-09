@@ -25,14 +25,14 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
 <link rel="stylesheet" href="calendar.css?v=5">
 <script defer src="member-gate.js"></script>
 <script defer src="calendar.js?v=5"></script>
-<link rel="stylesheet" href="blossom-skins.css"></head>
+<link rel="stylesheet" href="blossom-skins.css"><script src="blossom-session.js"></script></head>
 <body>
 <div id="blossom-access-gate" role="status" aria-live="polite"><div class="gate-card">
  <div style="font-size:33px;color:#f7b2f2">✿ BLOSSOM</div><h2>길드원 전용 공간</h2>
  <p data-gate-message>회원 확인을 준비하고 있어요...</p>
  <div class="gate-actions"><a data-gate-login href="auth.html#login">로그인 / 회원가입</a><button type="button" data-gate-retry>다시 확인</button><a href="index.html">홈으로</a></div>
 </div></div>
-<header class="top"><nav class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></nav></header>
+<header class="top"><nav class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a><a class="back" href="tips.html">📚 꿀팁</a><a class="back" href="help.html">🤝 도움 인증</a></nav></header>
 <main class="wrap">
  <section class="intro"><div class="eyebrow">BLOSSOM COMMUNITY</div><h1>✦ 이벤트 & 공지</h1><p>블로썸 길드의 공지와 이벤트 일정을 한곳에서 확인하세요. 승인된 길드원은 이벤트 기간을 타임라인으로 확인하고, 운영진 이상은 일정을 관리할 수 있습니다. 아래에는 기존 공지 게시판도 그대로 유지됩니다.</p></section>
 
@@ -100,19 +100,19 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
   </dialog>
  </section>
  <!-- 기존 v4 게시판 영역 시작 -->
- <div style="border-top:1px solid #56578e;padding-top:30px;margin-top:40px"><div class="eyebrow">GUILD COMMUNITY BOARD</div><h2 style="font-size:26px;margin:10px 0 4px">📢 길드 공지 게시판</h2><p style="color:#c7cae8;font-size:13px">기존 공지사항과 글 작성 기능은 그대로 유지됩니다.</p></div>
+ <div style="border-top:1px solid #56578e;padding-top:30px;margin-top:40px"><div class="eyebrow">GUILD COMMUNITY BOARD</div><h2 style="font-size:26px;margin:10px 0 4px">📢 공지사항 · 패치노트</h2><p style="color:#c7cae8;font-size:13px">공지사항·이벤트·패치노트를 등록하고 📌 상단 고정으로 중요한 글을 먼저 보여줄 수 있습니다.</p></div>
  <p id="boardStatus" class="status" aria-live="polite">길드 게시판을 불러오는 중...</p>
  <section id="editor" class="panel" hidden>
   <div class="head-row"><h2 id="editorTitle">✎ 새 게시물 작성</h2><button id="cancelEdit" type="button" class="subtle" hidden>수정 취소</button></div>
   <form id="postForm" class="form-grid">
-   <div class="field-row"><div><label for="postKind">게시물 종류</label><select id="postKind"><option value="notice">📢 공지사항</option><option value="event">🗓 이벤트</option></select></div><div id="dateField" hidden><label for="eventAt">이벤트 날짜 / 시간 (선택)</label><input id="eventAt" type="datetime-local"></div></div>
+   <div class="field-row"><div><label for="postKind">게시물 종류</label><select id="postKind"><option value="notice">📢 공지사항</option><option value="event">🗓 이벤트</option><option value="patchnote">🛠 패치노트</option></select></div><div id="dateField" hidden><label for="eventAt">이벤트 날짜 / 시간 (선택)</label><input id="eventAt" type="datetime-local"></div></div>
    <div><label for="postTitle">제목</label><input id="postTitle" type="text" required minlength="2" maxlength="100" placeholder="길드원에게 알릴 제목"></div>
-   <div><label for="postContent">내용</label><textarea id="postContent" required maxlength="4000" placeholder="공지 또는 이벤트 내용을 입력해 주세요."></textarea></div>
+   <div style="padding:11px 15px;background:#20264c;border-radius:10px;margin-top:8px"><label style="display:flex;gap:10px;align-items:center"><input id="pinPost" type="checkbox" style="width:17px;height:17px;accent-color:#ae81ff"> 📌 상단 고정 (운영진 이상)</label></div><div><label for="postContent">내용</label><textarea id="postContent" required maxlength="4000" placeholder="공지 또는 이벤트 내용을 입력해 주세요."></textarea></div>
    <div class="actions"><button id="submitPost" type="submit">게시물 등록</button><span class="hint">운영진 이상만 작성 · 게시물은 회원에게만 공개</span></div>
   </form>
  </section>
  <section aria-label="게시물 목록">
-  <div class="tabs" aria-label="게시물 필터"><button class="filter" type="button" data-filter="all" aria-pressed="true">전체</button><button class="filter" type="button" data-filter="notice" aria-pressed="false">📢 공지</button><button class="filter" type="button" data-filter="event" aria-pressed="false">🗓 이벤트</button><button id="refreshBoard" class="subtle" type="button">↻ 새로고침</button></div>
+  <div class="tabs" aria-label="게시물 필터"><button class="filter" type="button" data-filter="all" aria-pressed="true">전체</button><button class="filter" type="button" data-filter="notice" aria-pressed="false">📢 공지</button><button class="filter" type="button" data-filter="event" aria-pressed="false">🗓 이벤트</button><button class="filter" type="button" data-filter="patchnote" aria-pressed="false">🛠 패치노트</button><button id="refreshBoard" class="subtle" type="button">↻ 새로고침</button></div>
   <div id="feed" aria-live="polite"><p class="empty">게시물을 불러오는 중...</p></div>
  </section>
 </main>
@@ -159,14 +159,14 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
   function render() {
     const root = $('feed'); root.replaceChildren();
     const visible = posts.filter(p => filter === 'all' || p.kind === filter);
-    if (!visible.length) { root.append(node('p', 'empty', '아직 등록된 ' + (filter === 'all' ? '게시물이' : filter === 'notice' ? '공지사항이' : '이벤트가') + ' 없습니다.')); return; }
+    if (!visible.length) { root.append(node('p', 'empty', '아직 등록된 ' + (filter === 'all' ? '게시물이' : filter === 'notice' ? '공지사항이' : filter === 'patchnote' ? '패치노트가' : '이벤트가') + ' 없습니다.')); return; }
     for (const p of visible) {
       const card = node('article', 'entry');
       const head = node('div', 'entry-head');
       const info = node('div');
       const title = node('h2');
-      const kind = node('span', 'kind' + (p.kind === 'event' ? ' event' : ''), p.kind === 'event' ? '이벤트' : '공지');
-      title.append(kind, document.createTextNode(p.title));
+      const kind = node('span', 'kind' + (p.kind === 'event' ? ' event' : ''), p.kind === 'event' ? '이벤트' : p.kind === 'patchnote' ? '🛠 패치노트' : '공지');
+      if(p.is_pinned) title.prepend(node('span','kind','📌 고정'));title.append(kind, document.createTextNode(p.title));
       const meta = node('div', 'meta', '작성자: ' + p.author_name + ' · ' + dateLabel(p.created_at));
       info.append(title, meta); head.append(info);
       const isOwner = p.author_id === viewerId;
@@ -190,13 +190,13 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
     $('postForm').reset();
     $('editorTitle').textContent = '✎ 새 게시물 작성';
     $('submitPost').textContent = '게시물 등록';
-    $('cancelEdit').hidden = true;
+    $('cancelEdit').hidden = true;$('pinPost').checked=false;
     updateKind();
   }
   function beginEdit(post) {
     if (!canPost) return;
     editing = post.id;
-    $('postKind').value = post.kind;
+    $('postKind').value = post.kind;$('pinPost').checked=!!post.is_pinned;
     $('postTitle').value = post.title;
     $('postContent').value = post.content;
     if (post.event_at) {
@@ -217,7 +217,7 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
     message('게시물을 불러오는 중...');
     try {
       const data = await api();
-      posts = data.posts || []; viewerId = data.viewer_id;
+      posts = (data.posts || []).sort((a,b)=> Number(!!b.is_pinned)-Number(!!a.is_pinned)||Date.parse(b.pinned_at||b.created_at)-Date.parse(a.pinned_at||a.created_at)); viewerId = data.viewer_id;
       canPost = data.can_post === true; manageAny = data.can_manage_any === true;
       $('editor').hidden = !canPost;
       render(); message('총 ' + posts.length + '개의 게시물을 확인했습니다.');
@@ -238,7 +238,7 @@ html[data-blossom-access="approved"] #blossom-access-gate{display:none!important
     const content = $('postContent').value.trim();
     const rawDate = $('eventAt').value;
     const payload = { action: editing ? 'update' : 'create', kind, title, content,
-      event_at: kind === 'event' && rawDate ? new Date(rawDate).toISOString() : null };
+      event_at: kind === 'event' && rawDate ? new Date(rawDate).toISOString() : null,is_pinned: $('pinPost').checked };
     if (editing) payload.post_id = editing;
     busy = true; $('submitPost').disabled = true; message('게시물 저장 중...');
     try { const result = await api(payload); resetEditor(); busy = false; await loadBoard(); message(result.message); }

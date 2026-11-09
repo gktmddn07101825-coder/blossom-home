@@ -9,7 +9,7 @@
   const retryButton = gate.querySelector('[data-gate-retry]');
   const loginLink = gate.querySelector('[data-gate-login]');
   const currentPage = location.pathname.split('/').pop() || 'index.html';
-  const allowReturn = ['todo.html', 'timer.html', 'event.html'].includes(currentPage) ? currentPage : 'index.html';
+  const allowReturn = ['todo.html', 'timer.html', 'event.html', 'tips.html', 'help.html', 'shop.html', 'mini.html'].includes(currentPage) ? currentPage : 'index.html';
   loginLink.href = 'auth.html?next=' + encodeURIComponent(allowReturn) + '#login';
   let checking = false;
 
@@ -22,7 +22,7 @@
     } catch (_) {}
     return null;
   }
-  function clearSession() { try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {} }
+  function clearSession() { try { sessionStorage.removeItem(SESSION_KEY);window.BlossomSession?.logout(); } catch (_) {} }
   async function verify() {
     if (checking) return;
     checking = true;

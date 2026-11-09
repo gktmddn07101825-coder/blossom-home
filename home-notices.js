@@ -10,8 +10,8 @@
   const MAX_ITEMS = 3;
 
   const panel = [...document.querySelectorAll('.columns > article.panel')]
-    .find(el => el.querySelector('h2')?.textContent.includes('길드 공지사항'));
-  if (!panel) return;
+    .find(el => el.querySelector('h2')?.textContent.includes('길드 공지사항') || el.querySelector('h2')?.textContent.includes('길드 소식'));
+  if (!panel) return;panel.querySelector('h2').textContent='📢 길드 소식';
   const originalNotice = panel.querySelector('.notice');
   if (!originalNotice) return;
 
@@ -66,14 +66,14 @@
   originalNotice.replaceWith(list);
 
   const footer = node('div', 'bn-foot');
-  const status = node('small', '', '공지 확인 중…');
+  const status = node('small', '', '길드 소식 확인 중…');
   status.setAttribute('role', 'status');
   const reload = node('button', 'bn-reload', '↻ 공지 새로고침');
   reload.type = 'button';
   footer.append(status, reload);
   const more = panel.querySelector('a.preview');
   if (more) {
-    more.textContent = '📢 모든 공지 보러가기 ↗';
+    more.textContent = '📢 공지·패치노트 전체 보기 ↗';
     more.href = 'event.html#feed';
     panel.insertBefore(footer, more);
   } else {
@@ -130,7 +130,7 @@
   }
 
   function openNotice(post) {
-    dialogTitle.textContent = post.title || '제목 없는 공지';
+    dialogTag.textContent=post.is_pinned?'📌 고정':post.kind==='patchnote'?'🛠 패치노트':'📢 공지사항';dialogTitle.textContent = post.title || '제목 없는 글';
     dialogMeta.textContent = [post.author_name ? `작성자 ${post.author_name}` : '', dateLabel(post.created_at)]
       .filter(Boolean).join(' · ');
     dialogBody.textContent = post.content || '내용이 없습니다.';
@@ -141,18 +141,18 @@
   function render(posts) {
     list.replaceChildren();
     const notices = posts
-      .filter(p => p && p.kind === 'notice')
-      .sort((a, b) => (Date.parse(b.created_at) || 0) - (Date.parse(a.created_at) || 0));
-    status.textContent = `등록된 공지 ${notices.length}건 · 최신 ${Math.min(MAX_ITEMS, notices.length)}건 표시`;
+      .filter(p => p && (p.kind === 'notice' || p.kind === 'patchnote'))
+      .sort((a,b)=>Number(!!b.is_pinned)-Number(!!a.is_pinned)||(Date.parse(b.pinned_at||b.created_at)||0)-(Date.parse(a.pinned_at||a.created_at)||0));
+    status.textContent = `공지·패치노트 ${notices.length}건 · ${Math.min(MAX_ITEMS,notices.length)}건 표시`;
     if (!notices.length) {
-      empty('아직 등록된 길드 공지사항이 없습니다.');
+      empty('아직 등록된 공지사항이나 패치노트가 없습니다.');
       return;
     }
     notices.slice(0, MAX_ITEMS).forEach((post, i) => {
       const card = node('button', 'bn-item');
       card.type = 'button';
       const top = node('div', 'bn-top');
-      top.append(node('span', 'bn-tag' + (i === 0 ? ' bn-latest' : ''), i === 0 ? '📌 최신 공지' : '📢 공지'));
+      top.append(node('span', 'bn-tag' + (i === 0 ? ' bn-latest' : ''), post.is_pinned ? '📌 고정' : post.kind === 'patchnote' ? '🛠 패치노트' : '📢 공지'));
       top.append(node('span', 'bn-date', dateLabel(post.created_at)));
       const title = node('strong', 'bn-title', post.title || '제목 없는 공지');
       const snippet = node('div', 'bn-snippet', (post.content || '').replace(/\s+/g, ' ').trim());
