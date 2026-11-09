@@ -1,0 +1,74 @@
+/* BLOSSOM V5 일정 타임라인 — 기존 길드 게시판과 분리된 이름 공간 */
+#blossomCalendar{--bc-bg:#10162f;--bc-surface:#181f42;--bc-line:#424b78;--bc-day:53px;--bc-gold:#ffd78c;margin:30px 0 48px;isolation:isolate}
+#blossomCalendar *{box-sizing:border-box}
+#blossomCalendar .bc-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+#blossomCalendar .bc-eyebrow{font-weight:900;letter-spacing:2.8px;color:#8be9ff;font-size:11px}
+#blossomCalendar h2{font-size:clamp(25px,3vw,35px);margin:5px 0 6px;color:#fdf2ff}
+#blossomCalendar .bc-description{font-size:13px;color:#c4cbed;margin:0;line-height:1.6}
+#blossomCalendar .bc-toolbar{display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:16px 0}
+#blossomCalendar .bc-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#blossomCalendar button,#blossomCalendar input,#blossomCalendar select,#blossomCalendar textarea{font:inherit}
+#blossomCalendar button{border:1px solid #7374bc;color:#f7f4ff;border-radius:9px;background:#212a54;padding:9px 13px;font-weight:800;cursor:pointer;font-size:13px}
+#blossomCalendar button:hover{border-color:#a7e6ff;background:#303c73}#blossomCalendar button:focus-visible{outline:2px solid #79e4ff;outline-offset:2px}#blossomCalendar button:disabled{opacity:.5;cursor:not-allowed}
+#blossomCalendar .bc-primary{border-color:#c999eb;background:linear-gradient(110deg,#7460c7,#b66cbb);box-shadow:0 4px 16px #b35bc142}
+#blossomCalendar .bc-danger{border-color:#c17d9b;background:#5e2b4d}
+#blossomCalendar .bc-current{font-size:13px;font-weight:900;color:#dfe6ff;padding:0 6px;min-width:125px;text-align:center}
+#blossomCalendar .bc-month{width:153px;height:39px;padding:7px 9px;background:#111936;border:1px solid #566099;color:#eff2ff;border-radius:9px;font-size:13px}
+#blossomCalendar .bc-filter{max-width:150px;padding:9px 28px 9px 12px;border:1px solid #59649b;border-radius:9px;background:#141e40;color:#eef1ff}
+#blossomCalendar .bc-time{border-radius:12px;border:1px solid #d2a9ff5c;background:#33295062;color:#ecd2ff;padding:9px 12px;font-size:12px;letter-spacing:.2px;font-weight:800;white-space:nowrap}
+#blossomCalendar .bc-shell{border:1px solid #665aaf;border-radius:17px;background:linear-gradient(160deg,#171d40,#10172e 70%);box-shadow:0 18px 40px #0006,inset 0 1px #a891dc32;overflow:hidden}
+#blossomCalendar .bc-shelltop{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:15px 18px;border-bottom:1px solid #414b81;background:linear-gradient(105deg,#262951,#131c38)}
+#blossomCalendar .bc-shelltop strong{font-size:14px;color:#f4d6ff}#blossomCalendar .bc-shelltop span{font-size:12px;color:#b9c8ea}
+#blossomCalendar .bc-scroll{overflow:auto;overscroll-behavior-x:contain;scrollbar-color:#7763ad #151b35;scrollbar-width:thin;max-width:100%}
+#blossomCalendar .bc-canvas{position:relative;min-width:1855px}
+#blossomCalendar .bc-days{height:66px;display:grid;grid-template-columns:repeat(35,var(--bc-day));background:#151e3d;border-bottom:1px solid #4c537e}
+#blossomCalendar .bc-day{height:66px;text-align:center;padding:9px 1px 6px;border-right:1px solid #384066;position:relative;color:#dce8ff}
+#blossomCalendar .bc-day .bc-week{display:block;font-size:11px;color:#adbce0;margin-bottom:5px}
+#blossomCalendar .bc-day .bc-date{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:26px;font-size:13px;font-weight:800;border-radius:8px}
+#blossomCalendar .bc-day.bc-other-month .bc-date{color:#99a7c6}
+#blossomCalendar .bc-day.bc-weekend .bc-week{color:#ff9aba}
+#blossomCalendar .bc-day.bc-today{background:linear-gradient(180deg,#5b467555,#55417b22)}
+#blossomCalendar .bc-day.bc-today .bc-date{background:#805bca;color:white;box-shadow:0 0 15px #b577ea66}
+#blossomCalendar .bc-month-label{position:absolute;top:4px;left:3px;background:#283a66;box-shadow:0 1px 5px #0006;color:#acffc7;font-size:10px;font-weight:900;border:1px solid #436a78;padding:2px 4px;border-radius:5px;z-index:1}
+#blossomCalendar .bc-rows{position:relative;min-height:156px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--bc-day) - 1px),#353d5d  calc(var(--bc-day) - 1px),#353d5d var(--bc-day))}
+#blossomCalendar .bc-row{height:55px;position:relative;border-bottom:1px solid #293450;display:flex;align-items:center}
+#blossomCalendar .bc-row:nth-child(even){background:#8c8af406}
+#blossomCalendar .bc-bar{position:absolute;height:35px;top:10px;display:flex;align-items:center;gap:8px;padding:0 11px;text-align:left;border-radius:9px;border:1px solid #ffffff6a;color:#fff!important;background:linear-gradient(100deg,var(--bar-color),color-mix(in srgb,var(--bar-color) 65%,#1c255b));box-shadow:0 3px 12px #0005;overflow:hidden;white-space:nowrap;min-width:9px}
+#blossomCalendar .bc-bar:hover{filter:brightness(1.15);transform:translateY(-1px);z-index:5}
+#blossomCalendar .bc-bar::after{content:'';position:absolute;inset:0 0 0 auto;width:24%;background:linear-gradient(90deg,transparent,#fff2);pointer-events:none}
+#blossomCalendar .bc-bar-title{font-weight:900;font-size:13px;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1;letter-spacing:-.2px;text-shadow:0 1px 3px #0008}
+#blossomCalendar .bc-bar-small{justify-content:center;padding:0 3px}
+#blossomCalendar .bc-bar-small .bc-bar-title{display:none}
+#blossomCalendar .bc-bar-tag{font-size:10px;max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:900;border:1px solid #ffffff73;background:#14162a91;border-radius:6px;padding:3px 6px;flex:none}
+#blossomCalendar .bc-bar-draft{opacity:.55;border-style:dashed}
+#blossomCalendar .bc-nowline{position:absolute;z-index:6;top:0;bottom:0;width:2px;background:#ffd899;pointer-events:none;box-shadow:0 0 13px 2px #e9ad5e88}
+#blossomCalendar .bc-nowline:before{content:'';position:absolute;top:-4px;left:-4px;width:10px;height:10px;background:#ffe0a9;border-radius:50%;box-shadow:0 0 9px #ffd8a2}
+#blossomCalendar .bc-empty{min-height:156px;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:7px;color:#becaea;font-size:13px;line-height:1.6;text-align:center;padding:18px}
+#blossomCalendar .bc-empty strong{font-size:19px;color:#f1e4ff}
+#blossomCalendar .bc-note{margin:11px 3px 0;color:#adbce0;font-size:12px;line-height:1.65}
+#blossomCalendar .bc-status{min-height:23px;margin:8px 2px;color:#88eacc;font-size:13px;line-height:1.5}
+#blossomCalendar .bc-status.error{color:#ffb9c8}
+#blossomCalendar .bc-legend{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:11px;color:#c8d1f2}
+#blossomCalendar .bc-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+#blossomCalendar .bc-editor{margin-top:18px;padding:22px;border:1px solid #7665bd;border-radius:15px;background:linear-gradient(130deg,#232750,#171d38)}
+#blossomCalendar .bc-editor h3{font-size:20px;margin:0 0 8px}#blossomCalendar .bc-editor p{margin:0 0 15px;font-size:12px;color:#d2d6f4}
+#blossomCalendar .bc-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#blossomCalendar .bc-field{min-width:0}#blossomCalendar .bc-field.bc-full{grid-column:1/-1}
+#blossomCalendar .bc-field label{display:block;color:#dfe8ff;font-weight:800;font-size:13px;margin:0 0 6px}
+#blossomCalendar .bc-field input,#blossomCalendar .bc-field select,#blossomCalendar .bc-field textarea{width:100%;height:43px;min-width:0;outline-offset:2px;border:1px solid #6068a5;background:#0f1734;color:#fff;border-radius:10px;padding:10px;font-size:13px}
+#blossomCalendar .bc-field textarea{min-height:88px;height:auto;resize:vertical}
+#blossomCalendar .bc-field input[type=color]{height:43px;padding:4px;cursor:pointer}
+#blossomCalendar .bc-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#e6e5fb}
+#blossomCalendar .bc-check input{accent-color:#b67ee3;width:17px;height:17px}
+#blossomCalendar .bc-formactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px}
+#blossomCalendar .bc-detail{padding:0;border:1px solid #8073c2;border-radius:17px;background:#172044;color:#f6f4ff;max-width:min(530px,calc(100vw - 28px));width:100%;box-shadow:0 18px 55px #000b}
+#blossomCalendar .bc-detail::backdrop{background:#020618d4;backdrop-filter:blur(7px)}
+#blossomCalendar .bc-detail-head{padding:23px 23px 16px;border-radius:16px 16px 0 0;background:linear-gradient(115deg,#453c7e,#202b55)}
+#blossomCalendar .bc-detail-head .bc-detail-kind{font-size:11px;color:#bbf3ff;font-weight:900;letter-spacing:1px}
+#blossomCalendar .bc-detail-head h3{font-size:22px;margin:7px 0 0;line-height:1.45;overflow-wrap:anywhere}
+#blossomCalendar .bc-detail-body{padding:19px 23px 23px;display:grid;gap:13px;font-size:14px;line-height:1.75}
+#blossomCalendar .bc-detail-body p{color:#e1e5ff;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+#blossomCalendar .bc-detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+@media(max-width:700px){#blossomCalendar{--bc-day:53px}#blossomCalendar .bc-head{align-items:flex-start}#blossomCalendar .bc-controls{width:100%}#blossomCalendar .bc-toolbar{align-items:flex-start}#blossomCalendar .bc-filter{max-width:none;flex:1}#blossomCalendar .bc-shelltop{padding:13px 12px}#blossomCalendar .bc-formgrid{grid-template-columns:1fr}#blossomCalendar .bc-field.bc-full{grid-column:auto}#blossomCalendar .bc-editor{padding:16px}#blossomCalendar .bc-canvas{min-width:1855px}}
+
+#blossomCalendar .bc-countdown{position:absolute;top:17px;z-index:4;font-size:11px;font-weight:900;white-space:nowrap;border-radius:999px;background:#f4efff;color:#2b244b;padding:5px 9px;max-width:158px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px #0007;pointer-events:none}

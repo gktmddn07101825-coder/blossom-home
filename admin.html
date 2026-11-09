@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1025">
+<title>BLOSSOM | 관리자 센터</title>
+<style>
+:root{color-scheme:dark;--bg:#090d20;--panel:#161c3b;--pink:#f3a4f4;--blue:#76ddff;--text:#f5f3ff;--muted:#bbc3e8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#28225b 0,transparent 60%),var(--bg);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:var(--text)}a{color:inherit;text-decoration:none}.top{border-bottom:1px solid #7774d66b;background:#10142ee8;backdrop-filter:blur(16px)}.wrap{max-width:1040px;margin:auto;padding:0 22px}.nav{min-height:77px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-size:26px;font-weight:900;font-style:italic;color:#ffd4ff;text-shadow:0 0 17px #c75cf5}.brand small{display:block;font-size:10px;letter-spacing:2px;color:#bfc5f6;font-style:normal}.back{color:var(--blue);font-size:14px}main{padding-top:46px;padding-bottom:70px}.eyebrow{font-size:12px;letter-spacing:3px;color:var(--blue);font-weight:800}h1{font-size:clamp(28px,4.5vw,44px);margin:13px 0}h2{font-size:21px;margin:0 0 9px}p{color:var(--muted);line-height:1.7}.panel{background:linear-gradient(135deg,#24254b,#131b38);border:1px solid #776bc4;border-radius:16px;padding:26px;margin-top:24px;box-shadow:0 9px 28px #02041470}.login{max-width:530px}.field{display:block;margin:17px 0 6px;font-size:14px;font-weight:700}input,select{padding:12px 13px;background:#101631;border:1px solid #6865a8;border-radius:9px;color:white;font-size:15px}input:focus,select:focus{outline:2px solid #76ddff}input{width:100%}button{cursor:pointer;color:white;border:1px solid #9e86fb;border-radius:9px;padding:12px 16px;background:linear-gradient(110deg,#6958bd,#b66ed7);font-weight:800;font-size:14px}button.secondary{background:#192346}button.danger{background:#652c56;border-color:#bb789f}button:disabled{opacity:.55;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap}.login button{margin-top:18px;width:100%}.muted{font-size:13px;color:var(--muted)}.message{min-height:24px;margin-top:15px;white-space:pre-wrap}.error{color:#ffb5c7}.success{color:#8df5c7}.heading{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.person{display:flex;align-items:center;justify-content:space-between;gap:17px;padding:19px 0;border-top:1px solid #555e9d}.person:first-child{border-top:0}.person strong{font-size:17px}.person small{display:block;color:var(--muted);margin-top:7px;line-height:1.5}.empty{padding:25px 0;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.tab{background:#171b3c;border-color:#555f9a}.tab[aria-selected=true]{background:linear-gradient(110deg,#6958bd,#b66ed7);border-color:#d4a8ff}.counter{margin-left:4px;color:#bbf3ff}.role-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.role-controls select{width:165px}.pill{display:inline-block;padding:7px 11px;border:1px solid #727ec0;border-radius:40px;color:#bfe9ff;font-size:12px;background:#182444}.toolbar{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin:18px 0}.toolbar input{max-width:360px}.note{font-size:12px;margin-top:16px}.inline-label{font-size:13px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:640px){.wrap{padding:0 15px}.panel{padding:19px}.person{align-items:flex-start;flex-direction:column}.person .actions,.person .role-controls{width:100%}.person .actions button{flex:1}.role-controls select{flex:1;min-width:160px}.role-controls button{flex:1}.brand{font-size:23px}}
+</style>
+<link rel="stylesheet" href="blossom-skins.css"></head>
+<body>
+<header class="top"><div class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></div></header>
+<main class="wrap">
+<div class="eyebrow">BLOSSOM MANAGEMENT</div>
+<h1>✦ 관리자 센터</h1>
+<p>운영진 이상 · 가입 승인, 회원 관리 및 길드 운영</p>
+<section id="loginPanel" class="panel login">
+ <h2>관리자 로그인</h2><p class="muted">기존 로그인 계정으로 접속할 수 있습니다.</p>
+ <form id="loginForm"><label class="field" for="username">아이디</label><input id="username" autocomplete="username" required minlength="4" maxlength="20" placeholder="길드 운영진 아이디"><label class="field" for="password">비밀번호</label><input id="password" type="password" autocomplete="current-password" required placeholder="비밀번호"><button id="loginButton" type="submit">로그인</button></form>
+ <p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+</section>
+<section id="adminPanel" hidden>
+ <div class="panel">
+  <div class="heading"><div><h2 id="panelTitle">회원 관리</h2><p id="welcome" class="muted"></p></div><div class="actions"><button id="refreshButton" class="secondary" type="button">↻ 새로고침</button><button id="logoutButton" class="secondary" type="button">로그아웃</button></div></div>
+  <div class="tabs" role="tablist" aria-label="회원 관리 기능">
+   <button class="tab" id="pendingTab" type="button" role="tab" aria-selected="true" aria-controls="pendingView">가입 대기 <span class="counter" id="pendingCount"></span></button>
+   <button class="tab" id="membersTab" type="button" role="tab" aria-selected="false" aria-controls="membersView">전체 회원 <span class="counter" id="membersCount"></span></button>
+   <button class="tab" id="suspendedTab" type="button" role="tab" aria-selected="false" aria-controls="suspendedView">이용 중지 <span class="counter" id="suspendedCount"></span></button>
+   <button class="tab" id="calendarTab" type="button" role="tab" aria-selected="false" aria-controls="calendarView">🗓 이벤트 달력</button>
+  </div>
+  <section id="pendingView" role="tabpanel" aria-labelledby="pendingTab"><p class="muted">신규 가입 신청을 승인하거나 거절할 수 있습니다.</p><div id="pendingList" aria-live="polite"></div></section>
+  <section id="membersView" role="tabpanel" aria-labelledby="membersTab" hidden>
+   <div class="toolbar"><label class="inline-label" for="search">길드원 검색</label><input id="search" type="search" autocomplete="off" placeholder="아이디 또는 디마 닉네임 검색"><span id="countHint" class="muted"></span></div>
+   <div id="memberList" aria-live="polite"></div>
+   <p class="note">등급 변경·이용 중지는 본인보다 낮은 등급의 회원에게만 가능합니다. 최고관리자는 변경하거나 이용 중지할 수 없습니다.</p>
+  </section>
+  <section id="suspendedView" role="tabpanel" aria-labelledby="suspendedTab" hidden>
+    <p class="muted">관리자가 이용을 중지했거나 가입 신청이 거절된 계정입니다. 계정 기록은 삭제되지 않습니다.</p>
+    <div id="suspendedList" aria-live="polite"></div>
+  </section>
+  <section id="calendarView" role="tabpanel" aria-labelledby="calendarTab" hidden>
+   <h2 style="margin-top:23px">🗓 이벤트 일정 관리</h2>
+   <p>길드 이벤트 시작일·종료일·색상·공개 여부를 관리합니다. 화면에서 바로 등록·수정·삭제가 가능합니다.</p>
+   <a href="event.html#calendarManage" style="display:inline-block;margin:12px 0 18px;border:1px solid #b38ceb;border-radius:9px;padding:14px 20px;font-size:14px;font-weight:800;background:linear-gradient(110deg,#5949a8,#8b56aa)">✦ 이벤트 일정 등록·관리 화면 열기 ↗</a>
+   <p class="note">운영진·부마스터·길드마스터도 이벤트 페이지에서 일정 관리가 가능합니다. 일반 길드원은 보기만 가능합니다.</p>
+  </section>
+  <p id="adminMessage" class="message" role="status" aria-live="polite"></p>
+ </div>
+</section>
+</main>
+<script>
+'use strict';
+const PROJECT='https://hweouohzkwqhiwwsjlxu.supabase.co';
+const AUTH_URL=PROJECT+'/functions/v1/blossom-auth';
+const ADMIN_URL=PROJECT+'/functions/v1/blossom-admin';
+const SESSION_KEY='blossom_test_auth_v1';
+const ROLES={site_owner:'최고관리자',guild_master:'길드마스터',vice_master:'부마스터',staff:'운영진',member:'일반 회원'};
+const MANAGERS=['staff','vice_master','guild_master','site_owner'];
+const LEVEL={member:1,staff:2,vice_master:3,guild_master:4,site_owner:5};
+let myRole='member';
+const CHANGEABLE_ROLES=['member','staff','vice_master','guild_master'];
+const $=id=>document.getElementById(id);
+let token='',busy=false,activeTab='pending',allMembers=[];
+function msg(id,value,error=false){const el=$(id);el.textContent=value;el.className='message '+(error?'error':'success');}
+async function post(url,body,accessToken=''){
+ const headers={'Content-Type':'application/json'};
+ if(accessToken)headers.Authorization='Bearer '+accessToken;
+ let res;
+ try{res=await fetch(url,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});}catch{throw Error('서버에 연결하지 못했습니다.');}
+ let data;try{data=await res.json();}catch{throw Error('서버 응답을 읽지 못했습니다.');}
+ if(!res.ok||!data?.success){const error=new Error(data?.message||'요청에 실패했습니다.');error.status=res.status;throw error;}
+ return data;
+}
+function showLogin(note=''){
+ token='';$('loginPanel').hidden=false;$('adminPanel').hidden=true;$('password').value='';
+ if(note)msg('loginMessage',note,true);
+}
+function showAdmin(name,role){myRole=role;$('loginPanel').hidden=true;$('adminPanel').hidden=false;$('welcome').textContent=name+' · '+(ROLES[role]||role);}
+function saveSession(user,session){
+ try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({username:user.username,digimon_nickname:user.digimon_nickname,role:user.role,status:'approved',access_token:session.access_token,expires_at:session.expires_at||Math.floor(Date.now()/1000)+3600}));}catch{}
+}
+function session(){try{const s=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(s&&MANAGERS.includes(s.role)&&s.status==='approved'&&typeof s.access_token==='string'&&Number(s.expires_at)>Date.now()/1000+20)return s;}catch{}return null;}
+function switchTab(tab){
+ activeTab=tab;
+ $('pendingTab').setAttribute('aria-selected',String(tab==='pending'));
+ $('membersTab').setAttribute('aria-selected',String(tab==='members'));
+ $('calendarTab').setAttribute('aria-selected',String(tab==='calendar'));
+ $('suspendedTab').setAttribute('aria-selected',String(tab==='suspended'));
+ $('pendingView').hidden=tab!=='pending';$('membersView').hidden=tab!=='members';$('calendarView').hidden=tab!=='calendar';$('suspendedView').hidden=tab!=='suspended';
+}
+async function api(body){return post(ADMIN_URL,body,token);}
+function handleError(error){
+ if(error.status===401||error.status===403){showLogin('관리자 인증이 만료되었거나 권한이 없습니다. 다시 로그인해 주세요.');return;}
+ msg('adminMessage',error.message||'요청 실패',true);
+}
+async function reload(){
+ if(!token)return;
+ $('refreshButton').disabled=true;
+ msg('adminMessage','회원 정보를 불러오는 중...');
+ try{
+  const [p,m,s]=await Promise.all([api({action:'pending'}),api({action:'members'}),api({action:'suspended'})]);
+  renderPending(p.members||[]);allMembers=m.members||[];renderApproved();renderSuspended(s.members||[]);$('suspendedCount').textContent='('+String(s.total??s.members?.length??0)+')';
+  $('membersCount').textContent='('+String(m.total??allMembers.length)+')';
+  $('countHint').textContent=m.total>allMembers.length?'총 '+m.total+'명 · 처음 500명 표시':'총 '+(m.total??allMembers.length)+'명';
+  msg('adminMessage','회원 목록을 갱신했습니다.');
+ }catch(error){handleError(error);}finally{$('refreshButton').disabled=false;}
+}
+function renderPending(members){
+ const root=$('pendingList');root.replaceChildren();$('pendingCount').textContent='('+members.length+')';
+ if(!members.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='현재 가입 대기 회원이 없습니다.';root.append(empty);return;}
+ for(const m of members){
+  const item=document.createElement('div');item.className='person';
+  const info=document.createElement('div');const title=document.createElement('strong');title.textContent=m.digimon_nickname||m.username;
+  const detail=document.createElement('small');detail.textContent='아이디: '+m.username+' · 승인 대기';info.append(title,detail);
+  const actions=document.createElement('div');actions.className='actions';
+  const approve=document.createElement('button');approve.textContent='✓ 승인';approve.type='button';
+  const reject=document.createElement('button');reject.textContent='✕ 거절';reject.type='button';reject.className='danger';
+  approve.onclick=()=>review(m,'approve',approve,reject);reject.onclick=()=>review(m,'reject',approve,reject);
+  actions.append(approve,reject);item.append(info,actions);root.append(item);
+ }
+}
+function canManageRole(role){ return (LEVEL[myRole]||0)>(LEVEL[role]||999); }
+function renderApproved(){
+ const root=$('memberList');root.replaceChildren();
+ const keyword=$('search').value.trim().toLocaleLowerCase();
+ const list=allMembers.filter(m=>(m.username+' '+(m.digimon_nickname||'')).toLocaleLowerCase().includes(keyword));
+ if(!list.length){const empty=document.createElement('p');empty.className='empty';empty.textContent=keyword?'검색 결과가 없습니다.':'승인된 회원이 없습니다.';root.append(empty);return;}
+ for(const m of list){
+  const item=document.createElement('div');item.className='person';
+  const info=document.createElement('div');const name=document.createElement('strong');name.textContent=m.digimon_nickname||m.username;
+  const subtitle=document.createElement('small');subtitle.textContent='아이디: '+m.username+' · 현재 등급: '+(ROLES[m.role]||m.role);info.append(name,subtitle);
+  const control=document.createElement('div');control.className='role-controls';
+  if(!canManageRole(m.role)){
+   const pill=document.createElement('span');pill.className='pill';pill.textContent='등급 유지 · 상위 또는 동일 등급';control.append(pill);
+  }else{
+   const select=document.createElement('select');select.setAttribute('aria-label',m.username+' 회원 등급');
+   for(const role of CHANGEABLE_ROLES.filter(x=>canManageRole(x))){const option=document.createElement('option');option.value=role;option.textContent=ROLES[role];select.append(option);}
+   select.value=m.role;
+   const change=document.createElement('button');change.type='button';change.textContent='등급 변경';change.disabled=true;
+   select.addEventListener('change',()=>{change.disabled=busy||select.value===m.role;});
+   change.addEventListener('click',()=>changeRole(m,select,change));
+   const suspend=document.createElement('button');suspend.type='button';suspend.className='danger';suspend.textContent='이용 중지';
+   suspend.addEventListener('click',()=>changeAccess(m,false,suspend));
+   control.append(select,change,suspend);
+  }
+  item.append(info,control);root.append(item);
+ }
+}
+function renderSuspended(members){
+ const root=$('suspendedList');root.replaceChildren();
+ if(!members.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='이용 중지 또는 거절된 계정이 없습니다.';root.append(empty);return;}
+ for(const m of members){
+  const item=document.createElement('div');item.className='person';
+  const info=document.createElement('div');const title=document.createElement('strong');title.textContent=m.digimon_nickname||m.username;
+  const subtitle=document.createElement('small');subtitle.textContent='아이디: '+m.username+' · 등급: '+(ROLES[m.role]||m.role)+' · 이용 불가';info.append(title,subtitle);
+  const actions=document.createElement('div');actions.className='actions';
+  if(canManageRole(m.role)){
+   const restore=document.createElement('button');restore.type='button';restore.textContent='↻ 계정 활성화';
+   restore.addEventListener('click',()=>changeAccess(m,true,restore));actions.append(restore);
+  }else{const pill=document.createElement('span');pill.className='pill';pill.textContent='상위 등급 · 변경 불가';actions.append(pill);}
+  item.append(info,actions);root.append(item);
+ }
+}
+async function changeAccess(m,restore,button){
+ if(busy)return;
+ const verb=restore?'활성화':'이용 중지';
+ if(!confirm((m.digimon_nickname||m.username)+' ('+m.username+') 님의 사이트 이용을 '+verb+'할까요?\n'+(restore?'로그인 권한을 회복시킵니다.':'즉시 로그인이 차단됩니다. 숙제와 버프 기록은 삭제되지 않습니다.')))return;
+ busy=true;button.disabled=true;msg('adminMessage',verb+' 처리 중...');
+ try{const result=await api({action:restore?'restore':'suspend',member_id:m.id});busy=false;await reload();msg('adminMessage',result.message);}
+ catch(error){handleError(error);button.disabled=false;}
+ finally{busy=false;}
+}
+async function review(m,decision,approve,reject){
+ if(busy)return;
+ const verb=decision==='approve'?'승인':'거절';
+ if(!confirm((m.digimon_nickname||m.username)+' ('+m.username+') 님을 '+verb+'할까요?'))return;
+ busy=true;approve.disabled=true;reject.disabled=true;
+ msg('adminMessage',verb+' 처리 중...');
+ try{const result=await api({action:'review',member_id:m.id,decision});await reload();msg('adminMessage',result.message);}
+ catch(error){handleError(error);approve.disabled=false;reject.disabled=false;}
+ finally{busy=false;}
+}
+async function changeRole(m,select,button){
+ if(busy||m.role===select.value)return;
+ const selected=select.value;
+ if(!confirm((m.digimon_nickname||m.username)+' ('+m.username+') 님의 등급을 '+ROLES[selected]+'(으)로 변경할까요?'))return;
+ busy=true;button.disabled=true;select.disabled=true;
+ msg('adminMessage','등급 변경 중...');
+ try{const result=await api({action:'change_role',member_id:m.id,role:selected});await reload();msg('adminMessage',result.message);}
+ catch(error){handleError(error);if($('adminPanel').hidden===false){select.disabled=false;button.disabled=select.value===m.role;}}
+ finally{busy=false;}
+}
+$('loginForm').addEventListener('submit',async event=>{
+ event.preventDefault();if(busy)return;
+ busy=true;$('loginButton').disabled=true;msg('loginMessage','로그인 확인 중...');
+ try{
+  const d=await post(AUTH_URL,{action:'login',username:$('username').value.trim(),password:$('password').value});
+  if(!MANAGERS.includes(d.user?.role)||d.user?.status!=='approved'||!d.session?.access_token)throw Error('승인된 운영진 이상 계정만 접근할 수 있습니다.');
+  token=d.session.access_token;saveSession(d.user,d.session);showAdmin(d.user.digimon_nickname||d.user.username,d.user.role);await reload();
+ }catch(error){if(!$('adminPanel').hidden)handleError(error);else msg('loginMessage',error.message,true);}
+ finally{busy=false;$('loginButton').disabled=false;$('password').value='';}
+});
+$('pendingTab').addEventListener('click',()=>switchTab('pending'));
+$('membersTab').addEventListener('click',()=>switchTab('members'));
+$('calendarTab').addEventListener('click',()=>switchTab('calendar'));
+$('suspendedTab').addEventListener('click',()=>switchTab('suspended'));
+$('search').addEventListener('input',renderApproved);
+$('refreshButton').addEventListener('click',reload);
+$('logoutButton').addEventListener('click',()=>{try{sessionStorage.removeItem(SESSION_KEY);}catch{}showLogin();$('loginForm').reset();msg('loginMessage','로그아웃했습니다.');});
+(async()=>{const s=session();if(!s)return;token=s.access_token;showAdmin(s.digimon_nickname||s.username,s.role);await reload();})();
+</script>
+<script defer src="blossom-skin.js"></script></body>
+</html>

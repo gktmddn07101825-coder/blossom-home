@@ -1,468 +1,261 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!doctype html>
+<html lang="ko" data-blossom-access="checking">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌸 블로썸 길드 이벤트 & 공지 센터</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: #120f1d;
-      color: #ffffff;
-      font-family: 'Segoe UI', Malgun Gothic, sans-serif;
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container { width: 100%; max-width: 1100px; }
-    
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-      background: #1e182c;
-      padding: 18px;
-      border-radius: 16px;
-      border: 3px solid #ff758c;
-      box-shadow: 0 6px 0 #b33951;
-    }
-    header h1 {
-      font-size: 1.8rem;
-      color: #ff9a9e;
-      margin-bottom: 4px;
-      text-shadow: 2px 2px 0px #000;
-    }
-    header p { font-size: 0.85rem; color: #d1c4e9; font-weight: 500; }
-
-    .controls-panel {
-      background: #1e182c;
-      padding: 12px 15px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      border: 2px solid #ff758c;
-    }
-    .btn {
-      background: #ff758c;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 2px solid #222;
-      box-shadow: 0 3px 0 #b33951;
-      font-size: 0.85rem;
-    }
-    .btn:active { transform: translateY(2px); box-shadow: none; }
-    .btn-admin { background: #ffb703; color: #111; border-color: #d48b00; box-shadow: 0 3px 0 #b57600; }
-
-    /* 타임라인 박스 스타일 */
-    .timeline-container {
-      background: #181324;
-      border-radius: 16px;
-      border: 3px solid #ff758c;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-      overflow: hidden;
-      margin-bottom: 25px;
-    }
-    .timeline-nav {
-      background: #251d38;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #382b52;
-    }
-    .timeline-nav h2 { font-size: 1.3rem; color: #ff9a9e; }
-    .nav-btns { display: flex; gap: 8px; }
-
-    .timeline-scroll-area {
-      overflow-x: auto;
-      position: relative;
-      padding: 20px 0;
-      background: #151021;
-    }
-    .timeline-header-row {
-      display: flex;
-      border-bottom: 2px solid #2e2246;
-      padding-bottom: 10px;
-      min-width: max-content;
-    }
-    .timeline-day-col {
-      width: 45px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: #bfaedc;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      border-right: 1px solid rgba(255,255,255,0.05);
-    }
-    .timeline-day-col.weekend { color: #ff758c; }
-    .timeline-day-col.today-col { background: rgba(0, 255, 204, 0.08); border-top: 3px solid #00ffcc; }
-
-    .timeline-body {
-      position: relative;
-      min-width: max-content;
-      padding: 15px 0;
-      min-height: 250px;
-    }
-
-    /* 이벤트 바 스타일 */
-    .event-row-bar {
-      position: absolute;
-      height: 32px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #fff;
-      white-space: nowrap;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-      cursor: pointer;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: 0.2s;
-    }
-    .event-row-bar:hover { filter: brightness(1.15); transform: translateY(-1px); }
-    .event-time-badge {
-      margin-left: auto;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      color: #ffb7c5;
-      font-weight: normal;
-    }
-
-    /* 관리자 패널 */
-    .admin-panel {
-      display: none;
-      background: #2b1f3d;
-      padding: 18px;
-      border-radius: 14px;
-      border: 3px solid #ffb703;
-      box-shadow: 0 4px 0 #b57600;
-      margin-bottom: 20px;
-    }
-    .admin-panel.active { display: block; }
-    .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .form-row input, .form-row select {
-      padding: 8px; border-radius: 6px; border: 1px solid #554270; background: #1a1528; color: #fff; flex: 1; min-width: 140px;
-    }
-    .event-manage-list { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
-    .manage-item {
-      background: #1a1528; padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ffb703; font-size: 0.85rem;
-    }
-  </style>
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1025">
+<title>BLOSSOM | 이벤트 & 공지</title>
+<style>
+:root{--bg:#090d20;--panel:#161c3b;--pink:#f3a4f4;--blue:#76ddff;--text:#f5f3ff;--muted:#bbc3e8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:radial-gradient(ellipse at 50% 0,#26225b 0,transparent 55%),var(--bg)}a{color:inherit;text-decoration:none}[hidden]{display:none!important}
+.wrap{width:min(1450px,calc(100% - 36px));margin:auto}.top{background:#10142ee8;border-bottom:1px solid #7774d66b;backdrop-filter:blur(16px)}.nav{height:78px;display:flex;justify-content:space-between;align-items:center;gap:18px}.brand{font-size:27px;font-weight:900;font-style:italic;color:#ffd4ff;text-shadow:0 0 17px #c75cf5}.brand small{display:block;font-size:10px;letter-spacing:2.5px;color:#bfc5f6;font-style:normal}.back{font-weight:700;font-size:14px;color:#adf1ff}
+main{padding:42px 0 90px}.eyebrow{font-size:12px;letter-spacing:3px;color:var(--blue);font-weight:800}.intro h1{font-size:clamp(32px,5vw,52px);margin:13px 0 12px;font-weight:900}.intro p{color:var(--muted);line-height:1.8;max-width:770px;margin:0}.panel{background:linear-gradient(135deg,#24254b,#131b38);border:1px solid #776bc4;border-radius:17px;box-shadow:0 9px 28px #02041470;padding:24px;margin-top:25px}.panel h2{margin:0 0 14px;font-size:21px}.status{min-height:25px;color:#c1e9ff;font-size:13px;margin:20px 1px}.status.error{color:#ffb2c9}.status.success{color:#91ffcc}.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}button{font:inherit;font-weight:800;font-size:14px;border-radius:10px;border:1px solid #a38ce7;color:#fff;background:linear-gradient(110deg,#6958bd,#b66ed7);padding:12px 17px;cursor:pointer}button.subtle{background:#1b244a;border:1px solid #6369aa}button.danger{background:#682d57;border:1px solid #bd7ba8}button:disabled{opacity:.5;cursor:wait}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.tabs button{background:#161d3e;color:#dbe0ff;border-color:#565e9f}.tabs button[aria-pressed=true]{background:linear-gradient(110deg,#6958bd,#b66ed7);border-color:#edb6ff}
+#feed{display:grid;gap:16px;margin-top:20px}.entry{padding:22px 24px;background:linear-gradient(135deg,#22244a,#121b35);border:1px solid #6661ae;border-radius:16px}.entry-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}.entry h2{font-size:20px;margin:0;line-height:1.5;overflow-wrap:anywhere}.meta{font-size:12px;color:#c0c9eb;margin-top:9px;line-height:1.65}.kind{display:inline-block;border:1px solid #b58bc9;background:#48305d;color:#ffc9ed;border-radius:100px;padding:4px 9px;font-size:12px;font-weight:900;margin-right:8px}.kind.event{border-color:#71cbdc;background:#163e5a;color:#a4f2ff}.entry .content{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-size:14px;color:#ebeafe;margin:18px 0 8px}.event-date{font-size:13px;font-weight:800;color:#a0edff;margin-top:13px}.entry .actions button{font-size:12px;padding:8px 11px}.empty{text-align:center;border:1px dashed #6661ae;border-radius:16px;padding:40px 16px;color:#c5cdf2}
+.form-grid{display:grid;gap:13px}.form-grid label{display:block;font-weight:800;color:#dbe6ff;font-size:13px;margin:0 0 6px}input,select,textarea{width:100%;border:1px solid #6b68a9;background:#0e1632;color:white;border-radius:10px;padding:12px 13px;font:inherit;font-size:14px;outline-offset:2px}input:focus,textarea:focus,select:focus{outline:2px solid #83dfff}textarea{min-height:180px;resize:vertical;line-height:1.7}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.hint{font-size:12px;color:var(--muted);line-height:1.65}.head-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+html:not([data-blossom-access="approved"]) body > :not(#blossom-access-gate){visibility:hidden!important}
+#blossom-access-gate{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,#33215e,#0a1025 70%);color:#f5f3ff;text-align:center;visibility:visible!important}
+#blossom-access-gate .gate-card{width:min(440px,100%);background:linear-gradient(145deg,#24254b,#141b37);border:1px solid #8475d0;border-radius:20px;padding:34px 25px;box-shadow:0 15px 45px #0008}
+#blossom-access-gate h2{color:#ffc9f5;font-size:25px;margin:12px 0}#blossom-access-gate p{line-height:1.8;color:#d0d7f6}
+#blossom-access-gate .gate-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:25px}
+#blossom-access-gate .gate-actions a,#blossom-access-gate button{display:inline-block;background:#6553b6;border:1px solid #a89af0;border-radius:10px;color:#fff;padding:13px 18px;font-size:14px;font-weight:800;text-decoration:none;cursor:pointer;font-family:inherit}
+#blossom-access-gate button{background:#293459}#blossom-access-gate button:disabled{opacity:.55;cursor:wait}
+html[data-blossom-access="approved"] #blossom-access-gate{display:none!important}
+@media(max-width:640px){.nav{height:70px}.brand{font-size:21px}.back{font-size:12px}.panel,.entry{padding:18px}.field-row{grid-template-columns:1fr}.intro h1{font-size:33px}}
+</style>
+<link rel="stylesheet" href="calendar.css?v=5">
+<script defer src="member-gate.js"></script>
+<script defer src="calendar.js?v=5"></script>
+<link rel="stylesheet" href="blossom-skins.css"></head>
 <body>
+<div id="blossom-access-gate" role="status" aria-live="polite"><div class="gate-card">
+ <div style="font-size:33px;color:#f7b2f2">✿ BLOSSOM</div><h2>길드원 전용 공간</h2>
+ <p data-gate-message>회원 확인을 준비하고 있어요...</p>
+ <div class="gate-actions"><a data-gate-login href="auth.html#login">로그인 / 회원가입</a><button type="button" data-gate-retry>다시 확인</button><a href="index.html">홈으로</a></div>
+</div></div>
+<header class="top"><nav class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></nav></header>
+<main class="wrap">
+ <section class="intro"><div class="eyebrow">BLOSSOM COMMUNITY</div><h1>✦ 이벤트 & 공지</h1><p>블로썸 길드의 공지와 이벤트 일정을 한곳에서 확인하세요. 승인된 길드원은 이벤트 기간을 타임라인으로 확인하고, 운영진 이상은 일정을 관리할 수 있습니다. 아래에는 기존 공지 게시판도 그대로 유지됩니다.</p></section>
 
-  <div class="container">
-    <header>
-      <h1>🌸 블로썸 길드 이벤트 & 공지 센터</h1>
-      <p>실시간 공유 가로형 타임라인 일정표</p>
-    </header>
-
-    <div class="controls-panel">
-      <div style="font-size: 0.85rem; color: #00ffcc; font-weight: bold;" id="syncStatus">
-        🔄 데이터 동기화 완료
-      </div>
-      <button class="btn btn-admin" id="adminToggleBtn" onclick="tryAdminLogin()">🔒 관리자 모드 (이벤트 수정)</button>
-    </div>
-
-    <!-- 관리자 등록 패널 -->
-    <div class="admin-panel" id="adminPanel">
-      <h3 style="color: #ffb703; display: flex; justify-content: space-between; align-items: center;">
-        <span>🛠️ [관리자 모드] 타임라인 이벤트 등록/삭제</span>
-        <button class="btn" style="font-size: 0.75rem; background:#ff5252; padding: 3px 8px;" onclick="logoutAdmin()">닫기</button>
-      </h3>
-      
-      <div class="form-row">
-        <input type="text" id="evtTitle" placeholder="이벤트 / 공지 제목">
-        <input type="date" id="evtStart">
-        <input type="date" id="evtEnd">
-        <select id="evtColor">
-          <option value="linear-gradient(90deg, #ff758c, #ff7eb3)">🌸 핑크 그라데이션</option>
-          <option value="linear-gradient(90deg, #00b09b, #96c93d)">✨ 민트 그라데이션</option>
-          <option value="linear-gradient(90deg, #f7b733, #fc4a1a)">⭐ 골드 그라데이션</option>
-          <option value="linear-gradient(90deg, #36d1dc, #5b86e5)">🎧 블루 그라데이션</option>
-          <option value="linear-gradient(90deg, #cb2d3e, #ef473f)">🔥 레드 그라데이션</option>
-        </select>
-        <button class="btn" style="background:#ffb703; color:#000;" onclick="addNewEvent()">타임라인에 추가</button>
-      </div>
-
-      <div class="event-manage-list" id="adminEventList"></div>
-    </div>
-
-    <!-- 타임라인 뷰어 -->
-    <div class="timeline-container">
-      <div class="timeline-nav">
-        <h2 id="timelineTitle">2026년 11월 일정 타임라인</h2>
-        <div class="nav-btns">
-          <button class="btn" onclick="moveTimelineMonth(-1)">◀ 이전 달</button>
-          <button class="btn" onclick="goToToday()">오늘</button>
-          <button class="btn" onclick="moveTimelineMonth(1)">다음 달 ▶</button>
-        </div>
-      </div>
-
-      <div class="timeline-scroll-area" id="timelineScrollArea">
-        <div class="timeline-header-row" id="timelineHeader"></div>
-        <div class="timeline-body" id="timelineBody"></div>
-      </div>
-    </div>
+ <!-- BLOSSOM EVENT TIMELINE V5 / 기존 공지 게시판은 아래에 그대로 유지 -->
+ <section id="blossomCalendar" aria-label="길드 이벤트 타임라인">
+  <div class="bc-head">
+   <div><div class="bc-eyebrow">✦ EVENT TIMELINE / BLOSSOM</div><h2>🗓 이벤트 일정표</h2><p class="bc-description">기간 막대를 눌러 이벤트 정보를 확인하세요. 모든 시각은 한국 시간(KST) 기준입니다.</p></div>
+   <div class="bc-time" id="bcClock" aria-label="현재 한국 시간">KST --:--:--</div>
   </div>
+  <div class="bc-toolbar">
+   <div class="bc-controls">
+    <button id="bcPrev" type="button" title="이전 2주" aria-label="이전 2주">‹ 이전</button>
+    <button id="bcToday" type="button">오늘</button>
+    <button id="bcNext" type="button" title="다음 2주" aria-label="다음 2주">다음 ›</button>
+    <input id="bcMonth" class="bc-month" type="month" aria-label="조회 시작 월 선택" min="2020-01" max="2100-12">
+   </div>
+   <div class="bc-controls">
+    <select id="bcCategory" class="bc-filter" aria-label="이벤트 종류 선택">
+     <option value="all">모든 이벤트</option><option value="game">🎮 게임 이벤트</option><option value="guild">🌸 길드 일정</option><option value="notice">📢 안내</option><option value="maintenance">🛠 점검</option><option value="other">✨ 기타</option>
+    </select>
+    <button id="bcReload" type="button">↻ 새로고침</button>
+    <button id="bcCreateButton" class="bc-primary" type="button" hidden>＋ 이벤트 등록</button>
+   </div>
+  </div>
+  <div class="bc-shell">
+   <div class="bc-shelltop"><strong>✿ BLOSSOM SCHEDULE</strong><span id="bcRangeLabel">기간 불러오는 중...</span><span id="bcCount">0개 일정</span></div>
+   <div class="bc-scroll" tabindex="0" role="region" aria-label="좌우로 스크롤할 수 있는 이벤트 달력">
+    <div class="bc-canvas">
+     <div id="bcDays" class="bc-days" aria-hidden="true"></div>
+     <div id="bcRows" class="bc-rows" aria-live="polite"><div class="bc-empty"><strong>이벤트 달력 준비 중</strong>회원 정보 확인 후 불러옵니다.</div></div>
+     <div id="bcNowline" class="bc-nowline" aria-label="현재 시간 표시선" hidden></div>
+    </div>
+   </div>
+  </div>
+  <div class="bc-note">↔ 달력은 좌우로 스크롤할 수 있어요. 색상 막대는 이벤트 시작부터 종료까지 표시됩니다. 세로 금색 선은 현재 시각입니다.</div>
+  <p id="bcStatus" class="bc-status" role="status" aria-live="polite">이벤트 달력 연결을 기다리고 있어요...</p>
 
-  <script>
-    const BIN_ID = "6af0f5d6ac6210605a783891";
-    const API_KEY = "$2a$10$QCeURoTGN.wcSMcioL8CB.Cu7fE2kpyPt1GIMf3cuaUgR2sDlyyMC";
-    const ADMIN_PASSWORD = "gktmddn0710";
+  <section id="bcEditorSection" class="bc-editor" aria-label="관리자 이벤트 등록 및 수정" hidden>
+   <div id="calendarManage" class="bc-eyebrow">BLOSSOM STAFF ONLY · 이벤트 관리</div>
+   <h3 id="bcFormTitle">✦ 새 이벤트 등록</h3>
+   <p>운영진·부마스터·길드마스터·최고관리자만 저장할 수 있습니다. 길드원은 보는 것만 가능합니다.</p>
+   <form id="bcForm">
+    <div class="bc-formgrid">
+     <div class="bc-field bc-full"><label for="bcTitleInput">이벤트 제목 *</label><input id="bcTitleInput" required minlength="2" maxlength="120" placeholder="예: 주간 길드 보스 레이드"></div>
+     <div class="bc-field"><label for="bcStartInput">시작 날짜 / 시각 (KST) *</label><input type="datetime-local" id="bcStartInput" required></div>
+     <div class="bc-field"><label for="bcEndInput">종료 날짜 / 시각 (KST) *</label><input type="datetime-local" id="bcEndInput" required></div>
+     <div class="bc-field"><label for="bcCategoryInput">카테고리</label><select id="bcCategoryInput"><option value="game">🎮 게임 이벤트</option><option value="guild">🌸 길드 일정</option><option value="notice">📢 공지·안내</option><option value="maintenance">🛠 서버 점검</option><option value="other">✨ 기타</option></select></div>
+     <div class="bc-field"><label for="bcColorInput">달력 바 색상</label><input type="color" id="bcColorInput" value="#8b7bff"></div>
+     <div class="bc-field bc-full"><label for="bcDescriptionInput">상세 내용 (선택)</label><textarea id="bcDescriptionInput" maxlength="4000" placeholder="길드원에게 안내할 내용"></textarea></div>
+     <div class="bc-field bc-full"><label for="bcBannerInput">이벤트 배경 이미지 URL (선택 / https)</label><input id="bcBannerInput" type="url" maxlength="2000" placeholder="https://..."></div>
+     <div class="bc-field"><label for="bcOrderInput">표시 순서 (숫자가 작을수록 위)</label><input id="bcOrderInput" type="number" min="-10000" max="10000" step="1" value="0"></div>
+     <div class="bc-field"><label for="bcVisibleInput">공개 여부</label><label class="bc-check"><input type="checkbox" id="bcVisibleInput" checked> 모든 승인 길드원에게 공개</label></div>
+    </div>
+    <div class="bc-formactions"><button class="bc-primary" type="submit" id="bcSave">등록하기</button><button type="button" id="bcCancel" hidden>수정 취소</button><span class="bc-description">날짜를 넣으면 길드원 달력에 자동 표시됩니다.</span></div>
+   </form>
+  </section>
 
-    let viewYear = new Date().getFullYear();
-    let viewMonth = new Date().getMonth(); // 0~11
-    let eventsList = [];
-    let isAdmin = sessionStorage.getItem('blossom_event_admin') === 'true';
-
-    async function fetchEventsFromCloud() {
-      const statusEl = document.getElementById('syncStatus');
-      statusEl.innerText = "🔄 최신 데이터 불러오는 중...";
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: { "X-Master-Key": API_KEY }
-        });
-        const data = await res.json();
-        if (data.record && data.record.events) {
-          eventsList = data.record.events;
-        } else {
-          eventsList = [];
-        }
-        statusEl.innerText = "✅ 실시간 동기화 완료";
-        render();
-      } catch (err) {
-        console.error(err);
-        statusEl.innerText = "⚠️ 동기화 실패";
-        render();
+  <dialog id="bcDetail" class="bc-detail" aria-labelledby="bcDetailTitle">
+   <div class="bc-detail-head"><div id="bcDetailKind" class="bc-detail-kind">이벤트</div><h3 id="bcDetailTitle"></h3></div>
+   <div class="bc-detail-body">
+    <div id="bcDetailDates"></div><div id="bcDetailCountdown"></div>
+    <p id="bcDetailDescription"></p><div id="bcDetailVisibility" class="bc-description"></div>
+    <div class="bc-detail-actions"><button id="bcDetailEdit" type="button" hidden>✎ 수정</button><button id="bcDetailVisibilityButton" type="button" hidden>숨기기</button><button id="bcDetailDelete" class="bc-danger" type="button" hidden>삭제</button><button id="bcDetailClose" type="button">닫기</button></div>
+   </div>
+  </dialog>
+ </section>
+ <!-- 기존 v4 게시판 영역 시작 -->
+ <div style="border-top:1px solid #56578e;padding-top:30px;margin-top:40px"><div class="eyebrow">GUILD COMMUNITY BOARD</div><h2 style="font-size:26px;margin:10px 0 4px">📢 길드 공지 게시판</h2><p style="color:#c7cae8;font-size:13px">기존 공지사항과 글 작성 기능은 그대로 유지됩니다.</p></div>
+ <p id="boardStatus" class="status" aria-live="polite">길드 게시판을 불러오는 중...</p>
+ <section id="editor" class="panel" hidden>
+  <div class="head-row"><h2 id="editorTitle">✎ 새 게시물 작성</h2><button id="cancelEdit" type="button" class="subtle" hidden>수정 취소</button></div>
+  <form id="postForm" class="form-grid">
+   <div class="field-row"><div><label for="postKind">게시물 종류</label><select id="postKind"><option value="notice">📢 공지사항</option><option value="event">🗓 이벤트</option></select></div><div id="dateField" hidden><label for="eventAt">이벤트 날짜 / 시간 (선택)</label><input id="eventAt" type="datetime-local"></div></div>
+   <div><label for="postTitle">제목</label><input id="postTitle" type="text" required minlength="2" maxlength="100" placeholder="길드원에게 알릴 제목"></div>
+   <div><label for="postContent">내용</label><textarea id="postContent" required maxlength="4000" placeholder="공지 또는 이벤트 내용을 입력해 주세요."></textarea></div>
+   <div class="actions"><button id="submitPost" type="submit">게시물 등록</button><span class="hint">운영진 이상만 작성 · 게시물은 회원에게만 공개</span></div>
+  </form>
+ </section>
+ <section aria-label="게시물 목록">
+  <div class="tabs" aria-label="게시물 필터"><button class="filter" type="button" data-filter="all" aria-pressed="true">전체</button><button class="filter" type="button" data-filter="notice" aria-pressed="false">📢 공지</button><button class="filter" type="button" data-filter="event" aria-pressed="false">🗓 이벤트</button><button id="refreshBoard" class="subtle" type="button">↻ 새로고침</button></div>
+  <div id="feed" aria-live="polite"><p class="empty">게시물을 불러오는 중...</p></div>
+ </section>
+</main>
+<script>
+(() => {
+  'use strict';
+  const URL = 'https://hweouohzkwqhiwwsjlxu.supabase.co/functions/v1/blossom-events';
+  const SESSION_KEY = 'blossom_test_auth_v1';
+  const $ = id => document.getElementById(id);
+  let posts = [], viewerId = '', canPost = false, manageAny = false, filter = 'all', editing = null, busy = false;
+  function message(text, isError = false) {
+    $('boardStatus').textContent = text;
+    $('boardStatus').className = 'status ' + (isError ? 'error' : 'success');
+  }
+  function accessToken() {
+    try {
+      const session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
+      if (session && session.access_token && Number(session.expires_at) > Date.now() / 1000 + 10) return session.access_token;
+    } catch (_) {}
+    return '';
+  }
+  async function api(body) {
+    const token = accessToken();
+    if (!token) throw Error('로그인이 만료되었습니다. 다시 로그인해 주세요.');
+    const options = { method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' };
+    if (body) { options.headers['Content-Type'] = 'application/json'; options.body = JSON.stringify(body); }
+    const res = await fetch(URL, options);
+    let data;
+    try { data = await res.json(); } catch (_) { throw Error('서버 응답을 읽지 못했습니다.'); }
+    if (!res.ok || !data.success) throw Error(data.message || '요청에 실패했습니다.');
+    return data;
+  }
+  function node(tag, className, text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+  function dateLabel(iso) {
+    if (!iso) return '';
+    const date = new Date(iso);
+    return Number.isFinite(date.getTime()) ? date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', dateStyle: 'medium', timeStyle: 'short' }) : '';
+  }
+  function render() {
+    const root = $('feed'); root.replaceChildren();
+    const visible = posts.filter(p => filter === 'all' || p.kind === filter);
+    if (!visible.length) { root.append(node('p', 'empty', '아직 등록된 ' + (filter === 'all' ? '게시물이' : filter === 'notice' ? '공지사항이' : '이벤트가') + ' 없습니다.')); return; }
+    for (const p of visible) {
+      const card = node('article', 'entry');
+      const head = node('div', 'entry-head');
+      const info = node('div');
+      const title = node('h2');
+      const kind = node('span', 'kind' + (p.kind === 'event' ? ' event' : ''), p.kind === 'event' ? '이벤트' : '공지');
+      title.append(kind, document.createTextNode(p.title));
+      const meta = node('div', 'meta', '작성자: ' + p.author_name + ' · ' + dateLabel(p.created_at));
+      info.append(title, meta); head.append(info);
+      const isOwner = p.author_id === viewerId;
+      if (canPost && (manageAny || isOwner)) {
+        const actions = node('div', 'actions');
+        const edit = node('button', 'subtle', '수정'); edit.type = 'button';
+        edit.addEventListener('click', () => beginEdit(p));
+        const remove = node('button', 'danger', '삭제'); remove.type = 'button';
+        remove.addEventListener('click', () => deletePost(p));
+        actions.append(edit, remove); head.append(actions);
       }
+      card.append(head);
+      if (p.kind === 'event' && p.event_at) card.append(node('div', 'event-date', '🗓 행사 일정: ' + dateLabel(p.event_at)));
+      card.append(node('div', 'content', p.content));
+      root.append(card);
     }
-
-    async function saveEventsToCloud() {
-      const statusEl = document.getElementById('syncStatus');
-      statusEl.innerText = "⏳ 서버에 저장 중...";
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Master-Key": API_KEY
-          },
-          body: JSON.stringify({ events: eventsList })
-        });
-        statusEl.innerText = "✅ 모든 유저 화면 반영 완료!";
-      } catch (err) {
-        console.error(err);
-        alert("저장 실패!");
-      }
-    }
-
-    function render() {
-      renderTimeline();
-      renderAdminPanel();
-    }
-
-    function renderTimeline() {
-      const headerRow = document.getElementById('timelineHeader');
-      const bodyDiv = document.getElementById('timelineBody');
-      const titleEl = document.getElementById('timelineTitle');
-
-      headerRow.innerHTML = '';
-      bodyDiv.innerHTML = '';
-
-      titleEl.innerText = `${viewYear}년 ${viewMonth + 1}월 일정 타임라인`;
-
-      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-      const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-
-      let datesArray = [];
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dateObj = new Date(viewYear, viewMonth, d);
-        datesArray.push(dateObj);
-
-        const dayOfWeek = dateObj.getDay();
-        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-        const today = new Date();
-        const isToday = (today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === d);
-
-        const col = document.createElement('div');
-        col.className = `timeline-day-col ${isWeekend ? 'weekend' : ''} ${isToday ? 'today-col' : ''}`;
-        col.innerHTML = `<span>${d}</span><span style="font-size:0.68rem;">${dayNames[dayOfWeek]}</span>`;
-        headerRow.appendChild(col);
-      }
-
-      // 이벤트 바 배치 계산
-      // 월의 시작일과 마지막일 타임스탬프
-      const monthStartTime = new Date(viewYear, viewMonth, 1).setHours(0,0,0,0);
-      const colWidth = 45; // 각 날짜 칸의 너비 (px)
-
-      // 겹치지 않게 행(row) 자동 배정 알고리즘
-      let rowEnds = []; // 각 행의 마지막 이벤트가 끝나는 x좌표 기록
-
-      eventsList.forEach(evt => {
-        const evtStartTime = new Date(evt.start + "T00:00:00").getTime();
-        const evtEndTime = new Date(evt.end + "T23:59:59").getTime();
-
-        const monthEndTime = new Date(viewYear, viewMonth, daysInMonth).setHours(23,59,59,999);
-
-        // 이번 달에 걸치는 이벤트만 표시
-        if (evtEndTime < monthStartTime || evtStartTime > monthEndTime) return;
-
-        // 시작 인덱스 및 종료 인덱스 계산
-        const startDateObj = new Date(Math.max(evtStartTime, monthStartTime));
-        const endDateObj = new Date(Math.min(evtEndTime, monthEndTime));
-
-        const startDayIdx = startDateObj.getDate() - 1;
-        const durationDays = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24)) + 1;
-
-        const leftPos = startDayIdx * colWidth + 4;
-        const barWidth = durationDays * colWidth - 8;
-
-        // 남은 시간 계산
-        const now = Date.now();
-        let timeLeftStr = "";
-        if (evtEndTime > now) {
-          const diffMs = evtEndTime - now;
-          const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-          const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          timeLeftStr = `${diffDays}d ${diffHours}h 남음`;
-        } else {
-          timeLeftStr = "종료됨";
-        }
-
-        // 빈 행 찾기 (겹침 방지)
-        let assignedRow = 0;
-        let placed = false;
-        for (let r = 0; r < rowEnds.length; r++) {
-          if (rowEnds[r] <= leftPos) {
-            assignedRow = r;
-            rowEnds[r] = leftPos + barWidth;
-            placed = true;
-            break;
-          }
-        }
-        if (!placed) {
-          assignedRow = rowEnds.length;
-          rowEnds.push(leftPos + barWidth);
-        }
-
-        const bar = document.createElement('div');
-        bar.className = 'event-row-bar';
-        bar.style.left = `${leftPos}px` ;
-        bar.style.width = `${barWidth}px`;
-        bar.style.top = `${assignedRow * 38 + 10}px`;
-        bar.style.background = evt.color;
-        bar.innerHTML = `
-          <span style="overflow:hidden; text-overflow:ellipsis;">${evt.title}</span>
-          <span class="event-time-badge">${timeLeftStr}</span>
-        `;
-        bar.title = `${evt.title} (${evt.start} ~ ${evt.end})`;
-        bodyDiv.appendChild(bar);
-      });
-
-      // 전체 바디 높이 동적 조절
-      const totalRows = Math.max(rowEnds.length, 1);
-      bodyDiv.style.height = `${totalRows * 38 + 20}px`;
-    }
-
-    function moveTimelineMonth(dir) {
-      viewMonth += dir;
-      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-      else if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-      renderTimeline();
-    }
-
-    function goToToday() {
-      const now = new Date();
-      viewYear = now.getFullYear();
-      viewMonth = now.getMonth();
-      renderTimeline();
-    }
-
-    function tryAdminLogin() {
-      const pw = prompt("관리자 비밀번호를 입력하세요:");
-      if (pw === ADMIN_PASSWORD) {
-        isAdmin = true;
-        sessionStorage.setItem('blossom_event_admin', 'true');
-        alert("관리자 모드가 활성화되었습니다!");
-        render();
-      } else if (pw !== null) {
-        alert("비밀번호가 틀렸습니다.");
-      }
-    }
-
-    function logoutAdmin() {
-      isAdmin = false;
-      sessionStorage.removeItem('blossom_event_admin');
-      render();
-    }
-
-    function renderAdminPanel() {
-      const panel = document.getElementById('adminPanel');
-      const toggleBtn = document.getElementById('adminToggleBtn');
-      const listEl = document.getElementById('adminEventList');
-
-      if (isAdmin) {
-        panel.classList.add('active');
-        toggleBtn.style.display = 'none';
-
-        listEl.innerHTML = '<h4 style="color:#ffb703; margin-top:10px;">📋 등록된 타임라인 이벤트 목록</h4>';
-        eventsList.forEach((evt, idx) => {
-          const item = document.createElement('div');
-          item.className = 'manage-item';
-          item.innerHTML = `
-            <span><strong style="color:${evt.color}">■</strong> ${evt.title} (${evt.start} ~ ${evt.end})</span>
-            <button class="btn" style="background:#ff5252; padding:2px 6px; font-size:0.75rem;" onclick="deleteEvent(${idx})">삭제</button>
-          `;
-          listEl.appendChild(item);
-        });
-      } else {
-        panel.classList.remove('active');
-        toggleBtn.style.display = 'block';
-      }
-    }
-
-    async function addNewEvent() {
-      const title = document.getElementById('evtTitle').value.trim();
-      const start = document.getElementById('evtStart').value;
-      const end = document.getElementById('evtEnd').value;
-      const color = document.getElementById('evtColor').value;
-
-      if (!title || !start || !end) {
-        alert("제목과 시작일, 종료일을 모두 입력해주세요!");
-        return;
-      }
-
-      eventsList.push({ id: Date.now(), title, start, end, color });
-      render();
-      await saveEventsToCloud();
-
-      document.getElementById('evtTitle').value = '';
-      document.getElementById('evtStart').value = '';
-      document.getElementById('evtEnd').value = '';
-    }
-
-    async function deleteEvent(idx) {
-      if (confirm("이 이벤트를 모든 유저 화면에서 삭제하시겠습니까?")) {
-        eventsList.splice(idx, 1);
-        render();
-        await saveEventsToCloud();
-      }
-    }
-
-    fetchEventsFromCloud();
-  </script>
-</body>
+  }
+  function updateKind() { $('dateField').hidden = $('postKind').value !== 'event'; }
+  function resetEditor() {
+    editing = null;
+    $('postForm').reset();
+    $('editorTitle').textContent = '✎ 새 게시물 작성';
+    $('submitPost').textContent = '게시물 등록';
+    $('cancelEdit').hidden = true;
+    updateKind();
+  }
+  function beginEdit(post) {
+    if (!canPost) return;
+    editing = post.id;
+    $('postKind').value = post.kind;
+    $('postTitle').value = post.title;
+    $('postContent').value = post.content;
+    if (post.event_at) {
+      const d = new Date(post.event_at);
+      // datetime-local input must be local clock time, not UTC.
+      const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+      $('eventAt').value = local.toISOString().slice(0, 16);
+    } else $('eventAt').value = '';
+    $('editorTitle').textContent = '✎ 게시물 수정';
+    $('submitPost').textContent = '수정 저장';
+    $('cancelEdit').hidden = false;
+    updateKind();
+    $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  async function loadBoard() {
+    if (busy) return;
+    busy = true; $('refreshBoard').disabled = true;
+    message('게시물을 불러오는 중...');
+    try {
+      const data = await api();
+      posts = data.posts || []; viewerId = data.viewer_id;
+      canPost = data.can_post === true; manageAny = data.can_manage_any === true;
+      $('editor').hidden = !canPost;
+      render(); message('총 ' + posts.length + '개의 게시물을 확인했습니다.');
+    } catch (err) { message(err.message || '게시물을 불러오지 못했습니다.', true); }
+    finally { busy = false; $('refreshBoard').disabled = false; }
+  }
+  async function deletePost(post) {
+    if (busy || !confirm('「' + post.title + '」 게시물을 삭제할까요?')) return;
+    busy = true; message('게시물 삭제 중...');
+    try { const result = await api({ action: 'delete', post_id: post.id }); resetEditor(); busy = false; await loadBoard(); message(result.message); }
+    catch (err) { message(err.message || '삭제에 실패했습니다.', true); }
+    finally { busy = false; }
+  }
+  $('postForm').addEventListener('submit', async event => {
+    event.preventDefault(); if (busy || !canPost) return;
+    const kind = $('postKind').value;
+    const title = $('postTitle').value.trim();
+    const content = $('postContent').value.trim();
+    const rawDate = $('eventAt').value;
+    const payload = { action: editing ? 'update' : 'create', kind, title, content,
+      event_at: kind === 'event' && rawDate ? new Date(rawDate).toISOString() : null };
+    if (editing) payload.post_id = editing;
+    busy = true; $('submitPost').disabled = true; message('게시물 저장 중...');
+    try { const result = await api(payload); resetEditor(); busy = false; await loadBoard(); message(result.message); }
+    catch (err) { message(err.message || '저장에 실패했습니다.', true); }
+    finally { busy = false; $('submitPost').disabled = false; }
+  });
+  $('postKind').addEventListener('change', updateKind);
+  $('cancelEdit').addEventListener('click', resetEditor);
+  $('refreshBoard').addEventListener('click', loadBoard);
+  document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => {
+    filter = button.dataset.filter;
+    document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+    render();
+  }));
+  window.addEventListener('blossom:authorized', loadBoard);
+  if (document.documentElement.dataset.blossomAccess === 'approved') loadBoard();
+})();
+</script>
+<script defer src="blossom-skin.js"></script></body>
 </html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1025">
+<title>BLOSSOM | 회원 로그인 · 회원가입</title>
+<style>
+:root{color-scheme:dark;--bg:#090d20;--panel:#161c3b;--line:#7771bb;--pink:#f3a4f4;--blue:#76ddff;--text:#f5f3ff;--muted:#bbc3e8;--green:#85f1be}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(ellipse at 50% -10%,#31265e 0%,#13162f 42%,var(--bg) 76%);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1120px;margin:auto;padding:0 22px}.top{border-bottom:1px solid #7774d66b;background:#10142ed9;backdrop-filter:blur(16px)}.nav{min-height:75px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-size:26px;font-weight:900;font-style:italic;color:#ffd4ff;text-shadow:0 0 17px #c75cf5}.brand small{display:block;font-size:10px;letter-spacing:2px;color:#c3c8ed;font-style:normal}.back{color:var(--blue);font-size:14px}.back:hover{text-decoration:underline}.main{padding-top:62px;padding-bottom:86px}.intro{text-align:center;margin-bottom:30px}.eyebrow{font-size:12px;color:var(--blue);letter-spacing:3px;font-weight:800}.intro h1{font-size:clamp(30px,4.7vw,48px);margin:15px 0;color:#fff;text-shadow:0 0 25px #a858d86b}.intro p{color:var(--muted);line-height:1.8;margin:0}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:stretch}.art{border:1px solid #796cc0;border-radius:20px;padding:35px;min-height:540px;background:radial-gradient(circle at 63% 30%,#7b4aca70,transparent 37%),linear-gradient(145deg,#292351,#121933 75%);position:relative;overflow:hidden;box-shadow:0 13px 35px #01031260}.art:before{content:'✿';position:absolute;top:100px;left:50%;transform:translateX(-50%);font-size:160px;color:#efadff;text-shadow:0 0 25px #f184f4,0 0 60px #6b5bff,0 0 100px #5dcaff6e;line-height:1}.art:after{content:'';position:absolute;width:270px;height:270px;border:1px solid #b9acff35;border-radius:50%;left:50%;top:62px;transform:translateX(-50%);box-shadow:0 0 0 32px #ab9dff0b,0 0 0 68px #ab9dff09}.art-text{position:absolute;left:35px;right:35px;bottom:45px}.art-text strong{font-size:30px;font-style:italic;letter-spacing:2px}.art-text p{font-size:14px;color:#d5d6fa;line-height:1.9}.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pills span{border:1px solid #8e81c0;border-radius:30px;padding:8px 11px;font-size:12px;color:#e1ddff;background:#22244aa8}.panel{border:1px solid #8071c3;background:linear-gradient(145deg,#24254b,#151b37);border-radius:20px;padding:31px;box-shadow:0 13px 35px #01031260;min-height:540px}.tabs{display:flex;gap:8px;border:1px solid #5e5a99;background:#111733;border-radius:12px;padding:5px;margin-bottom:30px}.tab{flex:1;padding:12px 8px;border:0;border-radius:9px;color:#c3c6e7;background:transparent;font-weight:800;font-size:15px}.tab[aria-selected="true"]{color:white;background:linear-gradient(100deg,#6253b9,#a45fcb);box-shadow:0 3px 16px #9d68d344}.formtitle{font-size:25px;margin:0 0 6px}.hint{font-size:13px;line-height:1.7;color:var(--muted);margin:0 0 22px}.field{display:block;font-size:14px;font-weight:800;margin:15px 0 7px}.input-wrap{position:relative}input{width:100%;border-radius:10px;padding:14px;border:1px solid #6567a3;background:#101631;color:#fff;font-size:15px;outline:0}input::placeholder{color:#939bbc}input:focus{border-color:#83ddff;box-shadow:0 0 0 2px #83ddff3c}.password-input{padding-right:69px}.togglepass{position:absolute;right:7px;top:50%;transform:translateY(-50%);border:none;background:transparent;padding:8px;color:#b8c7f4;font-size:12px;font-weight:700}.help{display:block;color:#aab6db;font-size:12px;line-height:1.7;margin-top:6px}.primary{width:100%;margin-top:24px;padding:15px 16px;background:linear-gradient(110deg,#6858c0,#b66ed7);border:1px solid #b39bf9;color:#fff;font-weight:900;border-radius:10px;font-size:16px;box-shadow:0 7px 26px #8e56cc42}.primary:disabled{opacity:.55;cursor:wait}.message{min-height:22px;margin-top:15px;line-height:1.7;font-size:14px;white-space:pre-wrap}.message.error{color:#ffbbcb}.message.success{color:#88f2c6}.hidden{display:none!important}.pending{border:1px solid #7174b6;border-radius:12px;background:#11182f;padding:14px 16px;margin-top:18px;color:#cfd5f6;font-size:13px;line-height:1.7}.pending b{color:#f7c4ff}.welcome{font-size:18px;font-weight:800;margin-top:18px}.profile{border:1px solid #5f679f;background:#101733;border-radius:12px;padding:18px;margin-top:20px}.profile dl{display:grid;grid-template-columns:90px 1fr;gap:13px;margin:0}.profile dt{color:#b5bcdd;font-size:13px}.profile dd{margin:0;font-weight:700;overflow-wrap:anywhere}.badge{display:inline-block;background:#214b46;color:#9bffcf;border:1px solid #437f6b;padding:5px 9px;font-size:12px;border-radius:30px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.actions a,.actions button{flex:1;text-align:center;padding:13px;border:1px solid #a38ae6;border-radius:10px;background:#273159;color:white;font-weight:800;font-size:14px}.actions .logout{background:#43243c;border-color:#9b6e98}.fine{font-size:12px;color:#9da8ca;line-height:1.65;margin:23px 0 0}.footer{text-align:center;color:#8d9ac3;font-size:12px;padding:0 0 35px}@media(max-width:860px){.grid{grid-template-columns:1fr;max-width:520px;margin:auto}.art{min-height:170px;padding:25px}.art:before{font-size:88px;left:auto;right:26px;top:15px;transform:none}.art:after{width:120px;height:120px;left:auto;right:13px;top:0;transform:none}.art-text{position:relative;left:auto;right:auto;bottom:auto;max-width:73%}.art-text strong{font-size:22px}.art-text p{margin-bottom:0}.pills{display:none}.panel{min-height:0}}@media(max-width:480px){.wrap{padding:0 14px}.main{padding-top:37px}.panel{padding:23px 18px}.art{min-height:146px}.art-text{max-width:72%}.art-text p{font-size:12px}.intro p{font-size:14px}.brand{font-size:23px}}
+</style>
+<link rel="stylesheet" href="blossom-skins.css"></head>
+<body>
+<header class="top"><div class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></div></header>
+<main class="wrap main">
+ <div class="intro"><div class="eyebrow">WELCOME TO BLOSSOM</div><h1>길드원 로그인 · 회원가입</h1><p>디지털 월드에서 함께할 길드원들을 위한 공간</p></div>
+ <div class="grid">
+  <aside class="art"><div class="art-text"><strong>BLOSSOM GUILD</strong><p>함께 성장하고, 함께하는 우리들의 디지털 월드.<br>우리 길드의 새로운 이야기가 시작됩니다.</p><div class="pills"><span>✦ 길드 커뮤니티</span><span>✿ 회원 승인제</span><span>◈ 디지몬 마스터즈</span></div></div></aside>
+  <section class="panel" aria-label="회원 인증">
+   <div id="formsArea">
+    <div class="tabs" role="tablist" aria-label="로그인 및 회원가입">
+     <button type="button" class="tab" id="loginTab" role="tab" aria-selected="true" aria-controls="loginView">로그인</button>
+     <button type="button" class="tab" id="registerTab" role="tab" aria-selected="false" aria-controls="registerView">회원가입</button>
+    </div>
+    <div id="loginView" role="tabpanel" aria-labelledby="loginTab">
+     <h2 class="formtitle">다시 만나서 반가워요!</h2><p class="hint">승인된 회원만 로그인할 수 있어요.</p>
+     <form id="loginForm">
+      <label class="field" for="loginUsername">아이디</label><input id="loginUsername" name="username" autocomplete="username" required minlength="4" maxlength="20" placeholder="가입한 아이디">
+      <label class="field" for="loginPassword">비밀번호</label><div class="input-wrap"><input class="password-input" id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="비밀번호"><button class="togglepass" type="button" data-for="loginPassword">보기</button></div>
+      <button class="primary" id="loginSubmit" type="submit">로그인</button>
+     </form><p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+     <div class="pending">가입 신청을 완료한 분은 <b>관리자 승인 후</b> 로그인할 수 있습니다.</div>
+    </div>
+    <div id="registerView" class="hidden" role="tabpanel" aria-labelledby="registerTab">
+     <h2 class="formtitle">BLOSSOM에 오신 걸 환영해요</h2><p class="hint">정보를 입력하면 관리자에게 가입 신청이 전달됩니다.</p>
+     <form id="registerForm">
+      <label class="field" for="registerUsername">아이디</label><input id="registerUsername" name="username" autocomplete="username" required minlength="4" maxlength="20" pattern="[a-z0-9_]{4,20}" placeholder="예: blossom_new12"><span class="help">영문 소문자, 숫자, 밑줄(_)만 사용 · 4~20자</span>
+      <label class="field" for="nickname">디마 닉네임</label><input id="nickname" name="nickname" autocomplete="nickname" required minlength="2" maxlength="30" placeholder="게임에서 사용하는 닉네임"><span class="help">2~30자</span>
+      <label class="field" for="registerPassword">비밀번호</label><div class="input-wrap"><input class="password-input" id="registerPassword" name="new-password" type="password" autocomplete="new-password" required minlength="12" maxlength="128" placeholder="12자 이상의 비밀번호"><button type="button" class="togglepass" data-for="registerPassword">보기</button></div><span class="help">12~128자 · 다른 사이트와 다른 비밀번호를 권장합니다.</span>
+      <label class="field" for="confirmPassword">비밀번호 확인</label><div class="input-wrap"><input class="password-input" id="confirmPassword" type="password" autocomplete="new-password" required minlength="12" placeholder="비밀번호 다시 입력"><button type="button" class="togglepass" data-for="confirmPassword">보기</button></div>
+      <button class="primary" id="registerSubmit" type="submit">가입 신청하기</button>
+     </form><p id="registerMessage" class="message" role="status" aria-live="polite"></p>
+    </div>
+   </div>
+   <div id="doneArea" class="hidden">
+    <div class="eyebrow">BLOSSOM MEMBER</div><h2 class="formtitle" id="doneTitle">반가워요!</h2>
+    <p class="welcome" id="doneText"></p>
+    <div id="profileBox" class="profile hidden"><dl><dt>아이디</dt><dd id="profileUsername"></dd><dt>디마 닉네임</dt><dd id="profileNickname"></dd><dt>회원 상태</dt><dd><span class="badge">승인 완료</span></dd></dl></div>
+    <p id="doneDescription" class="hint" style="margin-top:18px"></p>
+    <div class="actions"><a href="index.html">⌂ 홈페이지로</a><a id="returnToPage" class="hidden" href="index.html">↩ 이용하던 페이지로</a><a id="adminLink" class="hidden" href="admin.html">⚙ 관리자 센터</a><button id="backToLogin" class="hidden" type="button">로그인 화면</button><button id="logout" class="logout hidden" type="button">로그아웃</button></div>
+   </div>
+   <p class="fine">이 페이지는 BLOSSOM 테스트 서버에 연결되어 있습니다. 기존 홈페이지의 숙제·타이머 기능은 변경되지 않습니다.</p>
+  </section>
+ </div>
+</main>
+<footer class="footer">✿ BLOSSOM DIGITAL WORLD GUILD</footer>
+<script>
+'use strict';
+// Supabase 공개 Edge Function 주소: 비밀 키를 HTML에 넣지 마세요.
+const AUTH_URL='https://hweouohzkwqhiwwsjlxu.supabase.co/functions/v1/blossom-auth';
+const SESSION_KEY='blossom_test_auth_v1';
+const NEXT_PAGE = (new URLSearchParams(location.search).get('next') || '');
+const SAFE_NEXT = ['todo.html', 'timer.html', 'event.html'].includes(NEXT_PAGE) ? NEXT_PAGE : '';
+const $=id=>document.getElementById(id);
+let busy=false;
+function setMessage(id,content,isError=false){const el=$(id);el.textContent=content;el.className='message '+(isError?'error':'success');}
+function showTab(tab){
+ const isLogin=tab==='login';
+ $('formsArea').classList.remove('hidden');$('doneArea').classList.add('hidden');
+ $('loginView').classList.toggle('hidden',!isLogin);$('registerView').classList.toggle('hidden',isLogin);
+ $('loginTab').setAttribute('aria-selected',String(isLogin));$('registerTab').setAttribute('aria-selected',String(!isLogin));
+ if(location.hash!=='#'+tab)history.replaceState(null,'','#'+tab);
+}
+$('loginTab').addEventListener('click',()=>{if(!busy)showTab('login');});
+$('registerTab').addEventListener('click',()=>{if(!busy)showTab('register');});
+for(const button of document.querySelectorAll('.togglepass')){
+ button.addEventListener('click',()=>{const el=$(button.dataset.for);const visible=el.type==='text';el.type=visible?'password':'text';button.textContent=visible?'보기':'숨기기';});
+}
+async function post(body){
+ let response;
+ try{response=await fetch(AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});}
+ catch{throw Error('서버에 연결할 수 없습니다. 네트워크 상태를 확인해 주세요.');}
+ let data;
+ try{data=await response.json();}catch{throw Error('서버 응답을 읽을 수 없습니다.');}
+ if(!response.ok||!data?.success)throw Error(data?.message||('요청에 실패했습니다. (HTTP '+response.status+')'));
+ return data;
+}
+function clearSession(){try{sessionStorage.removeItem(SESSION_KEY);}catch{}}
+function saveSession(user,session){
+ const expiresAt=Number(session.expires_at)||Math.floor(Date.now()/1000)+3600;
+ const value={username:user.username||'',digimon_nickname:user.digimon_nickname||'',role:user.role||'member',status:user.status||'approved',access_token:session.access_token,expires_at:expiresAt};
+ try{sessionStorage.setItem(SESSION_KEY,JSON.stringify(value));}catch{}
+ return value;
+}
+function getSession(){
+ try{const value=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');
+  if(value&&typeof value.access_token==='string'&&value.status==='approved'&&Number(value.expires_at)>Date.now()/1000+20)return value;
+ }catch{}clearSession();return null;
+}
+function showLoggedIn(user){
+ $('formsArea').classList.add('hidden');$('doneArea').classList.remove('hidden');
+ $('doneTitle').textContent='로그인 완료 ✿';
+ $('doneText').textContent=(user.digimon_nickname||user.username||'길드원')+'님, BLOSSOM에 오신 걸 환영합니다!';
+ $('doneDescription').textContent=SAFE_NEXT?'로그인이 완료됐습니다. 이용하던 페이지로 돌아갈 수 있어요.':'회원 인증이 완료되었습니다. 테스트 홈페이지로 이동할 수 있어요.';
+ $('returnToPage').classList.toggle('hidden', !SAFE_NEXT);
+ if (SAFE_NEXT) $('returnToPage').href=SAFE_NEXT;
+ $('profileUsername').textContent=user.username||'-';$('profileNickname').textContent=user.digimon_nickname||'-';
+ $('profileBox').classList.remove('hidden');
+ $('adminLink').classList.toggle('hidden',user.role!=='site_owner');
+ $('logout').classList.remove('hidden');$('backToLogin').classList.add('hidden');
+}
+function showRegistered(username){
+ $('formsArea').classList.add('hidden');$('doneArea').classList.remove('hidden');
+ $('doneTitle').textContent='가입 신청 완료! ✿';
+ $('doneText').textContent=username+'님, BLOSSOM 가입 신청이 접수되었습니다.';
+ $('doneDescription').textContent='지금은 관리자 승인 대기 상태예요. 관리자가 승인한 뒤 로그인해 주세요.';
+ $('profileBox').classList.add('hidden');$('adminLink').classList.add('hidden');$('returnToPage').classList.add('hidden');
+ $('logout').classList.add('hidden');$('backToLogin').classList.remove('hidden');
+}
+$('loginForm').addEventListener('submit',async event=>{
+ event.preventDefault();if(busy)return;
+ const username=$('loginUsername').value.trim().toLowerCase();const password=$('loginPassword').value;
+ busy=true;$('loginSubmit').disabled=true;setMessage('loginMessage','로그인 확인 중...');
+ try{
+  const data=await post({action:'login',username,password});
+  if(!data.user||data.user.status!=='approved'||!data.session?.access_token)throw Error('승인된 계정의 로그인 정보가 확인되지 않았습니다.');
+  const user=saveSession(data.user,data.session);
+  $('loginPassword').value='';showLoggedIn(user);
+ }catch(error){setMessage('loginMessage',error.message+'\n가입 신청 후라면 관리자 승인이 완료됐는지도 확인해 주세요.',true);}
+ finally{busy=false;$('loginSubmit').disabled=false;}
+});
+$('registerForm').addEventListener('submit',async event=>{
+ event.preventDefault();if(busy)return;
+ const username=$('registerUsername').value.trim().toLowerCase();
+ const digimon_nickname=$('nickname').value.trim();
+ const password=$('registerPassword').value;
+ const passwordConfirm=$('confirmPassword').value;
+ if(!/^[a-z0-9_]{4,20}$/.test(username)){setMessage('registerMessage','아이디는 영문 소문자, 숫자, 밑줄(_) 4~20자만 사용할 수 있습니다.',true);return;}
+ if(digimon_nickname.length<2||digimon_nickname.length>30){setMessage('registerMessage','디마 닉네임은 2~30자로 입력해 주세요.',true);return;}
+ if(password.length<12||password.length>128){setMessage('registerMessage','비밀번호는 12~128자로 입력해 주세요.',true);return;}
+ if(password!==passwordConfirm){setMessage('registerMessage','비밀번호 확인이 일치하지 않습니다.',true);return;}
+ busy=true;$('registerSubmit').disabled=true;setMessage('registerMessage','가입 신청을 보내는 중...');
+ try{
+  await post({action:'register',username,password,digimon_nickname});
+  $('registerForm').reset();showRegistered(username);
+ }catch(error){setMessage('registerMessage',error.message,true);}
+ finally{busy=false;$('registerSubmit').disabled=false;}
+});
+$('logout').addEventListener('click',()=>{clearSession();$('loginForm').reset();$('doneArea').classList.add('hidden');showTab('login');setMessage('loginMessage','로그아웃했습니다.');});
+$('backToLogin').addEventListener('click',()=>{showTab('login');$('loginUsername').value='';$('loginPassword').value='';setMessage('loginMessage','관리자 승인 후 로그인해 주세요.');});
+const session=getSession();if(session)showLoggedIn(session);else if(location.hash==='#register')showTab('register');
+</script>
+<script defer src="blossom-skin.js"></script></body>
+</html>
