@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090d20">
+  <meta name="description" content="BLOSSOM 길드원 개인 전용 디지몬 마스터즈 T 목표 수익 캘린더">
+  <title>BLOSSOM | 나의 T 목표 캘린더</title>
+  <link rel="stylesheet" href="wealth.css">
+  <link rel="stylesheet" href="blossom-skins.css">
+  <script src="blossom-session.js"></script>
+</head>
+<body>
+  <div id="blossom-access-gate" role="status" aria-live="polite">
+    <div class="gate-card">
+      <div class="gate-brand">✿ BLOSSOM</div>
+      <h2>길드원 전용 공간</h2>
+      <p data-gate-message>로그인 상태를 확인하고 있어요...</p>
+      <div class="gate-actions">
+        <a href="auth.html#login" data-gate-login>로그인 / 회원가입</a>
+        <button type="button" data-gate-retry>다시 확인</button>
+        <a href="index.html">홈으로</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header"><div class="frame top-row">
+    <a class="logo" href="index.html">✿ BLOSSOM <small>DIGITAL WORLD GUILD</small></a>
+    <nav class="header-links" aria-label="주요 메뉴">
+      <a href="index.html">⌂ 홈</a>
+      <a href="todo.html">☑ 숙제</a>
+      <a href="timer.html">◷ 버프</a>
+      <a href="shop.html">🌸 BP 상점</a>
+      <a href="wealth.html" class="selected" aria-current="page">💰 목표 수익</a>
+    </nav>
+  </div></header>
+
+  <main class="frame" id="wealthApp" hidden>
+    <section class="hero">
+      <div>
+        <div class="overline">BLOSSOM WEALTH PLANNER</div>
+        <h1>💎 나의 T 목표 캘린더</h1>
+        <p>사냥해서 번 T, 주간 던전 수익, 아이템 판매, 지출까지.<br>매일 간단하게 적으면 목표 달성일까지 자동으로 계산돼요.</p>
+        <span class="private-pill">🔒 내 계정에만 저장 · 길드원에게 공개되지 않아요</span>
+      </div>
+      <div class="hero-mark">₮</div>
+    </section>
+
+    <p class="notice-line" id="globalMessage" aria-live="polite">개인 수익 기록을 불러오는 중...</p>
+
+    <section class="panel goal-panel">
+      <div class="panel-heading"><div><span class="eyebrow">MY TARGET</span><h2>🎯 나의 저축 목표</h2></div><button type="button" id="goalToggle" class="outline-btn" aria-expanded="false">⚙ 목표 설정</button></div>
+      <div class="goal-overview">
+        <div class="main-goal"><div class="caption" id="goalDisplayName">목표를 설정해 주세요</div><div class="money-pair"><strong id="balanceText">—</strong><span id="goalText">/ —</span></div><div class="goal-bar"><div id="goalBar" class="goal-bar-fill"></div></div><div class="goal-meta"><span id="goalRate">진행률 —</span><span id="goalRemain">남은 목표 —</span></div></div>
+        <div class="forecast"><span>목표 달성 예상일</span><strong id="forecastDate">—</strong><small id="forecastDesc">기록을 입력하면 계산해 드릴게요</small></div>
+      </div>
+      <form id="goalForm" class="goal-form" hidden>
+        <label>목표 이름 <input id="goalName" type="text" maxlength="80" value="나의 T 모으기" placeholder="예: 아폴로몬 강화 자금" required></label>
+        <label>현재 보유금 (시작 기준) <input id="startingMoney" type="text" inputmode="decimal" autocomplete="off" placeholder="예: 150T 200M" required></label>
+        <label>목표 보유금 <input id="goalMoney" type="text" inputmode="decimal" autocomplete="off" placeholder="예: 1000T" required></label>
+        <div class="goal-help">시작 보유금은 기록을 시작할 때 가진 T입니다. 변경하면 계산된 현재 보유금도 함께 바뀝니다.</div>
+        <div class="goal-buttons"><button type="submit" class="primary-btn" id="saveGoal">목표 저장하기</button><button type="button" class="outline-btn" id="goalCancel">닫기</button></div>
+      </form>
+    </section>
+
+    <section class="stats-grid" aria-label="개인 수익 요약">
+      <article class="stat-card"><span>📈 최근 7일 일평균 순수익</span><strong id="averageText">—</strong><small>기록 없는 날은 0으로 계산</small></article>
+      <article class="stat-card"><span>🗓 이번 주 던전 + 판매 수익</span><strong id="dungeonWeekText">—</strong><small>화요일부터 월요일 · 판매액 포함</small></article>
+      <article class="stat-card"><span>🌸 오늘 순수익</span><strong id="todayText">—</strong><small>수익 − 지출</small></article>
+      <article class="stat-card"><span>💰 누적 순수익</span><strong id="totalText">—</strong><small>시작 보유금 제외</small></article>
+    </section>
+
+    <section class="work-grid">
+      <section class="panel calendar-panel">
+        <div class="panel-heading"><div><span class="eyebrow">DAILY RECORDS</span><h2>📅 날짜별 수익 캘린더</h2></div><div class="calendar-actions"><button id="monthBack" class="icon-btn" type="button" aria-label="이전 달">‹</button><strong id="monthLabel">—</strong><button id="monthNext" class="icon-btn" type="button" aria-label="다음 달">›</button></div></div>
+        <div class="week-headers"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+        <div class="calendar-grid" id="calendarGrid" role="group" aria-label="수익 기록 날짜 선택"></div>
+        <div class="calendar-legend"><span><i class="dot positive"></i>수익</span><span><i class="dot negative"></i>지출 초과</span><span><i class="dot empty"></i>미기록</span><span class="auto-note">날짜를 누르면 바로 기록할 수 있어요</span></div>
+      </section>
+
+      <section class="panel editor-panel">
+        <div class="panel-heading"><div><span class="eyebrow">QUICK ENTRY</span><h2>✍️ 하루 수익 기록</h2></div><button type="button" class="outline-btn" id="todayButton">오늘</button></div>
+        <div class="day-nav"><label for="entryDate">기록 날짜</label><input id="entryDate" type="date" min="2020-01-01" max="2100-12-31"><span class="save-state" id="saveState" aria-live="polite">날짜를 선택해 주세요</span></div>
+        <form id="dayForm" autocomplete="off">
+          <label class="entry-field"><span>⚔️ 사냥 수익 <small>몹이 떨어뜨린 돈</small></span><div class="entry-input"><input id="huntMoney" type="text" inputmode="decimal" placeholder="예: 12T 500M" aria-label="사냥 수익"><span>T / M / B</span></div></label>
+          <label class="entry-field"><span>🏰 주간 던전 직접 수익 <small>던전에서 받은 돈</small></span><div class="entry-input"><input id="dungeonMoney" type="text" inputmode="decimal" placeholder="예: 5T" aria-label="주간 던전 직접 수익"><span>T / M / B</span></div></label>
+          <label class="entry-field"><span>💎 아이템 판매 수익 <small>던전 아이템 등을 팔아 받은 돈</small></span><div class="entry-input"><input id="salesMoney" type="text" inputmode="decimal" placeholder="예: 20T" aria-label="아이템 판매 수익"><span>T / M / B</span></div></label>
+          <details class="extra-panel"><summary>＋ 기타 수익도 기록하기</summary><label class="entry-field"><span>🌟 기타 수익 <small>사냥·던전 외 현금 수익</small></span><div class="entry-input"><input id="otherMoney" type="text" inputmode="decimal" placeholder="예: 500M" aria-label="기타 수익"><span>T / M / B</span></div></label></details>
+          <label class="entry-field expense"><span>💸 지출 <small>강화·구매·소모품 등</small></span><div class="entry-input"><input id="expenseMoney" type="text" inputmode="decimal" placeholder="예: 3T 200M" aria-label="지출"><span>T / M / B</span></div></label>
+          <label class="memo-field">📝 간단 메모 <span>(선택)</span><textarea id="entryMemo" rows="2" maxlength="240" placeholder="예: 주간 던전 보상 판매, 강화 비용"></textarea></label>
+          <div class="daily-total"><span>선택한 날짜의 순수익</span><strong id="draftNet">0 B</strong></div>
+          <div class="save-actions"><button class="primary-btn" type="submit" id="saveDay">기록 저장하기</button><button type="button" id="clearDay" class="outline-btn danger-btn">이 날짜 삭제</button></div>
+          <p class="field-note">입력하면 약 1.2초 뒤 자동 저장돼요. <b>12.5</b>만 입력하면 <b>12.5T</b>로 계산됩니다. <b>500M</b>처럼 단위도 사용할 수 있어요.</p>
+        </form>
+      </section>
+    </section>
+
+    <section class="panel bottom-panel">
+      <div class="panel-heading"><div><span class="eyebrow">LAST 7 DAYS</span><h2>📊 최근 7일 수익 흐름</h2></div><span id="weekTotal" class="soft-badge">—</span></div>
+      <div class="bars" id="recentBars"></div>
+      <p class="field-note">오늘 포함 최근 7일 기준이며, 기록하지 않은 날은 수익 0으로 계산합니다. 이 표는 본인에게만 보입니다.</p>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="frame">✿ BLOSSOM DIGITAL WORLD GUILD · 개인별 목표와 수익은 Supabase에서 비공개 저장됩니다.</div></footer>
+  <script defer src="member-gate.js"></script>
+  <script defer src="wealth-app.js"></script>
+  <script defer src="blossom-skin.js"></script>
+</body>
+</html>
