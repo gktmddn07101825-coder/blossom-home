@@ -6,7 +6,7 @@
 <p class="sub">이 과정은 최고관리자에게만 적용돼요. 일반 길드원은 기존처럼 로그인하면 됩니다.</p>
 <p id="message">회원 확인 중...</p>
 <section id="setup" hidden><div class="group"><h2>1. 인증 앱 등록</h2><p class="sub">휴대폰의 Google Authenticator, Microsoft Authenticator 등에서 QR을 스캔하세요.</p>
-<button id="enroll" type="button">인증 QR 생성</button><div id="qrArea" hidden><p><img id="qr" alt="인증 앱 등록 QR 코드"></p><p>직접 입력할 때 사용할 키 (외부에 공유 금지)</p><p id="secret"></p></div>
+<button id="enroll" type="button">인증 QR 생성</button><div id="qrArea" hidden><p><img id="qr" alt="인증 앱 등록 QR 코드"></p><p id="qrHint" class="sub"></p><p>QR이 안 보일 때는 인증 앱에서 '설정 키 입력'을 선택하세요. (외부에 공유 금지)</p><p id="secret"></p></div>
 <p class="warn">QR·비밀키는 본인만 보세요. 인증 앱 삭제·휴대폰 분실 시 관리자 접근을 잃을 수 있어요.</p></div></section>
 <section id="verification" hidden><div class="group"><h2>2. 인증번호 입력</h2><p class="sub">휴대폰 인증 앱에 표시되는 6자리 번호를 입력하세요.</p>
 <input id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="000000" aria-label="인증번호 6자리">
@@ -46,12 +46,42 @@ async function boot(){
   $('setup').hidden=false;text('최고관리자 인증 앱을 최초 등록해 주세요.');
  }catch(e){text('인증 상태 확인 실패: '+e.message);}
 }
-$('enroll').onclick=async()=>{if(busy)return;busy=true;$('enroll').disabled=true;try{const d=await call('enroll');factorId=d.factor_id;
- if(d.qr&&(/^data:image\/svg\+xml/i.test(d.qr)||/^data:image\/png/i.test(d.qr)))$('qr').src=d.qr;
- else $('qr').style.display='none';
- $('secret').textContent=d.secret||'QR 등록 키를 불러오지 못했습니다.';
- $('qrArea').hidden=false;$('verification').hidden=false;text('QR을 등록한 뒤 6자리 번호를 입력해 주세요.');
- }catch(e){text('등록 실패: '+e.message);}finally{busy=false;$('enroll').disabled=false;}};
+// Supabase MFA can return a raw SVG document or an image data URL.
+// Never insert the raw SVG as HTML: render it as an image instead.
+function qrImageSrc(qr){
+ if(typeof qr!=='string')return '';
+ const value=qr.trim();
+ if(/^data:image\/(?:svg\+xml|png)[;,]/i.test(value))return value;
+ if(/^(?:<\?xml[\s\S]*?\?>\s*)?<svg[\s>]/i.test(value))
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(value);
+ return '';
+}
+$('enroll').onclick=async()=>{
+ if(busy)return;
+ busy=true;
+ $('enroll').disabled=true;
+ let success=false;
+ try{
+  const d=await call('enroll');
+  if(!d.factor_id)throw Error('인증 등록 ID를 받지 못했습니다.');
+  factorId=d.factor_id;
+  const img=$('qr');
+  const hint=$('qrHint');
+  const src=qrImageSrc(d.qr);
+  const secret=typeof d.secret==='string'?d.secret:'';
+  if(!src&&!secret)throw Error('인증용 QR 및 설정 키를 서버에서 받지 못했습니다.');
+  $('secret').textContent=secret||'설정 키가 제공되지 않았습니다.';
+  img.onload=()=>{img.style.display='block';hint.textContent='휴대폰 인증 앱에서 QR을 스캔해 주세요.';};
+  img.onerror=()=>{img.style.display='none';hint.textContent='QR 표시가 안 되면 아래 설정 키를 인증 앱에 직접 입력하세요.';};
+  if(src){img.style.display='block';img.src=src;hint.textContent='QR 코드를 불러오는 중...';}
+  else {img.removeAttribute('src');img.style.display='none';hint.textContent='QR을 받지 못했습니다. 아래 설정 키를 직접 입력하세요.';}
+  $('qrArea').hidden=false;
+  $('verification').hidden=false;
+  text('인증 앱에 QR 또는 설정 키를 등록한 뒤 6자리 인증번호를 입력하세요.');
+  success=true;
+ }catch(e){text('등록 실패: '+e.message);}
+ finally{busy=false;$('enroll').disabled=success;}
+};
 $('verify').onclick=async()=>{if(busy)return;const code=$('code').value.trim();if(!/^\d{6}$/.test(code)){text('인증번호 6자리를 입력해 주세요.');return;}
  busy=true;$('verify').disabled=true;try{const d=await call('verify',{factor_id:factorId,code});persist(d.session);$('code').value='';hideAll();$('completed').hidden=false;text('보안 인증 완료! 앞으로 최고관리자 작업은 인증 앱 확인이 필요합니다.');}
  catch(e){text('인증 실패: '+e.message);}finally{busy=false;$('verify').disabled=false;}};
