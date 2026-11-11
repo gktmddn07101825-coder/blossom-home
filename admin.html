@@ -11,7 +11,7 @@
 </style>
 <link rel="stylesheet" href="blossom-skins.css"><script src="blossom-session.js"></script></head>
 <body>
-<header class="top"><div class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></div></header>
+<header class="top"><div class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><div class="actions"><a class="back" href="owner-security.html">🔐 관리자 인증</a><a class="back" href="index.html">← 홈페이지</a></div></div></header>
 <main class="wrap">
 <div class="eyebrow">BLOSSOM MANAGEMENT</div>
 <h1>✦ 관리자 센터</h1>
@@ -37,7 +37,7 @@
    <p class="note">등급 변경·이용 중지는 본인보다 낮은 등급의 회원에게만 가능합니다. 최고관리자는 변경하거나 이용 중지할 수 없습니다.</p>
   </section>
   <section id="suspendedView" role="tabpanel" aria-labelledby="suspendedTab" hidden>
-    <p class="muted">관리자가 이용을 중지했거나 가입 신청이 거절된 계정입니다. 계정 기록은 삭제되지 않습니다.</p>
+    <p class="muted">이용 중지 계정은 복구할 수 있지만, 가입 거절 계정은 이 화면에서 복구할 수 없습니다.</p>
     <div id="suspendedList" aria-live="polite"></div>
   </section>
   <section id="calendarView" role="tabpanel" aria-labelledby="calendarTab" hidden>
@@ -79,7 +79,7 @@ function showLogin(note=''){
 }
 function showAdmin(name,role){myRole=role;$('loginPanel').hidden=true;$('adminPanel').hidden=false;$('welcome').textContent=name+' · '+(ROLES[role]||role);}
 function saveSession(user,session){
- try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({username:user.username,digimon_nickname:user.digimon_nickname,role:user.role,status:'approved',access_token:session.access_token,expires_at:session.expires_at||Math.floor(Date.now()/1000)+3600}));}catch{}
+ try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({username:user.username,digimon_nickname:user.digimon_nickname,role:user.role,status:'approved',access_token:session.access_token,refresh_token:session.refresh_token,expires_at:session.expires_at||Math.floor(Date.now()/1000)+3600}));}catch{}
 }
 function session(){try{const s=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(s&&MANAGERS.includes(s.role)&&s.status==='approved'&&typeof s.access_token==='string'&&Number(s.expires_at)>Date.now()/1000+20)return s;}catch{}return null;}
 function switchTab(tab){
@@ -92,6 +92,7 @@ function switchTab(tab){
 }
 async function api(body){return post(ADMIN_URL,body,token);}
 function handleError(error){
+ if(error.status===428){msg('adminMessage','최고관리자 인증번호를 입력해 주세요. 관리자 인증 페이지로 이동합니다.',true);location.href='owner-security.html';return;}
  if(error.status===401||error.status===403){showLogin('관리자 인증이 만료되었거나 권한이 없습니다. 다시 로그인해 주세요.');return;}
  msg('adminMessage',error.message||'요청 실패',true);
 }
@@ -154,12 +155,12 @@ function renderSuspended(members){
  for(const m of members){
   const item=document.createElement('div');item.className='person';
   const info=document.createElement('div');const title=document.createElement('strong');title.textContent=m.digimon_nickname||m.username;
-  const subtitle=document.createElement('small');subtitle.textContent='아이디: '+m.username+' · 등급: '+(ROLES[m.role]||m.role)+' · 이용 불가';info.append(title,subtitle);
+  const subtitle=document.createElement('small');subtitle.textContent='아이디: '+m.username+' · 등급: '+(ROLES[m.role]||m.role)+' · '+(m.is_suspended?'관리자 이용 중지':'가입 거절');info.append(title,subtitle);
   const actions=document.createElement('div');actions.className='actions';
-  if(canManageRole(m.role)){
+  if(canManageRole(m.role)&&m.is_suspended){
    const restore=document.createElement('button');restore.type='button';restore.textContent='↻ 계정 활성화';
    restore.addEventListener('click',()=>changeAccess(m,true,restore));actions.append(restore);
-  }else{const pill=document.createElement('span');pill.className='pill';pill.textContent='상위 등급 · 변경 불가';actions.append(pill);}
+  }else{const pill=document.createElement('span');pill.className='pill';pill.textContent=m.is_suspended?'상위 등급 · 변경 불가':'가입 거절 계정';actions.append(pill);}
   item.append(info,actions);root.append(item);
  }
 }
@@ -198,7 +199,9 @@ $('loginForm').addEventListener('submit',async event=>{
  try{
   const d=await post(AUTH_URL,{action:'login',username:$('username').value.trim(),password:$('password').value});
   if(!MANAGERS.includes(d.user?.role)||d.user?.status!=='approved'||!d.session?.access_token)throw Error('승인된 운영진 이상 계정만 접근할 수 있습니다.');
-  token=d.session.access_token;saveSession(d.user,d.session);showAdmin(d.user.digimon_nickname||d.user.username,d.user.role);await reload();
+  token=d.session.access_token;saveSession(d.user,d.session);
+  if(d.user.role==='site_owner') {location.href='owner-security.html';return;}
+  showAdmin(d.user.digimon_nickname||d.user.username,d.user.role);await reload();
  }catch(error){if(!$('adminPanel').hidden)handleError(error);else msg('loginMessage',error.message,true);}
  finally{busy=false;$('loginButton').disabled=false;$('password').value='';}
 });
@@ -209,7 +212,7 @@ $('suspendedTab').addEventListener('click',()=>switchTab('suspended'));
 $('search').addEventListener('input',renderApproved);
 $('refreshButton').addEventListener('click',reload);
 $('logoutButton').addEventListener('click',()=>{try{sessionStorage.removeItem(SESSION_KEY);window.BlossomSession?.logout();}catch{}showLogin();$('loginForm').reset();msg('loginMessage','로그아웃했습니다.');});
-(async()=>{const s=session();if(!s)return;token=s.access_token;showAdmin(s.digimon_nickname||s.username,s.role);await reload();})();
+(async()=>{const s=session();if(!s)return;if(s.role==='site_owner'){try{const aal=JSON.parse(atob(s.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).aal;if(aal!=='aal2'){location.href='owner-security.html';return;}}catch{location.href='owner-security.html';return;}}token=s.access_token;showAdmin(s.digimon_nickname||s.username,s.role);await reload();})();
 </script>
 <script defer src="blossom-skin.js"></script></body>
 </html>
