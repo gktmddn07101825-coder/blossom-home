@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0d1024">
 <title>BLOSSOM 길드원 명단 · 회원 소속 관리</title>
-<link rel="stylesheet" href="blossom-unified-nav.css?v=18.2">
-<link rel="stylesheet" href="blossom-guild-members.css?v=18.2">
+<link rel="stylesheet" href="blossom-unified-nav.css?v=18.3">
+<link rel="stylesheet" href="blossom-guild-members.css?v=18.3">
 <script src="blossom-session.js" defer></script>
-<script src="blossom-unified-nav.js?v=18.2" defer></script>
-<script src="blossom-guild-members.js?v=18.2" defer></script>
+<script src="blossom-unified-nav.js?v=18.3" defer></script>
+<script src="blossom-guild-members.js?v=18.3" defer></script>
 </head>
 <body class="gm-body">
 <main class="gm-shell" id="gmShell">
@@ -38,7 +38,7 @@
     <p class="gm-small" id="gmRosterNote"></p>
   </section>
   <section class="gm-panel gm-owner" id="gmOwnerPanel" hidden>
-    <div class="gm-panel-heading"><div><span class="gm-caption">SITE OWNER ONLY</span><h2>👥 회원 소속 관리</h2><p>일반 회원과 길드원을 나눠 보고, 길드 소속을 직접 등록하거나 해제할 수 있습니다.</p></div></div>
+    <div class="gm-panel-heading"><div><span class="gm-caption">GUILD MANAGEMENT</span><h2>👥 회원 소속 관리 <small id="gmManagerKind" class="gm-caption"></small></h2><p>일반 회원을 BLOSSOM에 등록하거나 명단에서 제외할 수 있습니다. 우비테이머 계정 추방 권한은 없습니다.</p></div></div>
     <div class="gm-summary" id="gmSummary"></div>
     <div class="gm-toolbar gm-filter">
       <div class="gm-toggle" role="group" aria-label="회원 분류">
@@ -47,7 +47,7 @@
       </div>
       <input type="search" id="gmAdminSearch" placeholder="아이디 또는 디마 닉네임 검색" maxlength="60" aria-label="회원 검색">
     </div>
-    <div class="gm-table-wrap"><table class="gm-table"><thead><tr><th>회원</th><th>사이트 직급</th><th>이용 상태</th><th>길드 소속</th><th>관리</th></tr></thead><tbody id="gmOwnerRows"></tbody></table></div>
+    <div class="gm-table-wrap"><table class="gm-table"><thead><tr><th>회원</th><th>사이트 직급</th><th>길드 소속</th><th>관리</th></tr></thead><tbody id="gmOwnerRows"></tbody></table></div>
     <p class="gm-small" id="gmOwnerNote"></p>
     <div class="gm-lookup">
       <h3>목록에 없는 회원 찾기</h3>
@@ -55,8 +55,20 @@
       <form id="gmLookupForm"><label class="gm-sr" for="gmLookupName">계정 아이디</label><input required id="gmLookupName" autocomplete="off" placeholder="계정 아이디 입력" pattern="[a-zA-Z0-9_]{3,40}" maxlength="40"><button class="gm-button" type="submit">회원 찾기</button></form>
       <div id="gmLookupResult"></div>
     </div>
-    <p class="gm-warning">길드 소속 변경은 최고관리자 OTP 인증 후 가능합니다. 실제 게임 내 길드원임을 확인한 뒤 등록하세요. 해제 후 이미 열린 탭은 재로그인·새로고침으로 다시 확인해야 합니다.</p>
+    <p class="gm-warning">길드마스터는 승인된 일반 회원을 길드원으로 등록하거나 명단에서 제외할 수 있습니다. 이 동작은 우비테이머 계정 정지·추방과 무관합니다. 사이트 최고관리자는 OTP 인증이 필요합니다. 길드 권한 변경 시 열린 탭을 새로고침해 주세요.</p>
   </section>
 </main>
+<script>
+  // If the external script fails to load or a session provider hangs, never spin forever.
+  setTimeout(function(){
+    var shell=document.getElementById('gmShell'), msg=document.getElementById('gmStatus');
+    if(shell && shell.dataset.ready!=='yes' && msg && msg.textContent.indexOf('접근 권한을 확인하는 중')>=0){
+      msg.textContent='접근 확인에 실패했습니다. 최신 패치 파일과 로그인 상태를 확인하고 새로고침해 주세요.';
+      msg.classList.add('error');
+      var denied=document.getElementById('gmDenied');if(denied)denied.hidden=false;
+      var detail=document.getElementById('gmDeniedText');if(detail)detail.textContent='사이트 파일 또는 서버 연결 문제입니다. 관리자에게 최신 패치 배포 상태를 확인해 주세요.';
+    }
+  },23000);
+</script>
 </body>
 </html>

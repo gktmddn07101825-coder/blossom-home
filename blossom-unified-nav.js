@@ -1,4 +1,4 @@
-/* BLOSSOM × UbiTamer unified navigation v18
+/* BLOSSOM × UbiTamer unified navigation v18.3
  * UI only. All membership and access rules must be enforced on Supabase.
  * No secret/service_role key is used here.
  */
@@ -11,7 +11,7 @@
   const SESSION_KEY = 'blossom_test_auth_v1';
   const LEGACY_ROOM_KEY = 'blossom_public_room_pref_v17';
   const PERSONAL_PREFIX = 'blossom_selected_room_v18_';
-  const GUILD_PATHS = new Set(['event.html', 'tips.html', 'help.html']);
+  const GUILD_PATHS = new Set(['event.html', 'tips.html', 'help.html', 'guild-members.html']);
   const pages = [
     {title:'🏠 홈',href:'index.html',kind:'shared'},
     {title:'💬 채팅 · 커뮤니티',href:'public-hub.html',kind:'shared'},
@@ -22,7 +22,8 @@
     {title:'⌛ 미니 타이머',href:'mini.html',kind:'shared'},
     {title:'🗓 BLOSSOM 공지 · 일정',href:'event.html',kind:'guild'},
     {title:'📚 길드 꿀팁 저장소',href:'tips.html',kind:'guild'},
-    {title:'🤝 뉴비 도움 인증',href:'help.html',kind:'guild'}
+    {title:'🤝 뉴비 도움 인증',href:'help.html',kind:'guild'},
+    {title:'👥 BLOSSOM 길드원 명단',href:'guild-members.html',kind:'guild'}
   ];
   const state = { room:'ubitetamer', rooms:['ubitetamer'], user:null, loaded:false };
   const $ = (s,root=document) => root.querySelector(s);
@@ -104,7 +105,21 @@
   }
   function makeLink(p){const a=node('a','bsh-menu-link',p.title);a.href=p.href;
     if(pageName()===p.href)a.setAttribute('aria-current','page');return a;}
+  function renderGuildAdminShortcut(){
+    if(pageName()!=='admin.html')return;
+    const hasPermission=!!state.user&&(state.user.role==='site_owner'||(state.user.guild_verified&&state.user.role==='guild_master'));
+    const old=$('#bshGuildAdminShortcut');
+    if(!hasPermission){old?.remove();return;}
+    if(old)return;
+    const main=document.querySelector('main')||document.body;
+    const section=node('section','bsh-guild-shortcut');section.id='bshGuildAdminShortcut';
+    const title=node('strong','','🌸 BLOSSOM 길드원 관리');
+    const desc=node('p','','길드원 등록 · 길드원 명단에서 제외 · 일반 회원 목록 조회 (계정 추방 권한 없음)');
+    const link=node('a','bsh-guild-shortcut-link','길드원 관리 열기 →');link.href='guild-members.html';
+    section.append(title,desc,link);main.prepend(section);
+  }
   function renderMenus(){
+    renderGuildAdminShortcut();
     const more=$('#bshMoreLinks');const user=$('#bshUserLinks');
     if(more){more.replaceChildren();
       pages.filter(p=>p.kind==='shared'||state.rooms.includes('blossom')).forEach(p=>more.append(makeLink(p)));
@@ -124,6 +139,7 @@
           const mod=node('a','bsh-menu-link','🛡 승인 · 신고 관리');mod.href='public-hub.html';user.append(mod);
         }
         if(u.role==='site_owner'||u.can_review_guild){const admin=node('a','bsh-menu-link','⚙ 관리자 센터');admin.href='admin.html';user.append(admin);}
+        if(u.can_view_guild){const roster=node('a','bsh-menu-link',(u.can_manage_global||(u.guild_verified&&u.role==='guild_master'))?'👥 길드원 명단 · 소속 관리':'👥 길드원 명단');roster.href='guild-members.html';user.append(roster);}
         if(u.role==='site_owner'){const mfa=node('a','bsh-menu-link','🔐 최고관리자 OTP');mfa.href='owner-security.html';user.append(mfa);}
         const logout=node('button','bsh-menu-link bsh-danger','↪ 로그아웃');logout.type='button';logout.onclick=()=>{
           try{window.BlossomSession?.logout?.();sessionStorage.removeItem(SESSION_KEY);}catch{}

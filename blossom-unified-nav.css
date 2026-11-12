@@ -73,3 +73,6 @@ body.blossom-shell-ready .workspace-top .place-label{display:none}
  body.blossom-shell-ready{padding-bottom:82px}
  body.bsh-home[data-bsh-room="ubitetamer"] .bsh-public-hero{padding:45px 20px}
 }
+
+/* v18.3 guild management entry inside administrator center */
+.bsh-guild-shortcut{margin:16px auto 24px;padding:20px 22px;max-width:1200px;background:#192643;border:1px solid #6677ab;border-radius:14px;color:#f2f3ff;font-family:system-ui,'Malgun Gothic',sans-serif}.bsh-guild-shortcut strong{font-size:17px;display:block}.bsh-guild-shortcut p{color:#c3cee9;margin:9px 0}.bsh-guild-shortcut-link{display:inline-flex;padding:10px 15px;background:#6655a9;color:white!important;border-radius:9px;text-decoration:none;font-weight:700}
