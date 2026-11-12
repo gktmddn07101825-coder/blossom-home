@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko" data-hub-room="ubitetamer">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1025">
+  <meta name="description" content="우비테이머와 BLOSSOM의 승인회원 전용 실시간 채팅 및 커뮤니티">
+  <title>우비테이머 | 디지털 월드 허브</title>
+  <link rel="stylesheet" href="public-hub.css?v=17">
+  <script defer src="blossom-session.js"></script>
+  <script defer src="public-hub.js?v=17"></script>
+<link rel="stylesheet" href="blossom-unified-nav.css?v=18">
+<script defer src="blossom-unified-nav.js?v=18"></script>
+</head>
+<body>
+  <div class="ambient ambient1"></div><div class="ambient ambient2"></div>
+  <header class="topbar">
+    <div class="top-inner">
+      <a class="logo" href="index.html" aria-label="홈페이지"><span class="logo-icon">✿</span><span><span id="brandName">우비테이머</span><small id="brandSub">DIGITAL WORLD COMMUNITY</small></span></a>
+      <div class="top-right"><span id="nicknameTag" class="nickname">회원 확인 중</span><a class="backlink" href="index.html">홈페이지 ↗</a></div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow" id="heroEyebrow">UBI TAMER · COMMUNITY HUB</div>
+      <h1 id="heroTitle">디지털 월드에서<br><span>함께 이야기해요.</span></h1>
+      <p id="heroDesc">방송을 보고 찾아온 테이머들과 실시간으로 대화하고, 승인된 회원끼리 공략과 일상을 나누는 공간이에요.</p>
+      <div class="hero-bottom">
+        <span class="status-pill"><span class="status-dot"></span><span id="syncLabel">연결 준비 중</span></span>
+        <span class="hero-note">가입 승인 후 이용 가능 · 실시간 채팅 증거 신고 지원</span>
+      </div>
+    </section>
+
+    <section class="quick-tools" aria-label="공용 편의 도구">
+      <div class="quick-tools-head"><div><span class="mini-kicker">SHARED TOOLS</span><h2>🎮 모든 테이머를 위한 편의 기능</h2></div><p>일반 테이머도 BLOSSOM 길드원도 같은 기능을 사용할 수 있어요.</p></div>
+      <nav class="tool-links" aria-label="공통 게임 편의 기능">
+        <a href="todo.html"><span>☑</span> 숙제 체크리스트</a>
+        <a href="timer.html"><span>⏱</span> 버프 타이머</a>
+        <a href="wealth.html"><span>💰</span> 목표 수익 캘린더</a>
+        <a href="shop.html"><span>🎁</span> BP 상점</a>
+        <a href="mini.html"><span>⌛</span> 미니 타이머</a>
+      </nav>
+    </section>
+
+    <section id="authNotice" class="notice" hidden>
+      <h2>🔐 승인된 회원 로그인이 필요해요</h2>
+      <p id="authMessage">홈페이지에서 로그인한 뒤 이용할 수 있습니다.</p>
+      <a href="auth.html?next=public-hub.html#login" class="primary-link">로그인 / 가입 신청 ↗</a>
+    </section>
+
+    <section id="mainPanel" class="panel-shell" hidden>
+      <div class="workspace-top">
+        <div class="place-label"><span>🌐 SPACE</span><label class="sr-only" for="roomSelect">이용 공간</label>
+          <select id="roomSelect" class="select-room"><option value="ubitetamer">🎮 우비테이머 · 전체 테이머</option></select></div>
+        <p id="roomInfo">공용 채팅과 승인회원 커뮤니티</p>
+      </div>
+      <nav id="tabs" class="tabs" aria-label="커뮤니티 메뉴">
+        <button type="button" class="tab active" data-tab="chat">💬 실시간 채팅</button>
+        <button type="button" class="tab" data-tab="posts">📚 승인회원 커뮤니티</button>
+        <button type="button" class="tab" data-tab="reports" hidden>🚨 신고 관리</button>
+        <button type="button" class="tab" data-tab="applications" hidden>🗂 가입 승인</button>
+        <button type="button" class="tab" data-tab="members" hidden>🛡 회원·운영진 관리</button>
+      </nav>
+
+      <section id="tab-chat" class="tab-panel" aria-label="실시간 채팅">
+        <div class="section-head"><div><span class="mini-kicker">LIVE CHAT</span><h2>테이머 라운지</h2></div><div class="section-actions"><button id="chatRefresh" class="ghost-button">↻ 새로고침</button></div></div>
+        <p class="description">게임 중 편하게 대화해요. 다른 회원의 메시지를 신고할 때는 원본과 문제가 된 부분이 함께 기록돼요.</p>
+        <div id="chatMessages" class="chat-feed" role="log" aria-live="polite" aria-label="채팅 메시지"><div class="empty">메시지를 불러오는 중...</div></div>
+        <form id="chatForm" class="chat-form"><input id="chatInput" type="text" maxlength="500" required autocomplete="off" placeholder="메시지를 입력하세요 (500자 이내)" aria-label="채팅 메시지"><button id="chatSubmit" type="submit" class="action-button">전송 <span>↗</span></button></form>
+        <p class="form-tip">하루 작성량 및 짧은 시간 도배 방지 제한이 있어요. 채팅 원본은 신고 심사에 사용될 수 있어요.</p>
+      </section>
+
+      <section id="tab-posts" class="tab-panel" hidden aria-label="승인회원 커뮤니티">
+        <div class="section-head"><div><span class="mini-kicker">MEMBER BOARD</span><h2>테이머 이야기</h2></div><button id="newPost" class="action-button">＋ 글 쓰기</button></div>
+        <p class="description">승인된 계정만 글과 댓글을 작성할 수 있어요. BLOSSOM 길드원은 공용·길드 전용 게시판을 모두 이용할 수 있어요.</p>
+        <div class="search-bar"><input id="postSearch" type="search" placeholder="제목·내용 검색" aria-label="게시글 검색"><button id="postRefresh" class="ghost-button">↻ 새로고침</button></div>
+        <div id="postsList" class="posts-list"><p class="empty">게시글을 불러오는 중...</p></div>
+      </section>
+
+      <section id="tab-reports" class="tab-panel" hidden aria-label="신고 관리">
+        <div class="section-head"><div><span class="mini-kicker">MODERATION CENTER</span><h2>채팅 신고함</h2></div><button id="reportsRefresh" class="ghost-button">↻ 새로고침</button></div>
+        <p class="description">원본 메시지와 선택된 문제 구간은 서버에 증거로 보존돼요. 이 화면은 권한이 확인된 운영진에게만 보여요.</p>
+        <div id="reportsList" class="reports-list"><div class="empty">신고 목록을 불러오는 중...</div></div>
+      </section>
+
+      <section id="tab-applications" class="tab-panel" hidden aria-label="가입 신청 심사">
+        <div class="section-head"><div><span class="mini-kicker">MEMBERSHIP APPLICATIONS</span><h2>🗂 가입 신청 관리</h2></div><button class="ghost-button" id="joinRefresh" type="button">↻ 새로고침</button></div>
+        <p class="description">일반 운영진은 일반 테이머 가입만, 인증된 길드마스터는 길드 가입만 심사할 수 있습니다. 최고관리자는 둘 다 관리합니다.</p>
+        <div class="search-bar"><label for="joinKind">신청 분류</label><select id="joinKind" class="field"><option value="general">🎮 일반 테이머 신청</option><option value="guild">🌸 BLOSSOM 길드 신청</option></select></div>
+        <div id="joinsList" class="posts-list"><div class="empty">가입 신청을 불러오는 중...</div></div>
+      </section>
+      <section id="tab-members" class="tab-panel" hidden aria-label="회원·운영진 관리">
+        <div class="section-head"><div><span class="mini-kicker">GUILD ACCESS</span><h2>회원 소속 및 운영 권한</h2></div></div>
+        <p class="description">최고관리자는 길드 인증과 일반 운영진 지정이 가능해요. 일반 운영진은 길드 권한이 없는 일반 회원의 이용 상태만 관리할 수 있어요. 최고관리자 작업에는 OTP가 필요합니다.</p>
+        <form id="memberFindForm" class="search-bar"><input id="memberUsername" placeholder="회원 아이디 입력 (디마 닉네임 아님)" maxlength="40" autocomplete="off"><button class="action-button" type="submit">조회</button></form>
+        <div id="memberResult" class="member-result"><p class="empty">회원 아이디로 검색해 주세요.</p></div>
+      </section>
+      <div id="guildUpgrade" class="notice" hidden><p>🌸 이미 일반 테이머로 가입했나요? 실제 BLOSSOM 길드원이 되었다면 길드 인증을 신청할 수 있어요.</p><button id="guildUpgradeButton" type="button" class="ghost-button">BLOSSOM 소속 신청하기</button></div>
+      <p id="globalStatus" class="global-status" role="status" aria-live="polite"></p>
+    </section>
+    <footer class="footer"><span>✿ DIGITAL WORLD · UBI TAMER × BLOSSOM</span><span>이용 중 문제가 생기면 신고 기능을 이용해 주세요.</span></footer>
+  </main>
+
+  <dialog id="reportDialog" class="modal"><form id="reportForm" class="modal-body">
+    <div class="modal-head"><div><span class="mini-kicker">REPORT CHAT</span><h2>🚨 채팅 신고</h2></div><button type="button" class="close" data-close="reportDialog" aria-label="닫기">✕</button></div>
+    <p class="description">첨부된 채팅에서 <b>문제가 된 문장을 마우스로 드래그해서 선택</b>해 주세요. 원본 채팅은 자동 첨부됩니다.</p>
+    <label for="reportEvidence" class="field-label">신고할 원본 채팅 (선택 가능)</label>
+    <textarea id="reportEvidence" class="report-evidence" readonly rows="4"></textarea>
+    <div class="inline-right"><button id="selectReportPart" type="button" class="ghost-button">선택한 부분 표시</button><button id="selectReportWhole" type="button" class="ghost-button">전체 메시지 선택</button></div>
+    <label class="field-label">신고에 첨부할 부분</label><div id="selectedPreview" class="evidence-preview" aria-live="polite"></div>
+    <label class="field-label" for="reportReason">신고 사유</label><select id="reportReason" required class="field">
+      <option value="abuse">욕설·비하</option><option value="harassment">괴롭힘·성희롱</option><option value="spam">도배·광고</option><option value="privacy">개인정보 노출</option><option value="other">기타</option></select>
+    <label class="field-label" for="reportExplanation">상세 설명 (선택)</label><textarea id="reportExplanation" maxlength="800" rows="3" class="field" placeholder="왜 문제가 되는지 작성해 주세요"></textarea>
+    <button type="submit" id="reportSubmit" class="action-button full">원본 채팅 첨부해서 신고 접수</button><p id="reportStatus" class="dialog-status"></p>
+  </form></dialog>
+
+  <dialog id="writeDialog" class="modal"><form id="writeForm" class="modal-body">
+    <div class="modal-head"><div><span class="mini-kicker">NEW STORY</span><h2>✍️ 새 글 작성</h2></div><button type="button" class="close" data-close="writeDialog" aria-label="닫기">✕</button></div>
+    <label class="field-label" for="writeTitle">제목</label><input id="writeTitle" class="field" maxlength="100" minlength="2" required placeholder="제목을 입력해 주세요">
+    <label class="field-label" for="writeBody">내용</label><textarea id="writeBody" class="field" rows="8" minlength="5" maxlength="5000" required placeholder="게임 이야기, 질문, 공략 등을 자유롭게 남겨 주세요"></textarea>
+    <button type="submit" class="action-button full" id="writeSubmit">글 등록하기</button><p id="writeStatus" class="dialog-status"></p>
+  </form></dialog>
+
+  <dialog id="postDialog" class="modal wide"><div class="modal-body">
+    <div class="modal-head"><div><span class="mini-kicker">COMMUNITY STORY</span><h2 id="detailTitle">게시글</h2></div><button type="button" class="close" data-close="postDialog" aria-label="닫기">✕</button></div>
+    <p id="detailMeta" class="meta"></p><div id="detailBody" class="post-body"></div>
+    <div id="detailActions" class="inline-right"></div>
+    <h3 class="comments-heading">💬 댓글</h3><div id="detailComments" class="comments-list"></div>
+    <form id="commentForm" class="chat-form"><input id="commentInput" maxlength="1000" required placeholder="승인회원만 댓글 작성 가능"><button class="action-button">등록</button></form>
+    <p id="commentStatus" class="dialog-status"></p>
+  </div></dialog>
+</body></html>

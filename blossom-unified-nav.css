@@ -1,0 +1,75 @@
+/* BLOSSOM x UbiTamer compact navigation v18. Progressive enhancement. */
+#bshHeader,#bshMobileBottom{box-sizing:border-box;font-family:'Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif}
+#bshHeader *,#bshMobileBottom *{box-sizing:border-box}
+body.blossom-shell-ready > header:not(#bshHeader),
+body.blossom-shell-ready > .top,
+body.blossom-shell-ready > .topbar{display:none!important}
+#bshHeader{position:sticky;z-index:9999;top:0;background:#0c1229f5;color:#f7f4ff;border-bottom:1px solid #6a6b9c5c;box-shadow:0 6px 24px #0004;backdrop-filter:blur(16px)}
+.bsh-inner{max-width:1480px;margin:auto;padding:10px 24px;display:flex;align-items:center;gap:22px;min-height:68px}
+.bsh-brand{display:flex;align-items:center;gap:10px;text-decoration:none!important;color:#fff!important;flex-shrink:0;white-space:nowrap}
+.bsh-brand-icon{font-size:29px;color:#f6b9f9;text-shadow:0 0 17px #e388f4}
+.bsh-brand strong{font-size:19px;font-weight:900;letter-spacing:-.5px;display:block;color:#f9d0fa}
+.bsh-brand small{display:block;color:#acb7dd;font-size:10px;letter-spacing:.6px;margin-top:3px}
+.bsh-primary-nav{display:flex;align-items:center;gap:4px;flex:1}
+.bsh-primary-nav a{border-radius:10px;color:#c9d3ee!important;padding:11px 12px;text-decoration:none!important;font-size:13px;font-weight:800;white-space:nowrap}
+.bsh-primary-nav a:hover,.bsh-primary-nav a.current{background:#2c315b;color:#fff!important}
+.bsh-right{display:flex;gap:8px;align-items:center;flex-shrink:0}
+#bshHeader .bsh-room-select{display:flex;gap:3px;padding:3px;border:1px solid #646b9c;border-radius:99px;background:#11172c}
+#bshHeader .bsh-room-select[hidden]{display:none!important}
+#bshHeader .bsh-room-select button{border:0;border-radius:99px;background:transparent;color:#aab8de;padding:8px 12px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:900;white-space:nowrap}
+#bshHeader .bsh-room-select button.active{color:#fff;background:linear-gradient(110deg,#8a68cb,#bb81d2);box-shadow:0 2px 12px #885aff46}
+#bshHeader .bsh-dropdown{position:relative}
+#bshHeader .bsh-summary{display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;list-style:none;border:1px solid #555e8c;border-radius:10px;padding:11px 12px;background:#161e3d;color:#e3eaff;font-size:12px;font-weight:800;white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+#bshHeader .bsh-summary::-webkit-details-marker{display:none}
+#bshHeader .bsh-summary:hover{border-color:#b08bea;background:#22294d}
+#bshHeader .bsh-dropdown-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:230px;max-height:min(65vh,550px);overflow:auto;padding:8px;border:1px solid #676d9d;border-radius:13px;background:#161d3b;color:#f7f7ff;box-shadow:0 18px 45px #0009;display:grid;gap:3px}
+#bshHeader .bsh-menu-link{color:#e2e8fc!important;background:transparent;display:block;border:0;border-radius:9px;padding:11px 12px;text-align:left;text-decoration:none!important;font-size:12px;font-weight:750;white-space:normal;cursor:pointer;font-family:inherit;width:100%}
+#bshHeader .bsh-menu-link:hover,#bshHeader .bsh-menu-link[aria-current="page"]{background:#303962}
+#bshHeader .bsh-danger{color:#f5a9b2!important}
+#bshHeader .bsh-menu-note{font-size:11px;color:#abb7db;padding:10px;line-height:1.65;border-top:1px solid #454c75}
+#bshMobileBottom{display:none}
+/* UbiTamer: a public-facing brand skin; never used as an authorization check. */
+body[data-bsh-room="ubitetamer"]{--pink:#8cdffc;--blue:#64ecf2;--accent:#79e9fa;--line:#456c88;background:radial-gradient(ellipse at 65% 0,#123b53,transparent 59%),#091522;color:#ebf7ff}
+body[data-bsh-room="ubitetamer"] .panel,body[data-bsh-room="ubitetamer"] .tile{border-color:#44778e;background:linear-gradient(140deg,#152f42,#101d31)}
+body[data-bsh-room="ubitetamer"] .btn{background:linear-gradient(110deg,#147c9f,#488ca7);border-color:#4eb6c9}
+body[data-bsh-room="ubitetamer"] #bshHeader{border-color:#336b7c}
+body[data-bsh-room="ubitetamer"] .bsh-brand strong{color:#acf2ff}
+body[data-bsh-room="ubitetamer"] .bsh-brand-icon{color:#7eeaff;text-shadow:0 0 17px #4bdbff}
+body.bsh-home .bsh-public-hero{display:none}
+body.bsh-home[data-bsh-room="ubitetamer"] .hero{background:radial-gradient(ellipse at 75% 35%,#219bbb48,transparent 47%),linear-gradient(120deg,#153f5f,#0d1830 78%);border-color:#4fa1b7;min-height:340px}
+body.bsh-home[data-bsh-room="ubitetamer"] .hero .hero-content{display:none}
+body.bsh-home[data-bsh-room="ubitetamer"] .bsh-public-hero{display:block;position:relative;z-index:1;padding:60px 6% 54px;max-width:700px}
+.bsh-public-hero .bsh-eyebrow{font-size:12px;color:#81e9f2;font-weight:900;letter-spacing:2px}
+.bsh-public-hero h1{font-size:clamp(36px,5vw,60px);line-height:1.2;margin:16px 0 15px;font-weight:900}
+.bsh-public-hero h1 em{color:#8eeafa;font-style:normal}
+.bsh-public-hero p{color:#d2e9f7;font-size:15px;line-height:1.8}
+.bsh-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.bsh-hero-actions a{border-radius:11px;padding:13px 19px;font-weight:900;font-size:13px;text-decoration:none!important;color:#fff}
+.bsh-hero-actions .bsh-primary{background:linear-gradient(105deg,#176e98,#3bbed2)}
+.bsh-hero-actions .bsh-secondary{background:#182d42;border:1px solid #437e98}
+/* Original news/events/help pages have not yet been migrated to scoped APIs. Do not show old guild cards to public profiles. */
+body.bsh-home[data-bsh-room="ubitetamer"] .columns{display:none!important}
+body.bsh-home[data-bsh-room="ubitetamer"] .quick a[href="event.html"],
+body.bsh-home[data-bsh-room="ubitetamer"] .quick a[href="tips.html"],
+body.bsh-home[data-bsh-room="ubitetamer"] .quick a[href="help.html"]{display:none!important}
+body.bsh-home #bsh-new-quick{border-color:#5a97be}
+/* In the Hub itself, the top room control replaces the old workspace dropdown. */
+body.blossom-shell-ready .workspace-top .place-label{display:none}
+@media(max-width:1200px){.bsh-inner{gap:11px}.bsh-primary-nav a{padding:9px 8px}.bsh-brand strong{font-size:17px}#bshHeader .bsh-summary{max-width:172px}}
+@media(max-width:850px){
+ .bsh-inner{padding:9px 13px;min-height:58px;justify-content:space-between;gap:7px}
+ .bsh-primary-nav{display:none}
+ .bsh-brand-icon{font-size:24px}.bsh-brand strong{font-size:15px}.bsh-brand small{font-size:8px}
+ #bshHeader .bsh-room-select button{padding:7px 9px;font-size:11px}
+ #bshHeader .bsh-summary{font-size:0;padding:10px;max-width:45px;min-width:38px}
+ #bshHeader .bsh-more .bsh-summary{font-size:0}
+ #bshHeader .bsh-more .bsh-summary::before{content:'☰';font-size:19px}
+ #bshHeader .bsh-account .bsh-summary::before{content:'👤';font-size:17px}
+ #bshHeader .bsh-dropdown-menu{min-width:min(275px,88vw)}
+ #bshMobileBottom{display:block;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:#0c142af5;border-top:1px solid #50688e;box-shadow:0 -8px 28px #0007;padding:7px 9px max(7px,env(safe-area-inset-bottom))}
+ #bshMobileBottom .bsh-mobile-items{display:flex;justify-content:space-around;gap:5px;max-width:620px;margin:auto}
+ #bshMobileBottom .bsh-menu-link{text-decoration:none!important;color:#d8e7fa!important;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:9px;padding:10px 5px;flex:1;font-weight:850;background:#17213a}
+ #bshMobileBottom .bsh-menu-link[aria-current="page"]{background:#244760;color:#96f8ff!important}
+ body.blossom-shell-ready{padding-bottom:82px}
+ body.bsh-home[data-bsh-room="ubitetamer"] .bsh-public-hero{padding:45px 20px}
+}

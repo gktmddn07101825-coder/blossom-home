@@ -14,6 +14,8 @@
 #blossomTurnstileHint{color:#c4ccea;font-size:12px;margin:8px 0 0;text-align:center}
 </style>
 <script src="blossom-security-config.js"></script>
+<link rel="stylesheet" href="blossom-unified-nav.css?v=18">
+<script defer src="blossom-unified-nav.js?v=18"></script>
 </head>
 <body>
 <header class="top"><div class="wrap nav"><a class="brand" href="index.html">✿ BLOSSOM<small>DIGITAL WORLD GUILD</small></a><a class="back" href="index.html">← 홈페이지</a></div></header>
@@ -40,6 +42,12 @@
     <div id="registerView" class="hidden" role="tabpanel" aria-labelledby="registerTab">
      <h2 class="formtitle">BLOSSOM에 오신 걸 환영해요</h2><p class="hint">정보를 입력하면 관리자에게 가입 신청이 전달됩니다.</p>
      <form id="registerForm">
+      <label class="field" for="signupType">가입 신청 유형</label>
+      <select id="signupType" class="field" required style="width:100%;padding:13px;background:#111b32;border:1px solid #6774a9;border-radius:10px;color:white;margin-bottom:13px">
+        <option value="general">🎮 일반 테이머 (우비테이머)</option>
+        <option value="guild">🌸 BLOSSOM 길드원 신청</option>
+      </select>
+      <span class="help" style="display:block;margin-bottom:10px">길드 가입 신청은 길드마스터의 확인이 필요하며, 선택만으로 길드 권한이 생기지 않습니다.</span>
       <label class="field" for="registerUsername">아이디</label><input id="registerUsername" name="username" autocomplete="username" required minlength="4" maxlength="20" pattern="[a-z0-9_]{4,20}" placeholder="예: blossom_new12"><span class="help">영문 소문자, 숫자, 밑줄(_)만 사용 · 4~20자</span>
       <label class="field" for="nickname">디마 닉네임</label><input id="nickname" name="nickname" autocomplete="nickname" required minlength="2" maxlength="30" placeholder="게임에서 사용하는 닉네임"><span class="help">2~30자</span>
       <label class="field" for="registerPassword">비밀번호</label><div class="input-wrap"><input class="password-input" id="registerPassword" name="new-password" type="password" autocomplete="new-password" required minlength="12" maxlength="128" placeholder="12자 이상의 비밀번호"><button type="button" class="togglepass" data-for="registerPassword">보기</button></div><span class="help">12~128자 · 다른 사이트와 다른 비밀번호를 권장합니다.</span>
@@ -55,7 +63,7 @@
     <p class="welcome" id="doneText"></p>
     <div id="profileBox" class="profile hidden"><dl><dt>아이디</dt><dd id="profileUsername"></dd><dt>디마 닉네임</dt><dd id="profileNickname"></dd><dt>회원 상태</dt><dd><span class="badge">승인 완료</span></dd></dl></div>
     <p id="doneDescription" class="hint" style="margin-top:18px"></p>
-    <div class="actions"><a href="index.html">⌂ 홈페이지로</a><a id="returnToPage" class="hidden" href="index.html">↩ 이용하던 페이지로</a><a id="adminLink" class="hidden" href="admin.html">⚙ 관리자 센터</a><a id="ownerMfaLink" class="hidden" href="owner-security.html">🔐 최고관리자 보안 인증</a><button id="backToLogin" class="hidden" type="button">로그인 화면</button><button id="logout" class="logout hidden" type="button">로그아웃</button></div>
+    <div class="actions"><a href="index.html">⌂ 홈페이지로</a><a href="public-hub.html">💬 테이머 라운지</a><a id="returnToPage" class="hidden" href="index.html">↩ 이용하던 페이지로</a><a id="adminLink" class="hidden" href="admin.html">⚙ 관리자 센터</a><a id="ownerMfaLink" class="hidden" href="owner-security.html">🔐 최고관리자 보안 인증</a><button id="backToLogin" class="hidden" type="button">로그인 화면</button><button id="logout" class="logout hidden" type="button">로그아웃</button></div>
    </div>
    <p class="fine">BLOSSOM 길드원 전용 계정입니다. 로그인 유지 설정은 본인 기기에서만 사용해 주세요.</p>
   </section>
@@ -131,14 +139,14 @@ function showLoggedIn(user){
  if (SAFE_NEXT) $('returnToPage').href=SAFE_NEXT;
  $('profileUsername').textContent=user.username||'-';$('profileNickname').textContent=user.digimon_nickname||'-';
  $('profileBox').classList.remove('hidden');
- $('adminLink').classList.toggle('hidden',!['site_owner','guild_master','vice_master','staff'].includes(user.role));
+ $('adminLink').classList.toggle('hidden',user.role!=='site_owner');
  $('ownerMfaLink').classList.toggle('hidden',user.role!=='site_owner');
  $('logout').classList.remove('hidden');$('backToLogin').classList.add('hidden');
 }
 function showRegistered(username){
  $('formsArea').classList.add('hidden');$('doneArea').classList.remove('hidden');
  $('doneTitle').textContent='가입 신청 완료! ✿';
- $('doneText').textContent=username+'님, BLOSSOM 가입 신청이 접수되었습니다.';
+ $('doneText').textContent=username+'님, 가입 신청이 접수되었습니다.';
  $('doneDescription').textContent='지금은 관리자 승인 대기 상태예요. 관리자가 승인한 뒤 로그인해 주세요.';
  $('profileBox').classList.add('hidden');$('adminLink').classList.add('hidden');$('ownerMfaLink').classList.add('hidden');$('returnToPage').classList.add('hidden');
  $('logout').classList.add('hidden');$('backToLogin').classList.remove('hidden');
@@ -168,7 +176,7 @@ $('registerForm').addEventListener('submit',async event=>{
  if(!turnstileReady||!turnstileToken){setMessage('registerMessage','자동가입 방지 확인을 완료해 주세요. 잠시 뒤 다시 시도해 주세요.',true);return;}
  busy=true;$('registerSubmit').disabled=true;setMessage('registerMessage','가입 신청을 보내는 중...');
  try{
-  await post({action:'register',username,password,digimon_nickname,turnstile_token:turnstileToken});
+  await post({action:'register',username,password,digimon_nickname,signup_type:$('signupType').value,turnstile_token:turnstileToken});
   $('registerForm').reset();showRegistered(username);
  }catch(error){setMessage('registerMessage',error.message,true);}
  finally{resetTurnstile();busy=false;$('registerSubmit').disabled=false;}

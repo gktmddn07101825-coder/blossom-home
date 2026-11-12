@@ -1,0 +1,45 @@
+/* BLOSSOM home live chat v18.1 - scoped styles only */
+#bshHomeChat{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;position:relative;margin-top:22px;margin-bottom:25px;color:#e7efff}
+#bshHomeChat *{box-sizing:border-box}
+#bshHomeChat .bshc-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:0 0 13px}
+#bshHomeChat .bshc-heading h2{font-size:clamp(20px,2.3vw,27px);color:#f7f7ff;font-weight:900;margin:5px 0 0}
+#bshHomeChat .bshc-eyebrow{font-size:11px;letter-spacing:2px;color:#8fe0fa;font-weight:900}
+#bshHomeChat a{text-decoration:none}
+#bshHomeChat .bshc-hub-link{color:#bbddff;border:1px solid #536c93;border-radius:9px;padding:10px 15px;font-size:12px;font-weight:800;white-space:nowrap}
+#bshHomeChat .bshc-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(215px,.7fr);gap:16px}
+#bshHomeChat .bshc-chat,#bshHomeChat .bshc-aside{min-width:0;background:linear-gradient(160deg,#151d3a,#10172d);border:1px solid #435480;border-radius:17px;box-shadow:0 12px 32px #02061566}
+#bshHomeChat .bshc-chat{padding:19px;display:flex;flex-direction:column}
+#bshHomeChat .bshc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#bshHomeChat .bshc-room{font-size:16px;color:#f4eaff}
+#bshHomeChat .bshc-status{font-size:11px;color:#89ebcb}
+#bshHomeChat .bshc-status[data-error="true"]{color:#ffabad}
+#bshHomeChat .bshc-room-choices{display:flex;gap:7px;margin:12px 0 0}
+#bshHomeChat [hidden]{display:none!important}
+#bshHomeChat .bshc-room-btn{background:#202b51;color:#cddff7;border:1px solid #455e82;border-radius:10px;padding:7px 12px;font-size:12px;cursor:pointer}
+#bshHomeChat .bshc-room-btn.active{background:#3b4f8b;border-color:#9dc7ff;color:#fff}
+#bshHomeChat .bshc-feed{overflow-y:auto;overscroll-behavior:contain;background:#0b1124;border:1px solid #283854;border-radius:12px;min-height:260px;max-height:300px;padding:13px;margin-top:13px}
+#bshHomeChat .bshc-empty{color:#9caad0;text-align:center;font-size:13px;margin:45px 0}
+#bshHomeChat .bshc-message{margin-bottom:12px;border-bottom:1px solid #222f4a;padding-bottom:10px}
+#bshHomeChat .bshc-message:last-child{border-bottom:0;margin-bottom:0}
+#bshHomeChat .bshc-message-head{display:flex;align-items:center;gap:11px;margin-bottom:5px}
+#bshHomeChat .bshc-message-head strong{color:#a9eaff;font-size:12px;overflow-wrap:anywhere}
+#bshHomeChat .bshc-message.mine .bshc-message-head strong{color:#f7bff7}
+#bshHomeChat .bshc-message-head time{color:#778cae;font-size:10px}
+#bshHomeChat .bshc-message p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.5;margin:0;color:#e8edfb}
+#bshHomeChat .bshc-notice{padding:35px 12px;text-align:center}
+#bshHomeChat .bshc-notice p{color:#bfd0e8;font-size:13px;margin-bottom:17px}
+#bshHomeChat .bshc-login,#bshHomeChat .bshc-send{display:inline-flex;border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(110deg,#3954ba,#3190b7);color:#fff;font-weight:800;cursor:pointer}
+#bshHomeChat .bshc-form{display:flex;gap:9px;margin-top:12px}
+#bshHomeChat .bshc-input{flex:1;min-width:0;color:#fff;background:#101b31;border:1px solid #425982;border-radius:9px;padding:11px 13px;font-size:13px;outline:none}
+#bshHomeChat .bshc-input:focus{border-color:#81e9ff}
+#bshHomeChat .bshc-send:disabled{opacity:.5;cursor:not-allowed}
+#bshHomeChat .bshc-foot{color:#92a9cb;font-size:11px;line-height:1.5;margin:12px 0 0}
+#bshHomeChat .bshc-aside{padding:22px;display:flex;flex-direction:column;justify-content:center}
+#bshHomeChat .bshc-aside h3{color:#f1f4ff;font-size:24px;line-height:1.3;margin:15px 0}
+#bshHomeChat .bshc-aside p{color:#b8c9de;font-size:13px;line-height:1.8}
+#bshHomeChat .bshc-aside-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+#bshHomeChat .bshc-link{background:#223557;color:#d1eaff!important;padding:12px 14px;border-radius:10px;font-size:12px;font-weight:800}
+html[data-bsh-theme="blossom"] #bshHomeChat .bshc-chat{border-color:#8467ac}
+html[data-bsh-theme="blossom"] #bshHomeChat .bshc-room{color:#fbd1f6}
+@media(max-width:850px){#bshHomeChat .bshc-layout{grid-template-columns:1fr}#bshHomeChat .bshc-aside{display:none}#bshHomeChat .bshc-feed{min-height:260px;max-height:310px}#bshHomeChat .bshc-chat{padding:13px}#bshHomeChat .bshc-heading{align-items:center}#bshHomeChat .bshc-hub-link{font-size:11px;padding:9px}}
+@media(max-width:450px){#bshHomeChat .bshc-heading h2{font-size:19px}#bshHomeChat .bshc-room{font-size:14px}#bshHomeChat .bshc-hub-link{white-space:normal}}
