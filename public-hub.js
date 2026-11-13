@@ -327,6 +327,7 @@
   async function start(){
     wire();try{
       const d=await request('bootstrap');renderSession(d);
+      if(new URLSearchParams(location.search).get('tab')==='applications')switchTab('applications');
       await loadChat();startSyncTimer();await setupRealtime();
     }catch(err){$('authNotice').hidden=false;$('mainPanel').hidden=true;$('authMessage').textContent=err.message;syncLabel('로그인 필요');}
   }
